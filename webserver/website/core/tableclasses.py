@@ -360,20 +360,6 @@ def addstaticdata(session):
    account.addRole( roles.getRole('botrunneradmin') )
    account.addRole( roles.getRole('requestadmin') )
 
-   # add a couple of default mods/maps/ais:
-   map = Map( 'SmallDivide.smf')
-   map.map_url = 'http://spring-portal.com/index.php/docman/doc_download/104-smalldivide'
-   session.add(map)
-
-   mod = Mod('Balanced Annihilation V7.04')
-   mod.mod_url = 'http://spring-portal.com/index.php/docman/doc_download/314-balanced-annihilation-v704'
-   session.add(mod)
-
-   ai = AI('E323AI','2.83')
-   ai.ai_download_url = 'http://github.com/Error323/E323AI/tarball/v2.83'
-   ai.ai_needscompiling = True
-   session.add(ai)
-
 def createall(engine):
    Base.metadata.create_all(engine)
    openidhelper.createtables(engine)
