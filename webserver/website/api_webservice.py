@@ -72,7 +72,7 @@ class APIService:
    # note: later versions of this function should be added with a new version number
    # ie v2, v3 etc... to avoid breaking the api for old clients
    # returns [True,''] or [False, errormessage ]
-   def schedulematchv1(self,map_name,mod_name,ais,options):
+   def schedulematchv1(self,map_name,mod_name,ais,options,speed):
       try:
          map = sqlalchemysetup.session.query(Map).filter(Map.map_name == map_name ).first()
          mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == mod_name ).first()
@@ -81,8 +81,10 @@ class APIService:
 
          if map == None or mod == None or ai0 == None or ai1 == None:
             return [False,'one of your parameters did not correspond to an existing map, mod or ai.  Please check and try again.']
+         if speed == None:
+             speed = 1
 
-         matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod )
+         matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed )
          sqlalchemysetup.session.add( matchrequest )
 
          # add options:

@@ -268,7 +268,7 @@ class MatchRequest(Base):
    matchresult = relation("MatchResult", uselist=False)
    options = relation("AIOption", secondary = matchrequest_options )
 
-   def __init__( self, ai0, ai1, map, mod, speed, league = None ):
+   def __init__( self, ai0, ai1, map, mod, speed = 1, league = None ):
       self.ai0 = ai0
       self.ai1 = ai1
       self.map = map
