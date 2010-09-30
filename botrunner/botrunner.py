@@ -307,6 +307,7 @@ def rungame( serverrequest ):
    scriptcontents = scriptcontents.replace("%AI0VERSION%", serverrequest['ai0_version'] )
    scriptcontents = scriptcontents.replace("%AI1%", serverrequest['ai1_name'] )
    scriptcontents = scriptcontents.replace("%AI1VERSION%", serverrequest['ai1_version'] )
+   scriptcontents = scriptcontents.replace("%SPEED%", str(serverrequest['speed']))
 
    map_info = unitsyncpkg.MapInfo()
    unitsync.GetMapInfoEx(str(serverrequest['map_name']), map_info, 1)

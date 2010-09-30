@@ -305,6 +305,7 @@ class SpringGridService:
          requestitemdict['ai1_version'] = requestitem.ai1.ai_version
          requestitemdict['map_name'] = requestitem.map.map_name
          requestitemdict['mod_name'] = requestitem.mod.mod_name
+         requestitemdict['speed'] = requestitem.speed
          requestitemdict['gametimeoutminutes'] = confighelper.getValue('gametimeoutminutes')
          requestitemdict['gameendstring'] = confighelper.getValue('gameendstring')
 

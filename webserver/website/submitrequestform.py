@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/gajop/radni_direktorijum/env_springgrid/bin/python
 
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
@@ -46,8 +46,10 @@ aivalues = []
 for ai in ais:
    aivalues.append( ai.ai_name + " " + ai.ai_version )
    aiitems.append( ai.ai_name + "|" + ai.ai_version )
+speeds = [i for i in range(1, 10)]
+speeds.extend([i for i in range(10,101,5)])
 
-jinjahelper.rendertemplate('submitrequestform.html', ais = ais, maps = maps, mods = mods, aivalues = aivalues, aiitems = aiitems, options = options )
+jinjahelper.rendertemplate('submitrequestform.html', ais = ais, maps = maps, mods = mods, aivalues = aivalues, aiitems = aiitems, options = options, speeds = speeds )
 
 sqlalchemysetup.close()
 

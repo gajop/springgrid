@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/gajop/radni_direktorijum/env_springgrid/bin/python
 
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
@@ -58,7 +58,7 @@ def go():
       jinjahelper.message( "Please login first." )
       return
 
-   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'mapname', 'modname'])
+   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'mapname', 'modname', 'speed'])
    if not result:
       jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
       return
@@ -71,6 +71,7 @@ def go():
    ai1version = ai1nameversion.split("|")[1]
    mapname = formhelper.getValue("mapname")
    modname = formhelper.getValue("modname")
+   speed = formhelper.getValue("speed")
 
    #if matchrequestcontroller.submitrequest( matchrequest ):
     #  jinjahelper.message( "Submitted"
@@ -81,7 +82,7 @@ def go():
    ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai0name ).filter(AI.ai_version == ai0version ).first()
    ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai1name ).filter(AI.ai_version == ai1version ).first()
 
-   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod )
+   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed )
    sqlalchemysetup.session.add( matchrequest )
 
    # add options:

@@ -25,9 +25,9 @@
 		mo_noowner=0;
 		mo_noshare=1;
 		mo_nowrecks=0;
-		maxspeed=3;
+		maxspeed=%SPEED%;
 		maxunits=500;
-		minspeed=3;
+		minspeed=%SPEED%;
 		mo_hilltime=15;
 		startenergy=1000;
 		startmetal=1000;
