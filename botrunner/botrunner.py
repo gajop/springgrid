@@ -39,6 +39,7 @@ import traceback
 import imp
 import psutil
 import threading
+import shutil
 
 from unitsync import unitsync as unitsyncpkg
 
@@ -82,6 +83,13 @@ class GameRunner(threading.Thread):
        global numinstanceslock
        numinstanceslock.acquire()
        numinstances -= 1
+       global writabledatadirectory
+       datadir = writabledatadirectory + "tmpdir" + str(self.instanceid) + "/"
+       scriptname = "script" + str(self.instanceid) + ".txt"
+       if os.path.exists(datadir):
+           shutil.rmtree(datadir)
+       if os.path.exists(scriptname):
+           os.remove(scriptname)
        matches.remove(self.serverrequest['matchrequest_id'])
        numinstanceslock.release()
 
@@ -353,36 +361,33 @@ def rungame(serverrequest, instanceid ):
    scriptcontents = scriptcontents.replace("%TEAM1STARTPOSZ%", str( team1startpos.y ) )   
 
    scriptname = "script" + str(instanceid) + ".txt"
-#   infologname = "infolog" + str(instanceid) + ".txt"
-   infologname = "infolog.txt" #need to be able to specify different infologs
+   infologname = "tmpdir" + str(instanceid) + "/infolog.txt"
+   datadir = writabledatadirectory + "tmpdir" + str(instanceid) + "/"
+#t  infologname = "infolog.txt" #need to be able to specify different infologs
 
    scriptpath = writabledatadirectory + scriptname
    filehelper.writeFile( scriptpath, scriptcontents )
+
+   if os.path.exists(datadir):
+      shutil.rmtree(datadir)
 
    if os.path.exists( writabledatadirectory + infologname ):
       os.remove( writabledatadirectory + infologname )
 
    os.chdir( writabledatadirectory )
+   existingenv = {"SPRING_DATADIR":datadir}
    if config.JAVA_HOME != None:
-      existingenv = {}
       for varname in os.environ.keys():
          if os.getenv(varname) != None:
             existingenv[varname ] = os.getenv(varname)
       existingenv[ "JAVA_HOME" ] = os.path.dirname( config.JAVA_HOME )
-      if config.debug:
-         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
-            env = existingenv )
-      else:
-         fnull = open(os.devnull, 'w')
-         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
-            env = existingenv, stdout=fnull, stderr=fnull )
+   if config.debug:
+      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname],
+         env = existingenv)
    else:
-      if config.debug:
-         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname])
-      else:
-         fnull = open(os.devnull, 'w')
-         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
-            stdout=fnull, stderr=fnull)
+      fnull = open(os.devnull, 'w')
+      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
+         env = existingenv, stdout=fnull, stderr=fnull)
    finished = False
    starttimeseconds = time.time()
    doping( "playing game " + serverrequest['ai0_name'] + " vs " + serverrequest['ai1_name'] + " on " + serverrequest['map_name'] + " " + serverrequest['mod_name'] )
@@ -483,7 +488,7 @@ def rungame(serverrequest, instanceid ):
 # when spring crashes, the replay is called 'unnamed', so we'll grab that file instead
 def getreplayfullpath( writabledatadirectory, relativereplaypathfrominfolog ):
    if relativereplaypathfrominfolog == None:
-      print "No replay found"
+      print "No replay found", relativepathfrominfolog
       return None
 
    replayfullpath = writabledatadirectory + relativereplaypathfrominfolog
@@ -491,17 +496,18 @@ def getreplayfullpath( writabledatadirectory, relativereplaypathfrominfolog ):
       return replayfullpath
 
    demo_folderpath = os.path.dirname( replayfullpath )
-   demo_filename = os.path.basename( replayfullpath )
+#   demo_filename = os.path.basename( replayfullpath )
 
-   demo_splitunder = demo_filename.split('_')
-   demo_newname = '_'.join(demo_splitunder[:3] + ['unnamed',] + demo_splitunder[4:])
-   demo_newpath = os.path.join(demo_folderpath, demo_newname)
+#   demo_splitunder = demo_filename.split('_')
+#   demo_newname = '_'.join(demo_splitunder[:3] + ['unnamed',] + demo_splitunder[4:])
+#   demo_newpath = os.path.join(demo_folderpath, demo_newname)
+   demo_newpath = os.path.join(demo_folderpath,  os.listdir(demo_folderpath)[0])
 
    if not os.path.isfile( demo_newpath ):
-      print "No replay found"
+      print "No replay found", demo_newpath
       return None
 
-   print 'Spring bug: replay is actually named:', demo_newname
+   print 'Spring bug: replay is actually named:', demo_newpath
    return demo_newpath
 
 def uploadresulttoserver( host, serverrequest, gameresult, instanceid ):
@@ -511,21 +517,22 @@ def uploadresulttoserver( host, serverrequest, gameresult, instanceid ):
    # ...
 
    # first we should take care of the replay
-   replaypath = getreplayfullpath( writabledatadirectory, gameresult['replaypath'] )
-   infologname = 'infolog' + str(instanceid) + ".txt"
+   infologname = "infolog.txt"
    replaytarname = 'thisreplay' + str(instanceid) + '.tar.bz2'
    infologtarname = 'thisinfolog' + str(instanceid) + '.tar.bz2'
    uploaddatadict = {} # dict of 'replay': replaydata, etc ...
+   datadir = writabledatadirectory + "tmpdir" + str(instanceid) + "/"
+   replaypath = getreplayfullpath(datadir, gameresult['replaypath'] )
 
    if replaypath != '' and replaypath != None and os.path.exists( replaypath ):
       # first tar.bz2 it
-      tarhandle = tarfile.open(writabledatadirectory + replaytarname, "w:bz2" )
-      os.chdir( os.path.dirname(replaypath) )  # cd in, so that we don't embed the paths
+      tarhandle = tarfile.open(datadir + replaytarname, "w:bz2" )
+      os.chdir(os.path.dirname(replaypath))  # cd in, so that we don't embed the paths
                    # in the tar file...
       tarhandle.add( os.path.basename(replaypath) )
       tarhandle.close()
 
-      replayfilehandle = open( writabledatadirectory + replaytarname, 'rb' )
+      replayfilehandle = open(datadir + replaytarname, 'rb')
       replaycontents = replayfilehandle.read()
       replayfilehandle.close()
 
@@ -536,13 +543,13 @@ def uploadresulttoserver( host, serverrequest, gameresult, instanceid ):
    # should move this stuff to a function, but just hacking it in for now to get it working
    if os.path.exists( writabledatadirectory + infologname ):
       # first tar.bz2 it
-      tarhandle = tarfile.open(writabledatadirectory + infologtarname, "w:bz2" )
-      os.chdir( writabledatadirectory )  # cd in, so that we don't embed the paths
+      tarhandle = tarfile.open(datadir + infologtarname, "w:bz2" )
+      os.chdir(datadir)  # cd in, so that we don't embed the paths
                    # in the tar file...
       tarhandle.add( os.path.basename(infologname) )
       tarhandle.close()
 
-      replayfilehandle = open( writabledatadirectory + infologtarname, 'rb' )
+      replayfilehandle = open(datadir + infologtarname, 'rb')
       replaycontents = replayfilehandle.read()
       replayfilehandle.close()
 
