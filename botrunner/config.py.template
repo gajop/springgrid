@@ -2,6 +2,12 @@
 # so don't go using your favorite most secure password here...
 botrunnername="BOTRUNNERNAME"
 sharedsecret="SHAREDSECRET"
+#max memory each botrunner instance can use, in MBs
+maxmemory = 512
+#max amount of spring instances, valid values are 1,2,3,4... or 'auto' which 
+#will assign it as the amount of cores; AUTO NOT IMPLEMENTED YET
+maxinstances = 1 
+debug = False
 
 # example websiteurls:
 # websiteurl =  "http://localhost/ailadder"

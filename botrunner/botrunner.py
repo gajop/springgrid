@@ -37,6 +37,8 @@ import xmlrpclib
 from optparse import OptionParser
 import traceback
 import imp
+import psutil
+import threading
 
 from unitsync import unitsync as unitsyncpkg
 
@@ -50,11 +52,38 @@ except:
 config = None
 unitsync = None
 writabledatadirectory = None
+numinstances = 0
+matches = []
+numinstanceslock = threading.Lock()
+
+instanceids = 0
+instanceidslock = threading.Lock()
 
 scriptdir = os.path.dirname( os.path.realpath( __file__ ) )
 
 options = {}
 args = {}
+
+class GameRunner(threading.Thread):
+   def __init__(self, host, serverrequest):
+       self.serverrequest = serverrequest
+       self.host = host
+       global instanceids, instanceidslock
+       instanceidslock.acquire()
+       self.instanceid = instanceids
+       instanceids += 1
+       instanceidslock.release()
+       threading.Thread.__init__(self)
+
+   def run(self):
+       result = rungame(self.serverrequest, self.instanceid)
+       uploadresulttoserver(self.host, self.serverrequest, result, self.instanceid)
+       global numinstances
+       global numinstanceslock
+       numinstanceslock.acquire()
+       numinstances -= 1
+       matches.remove(self.serverrequest['matchrequest_id'])
+       numinstanceslock.release()
 
 def parseopts():
    global sessionid, options, args
@@ -296,7 +325,7 @@ def downloadai( host, downloadrequest ):
 
    return True
 
-def rungame( serverrequest ):
+def rungame(serverrequest, instanceid ):
    global config, writabledatadirectory
    scripttemplatecontents = filehelper.readFile( scriptdir + "/" + config.scripttemplatefilename )
 
@@ -309,6 +338,7 @@ def rungame( serverrequest ):
    scriptcontents = scriptcontents.replace("%AI1VERSION%", serverrequest['ai1_version'] )
    scriptcontents = scriptcontents.replace("%SPEED%", str(serverrequest['speed']))
 
+   speed = serverrequest['speed']
    map_info = unitsyncpkg.MapInfo()
    unitsync.GetMapInfoEx(str(serverrequest['map_name']), map_info, 1)
    team0startpos = map_info.StartPos[0]
@@ -322,11 +352,14 @@ def rungame( serverrequest ):
    scriptcontents = scriptcontents.replace("%TEAM1STARTPOSX%", str( team1startpos.x ) )   
    scriptcontents = scriptcontents.replace("%TEAM1STARTPOSZ%", str( team1startpos.y ) )   
 
-   scriptpath = writabledatadirectory + "/script.txt"
+   scriptname = "script" + str(instanceid) + ".txt"
+   infologname = "infolog" + str(instanceid) + ".txt"
+
+   scriptpath = writabledatadirectory + scriptname
    filehelper.writeFile( scriptpath, scriptcontents )
 
-   if os.path.exists( writabledatadirectory + "/infolog.txt" ):
-      os.remove( writabledatadirectory + "/infolog.txt" )
+   if os.path.exists( writabledatadirectory + infologname ):
+      os.remove( writabledatadirectory + infologname )
 
    os.chdir( writabledatadirectory )
    if config.JAVA_HOME != None:
@@ -335,10 +368,20 @@ def rungame( serverrequest ):
          if os.getenv(varname) != None:
             existingenv[varname ] = os.getenv(varname)
       existingenv[ "JAVA_HOME" ] = os.path.dirname( config.JAVA_HOME )
-      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + "/script.txt"], 
-         env = existingenv )
+      if config.debug:
+         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
+            env = existingenv )
+      else:
+         fnull = open(os.devnull, 'w')
+         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
+            env = existingenv, stdout=fnull, stderr=fnull )
    else:
-      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + "/script.txt"])
+      if config.debug:
+         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname])
+      else:
+         fnull = open(os.devnull, 'w')
+         popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
+            stdout=fnull, stderr=fnull)
    finished = False
    starttimeseconds = time.time()
    doping( "playing game " + serverrequest['ai0_name'] + " vs " + serverrequest['ai1_name'] + " on " + serverrequest['map_name'] + " " + serverrequest['mod_name'] )
@@ -353,8 +396,8 @@ def rungame( serverrequest ):
          doping ( "playing game " + serverrequest['ai0_name'] + " vs " + serverrequest['ai1_name'] + " on " + serverrequest['map_name'] + " " + serverrequest['mod_name'] )
          lastpingtimeseconds = time.time()
       infologcontents = '' # initialize just in case it doesn't exist yet
-      if os.path.exists( writabledatadirectory + "/infolog.txt" ):
-         infologcontents = filehelper.readFile( writabledatadirectory + "/infolog.txt" )
+      if os.path.exists(writabledatadirectory + infologname):
+         infologcontents = filehelper.readFile(writabledatadirectory + infologname)
       # print infologcontents
       ai0endstring = serverrequest['gameendstring'].replace("%TEAMNUMBER%", "0")
       ai1endstring = serverrequest['gameendstring'].replace("%TEAMNUMBER%", "1")
@@ -404,7 +447,7 @@ def rungame( serverrequest ):
             pass
 
       # check timeout (== draw)
-      if ( time.time() - starttimeseconds ) > serverrequest['gametimeoutminutes'] * 60:
+      if ( time.time() - starttimeseconds ) > serverrequest['gametimeoutminutes'] * 60.0: #magic
          # timeout
          print "Game timed out"
          gameresult['winningai'] = -1
@@ -422,6 +465,16 @@ def rungame( serverrequest ):
          gameresult['replaypath'] = getreplaypath( infologcontents )
          return gameresult
 
+      proc = psutil.Process(popen.pid)
+      rss = proc.get_memory_info()[0]
+      if rss / (1024 * 1024) > config.maxmemory:
+         proc.kill()
+         print "Killing, it's using too much memory"
+         gameresult['winningai'] = -1
+         gameresult['resultstring'] = "crashed"
+         gameresult['replaypath'] = getreplaypath( infologcontents )
+         return gameresult
+          
       time.sleep (1)
 
    return gameresult
@@ -450,7 +503,7 @@ def getreplayfullpath( writabledatadirectory, relativereplaypathfrominfolog ):
    print 'Spring bug: replay is actually named:', demo_newname
    return demo_newpath
 
-def uploadresulttoserver( host, serverrequest, gameresult ):
+def uploadresulttoserver( host, serverrequest, gameresult, instanceid ):
    global writabledatadirectory
 
    # upload gameresult and serverrequest to server...
@@ -458,18 +511,20 @@ def uploadresulttoserver( host, serverrequest, gameresult ):
 
    # first we should take care of the replay
    replaypath = getreplayfullpath( writabledatadirectory, gameresult['replaypath'] )
-
+   infologname = 'infolog' + str(instanceid) + ".txt"
+   replaytarname = 'thisreplay' + str(instanceid) + '.tar.bz2'
+   infologtarname = 'thisinfolog' + str(instanceid) + '.tar.bz2'
    uploaddatadict = {} # dict of 'replay': replaydata, etc ...
 
    if replaypath != '' and replaypath != None and os.path.exists( replaypath ):
       # first tar.bz2 it
-      tarhandle = tarfile.open(writabledatadirectory + "/thisreplay.tar.bz2", "w:bz2" )
+      tarhandle = tarfile.open(writabledatadirectory + replaytarname, "w:bz2" )
       os.chdir( os.path.dirname(replaypath) )  # cd in, so that we don't embed the paths
                    # in the tar file...
       tarhandle.add( os.path.basename(replaypath) )
       tarhandle.close()
 
-      replayfilehandle = open( writabledatadirectory + "/thisreplay.tar.bz2", 'rb' )
+      replayfilehandle = open( writabledatadirectory + replaytarname, 'rb' )
       replaycontents = replayfilehandle.read()
       replayfilehandle.close()
 
@@ -478,15 +533,15 @@ def uploadresulttoserver( host, serverrequest, gameresult ):
       uploaddatadict['replay'] = replaybinarywrapper
 
    # should move this stuff to a function, but just hacking it in for now to get it working
-   if os.path.exists( writabledatadirectory + 'infolog.txt' ):
+   if os.path.exists( writabledatadirectory + infologname ):
       # first tar.bz2 it
-      tarhandle = tarfile.open(writabledatadirectory + "/thisinfolog.tar.bz2", "w:bz2" )
+      tarhandle = tarfile.open(writabledatadirectory + infologtarname, "w:bz2" )
       os.chdir( writabledatadirectory )  # cd in, so that we don't embed the paths
                    # in the tar file...
-      tarhandle.add( os.path.basename('infolog.txt') )
+      tarhandle.add( os.path.basename(infologname) )
       tarhandle.close()
 
-      replayfilehandle = open( writabledatadirectory + "/thisinfolog.tar.bz2", 'rb' )
+      replayfilehandle = open( writabledatadirectory + infologtarname, 'rb' )
       replaycontents = replayfilehandle.read()
       replayfilehandle.close()
 
@@ -808,32 +863,44 @@ def go():
             print "Couldn't register capabilities to host " + host + " " + str( sys.exc_info() )
 
    while True:
-      print "Checking for new request..."
       # go through each host getting a request
       # Process each request, then go back to start of loop,
       # otherwise wait a bit
-      gotrequest = False
-      for host in config.websiteurls:
-         print "checking " + host + " ..."
-         serverrequest = requestgamefromwebserver(host)
-         if serverrequest != None:
-            # we have a request to process
-            result = rungame( serverrequest )
-            uploadresulttoserver( host, serverrequest, result )
-            gotrequest = True
-
-      if not gotrequest and config.allowdownloading:  # see if we can download a new ai
-         print "checking for download request ... "
+      global numinstanceslock
+      global numinstances
+      numinstanceslock.acquire()
+      if numinstances < config.maxinstances:
+         numinstanceslock.release()
+         print "Checking for new request..."
+         gotrequest = False
          for host in config.websiteurls:
-            if trydownloadingsomething(host) != None:
-               gotrequest = True
-               break
+            print "checking " + host + " ..."
+            serverrequest = requestgamefromwebserver(host)
+            if serverrequest != None:
+               # we have a request to process
+               numinstanceslock.acquire()
+               matchid = serverrequest['matchrequest_id']
+               if numinstances < config.maxinstances and matchid not in matches:
+                  matches.append(matchid)
+                  GameRunner(host, serverrequest).start()
+                  numinstances += 1
+                  gotrequest = True
+               numinstanceslock.release()
+
+         if not gotrequest and config.allowdownloading:  # see if we can download a new ai
+            print "checking for download request ... "
+            for host in config.websiteurls:
+               if trydownloadingsomething(host) != None:
+                  gotrequest = True
+                  break
+
+         if not gotrequest: 
+            print "Nothing to do.  Sleeping..."
+            doping("sleeping")
+            time.sleep(config.sleepthislongwhennothingtodoseconds)
+      else:
+         numinstanceslock.release()
       
-      if not gotrequest:
-         # else, sleep...
-         print "Nothing to do.  Sleeping..."
-         doping("sleeping")
-         time.sleep(config.sleepthislongwhennothingtodoseconds)
 
 if __name__ == '__main__':
    go()
