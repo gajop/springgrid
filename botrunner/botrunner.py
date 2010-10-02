@@ -353,7 +353,8 @@ def rungame(serverrequest, instanceid ):
    scriptcontents = scriptcontents.replace("%TEAM1STARTPOSZ%", str( team1startpos.y ) )   
 
    scriptname = "script" + str(instanceid) + ".txt"
-   infologname = "infolog" + str(instanceid) + ".txt"
+#   infologname = "infolog" + str(instanceid) + ".txt"
+   infologname = "infolog.txt" #need to be able to specify different infologs
 
    scriptpath = writabledatadirectory + scriptname
    filehelper.writeFile( scriptpath, scriptcontents )
