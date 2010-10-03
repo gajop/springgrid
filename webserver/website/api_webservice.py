@@ -82,7 +82,7 @@ class APIService:
          if map == None or mod == None or ai0 == None or ai1 == None:
             return [False,'one of your parameters did not correspond to an existing map, mod or ai.  Please check and try again.']
          if speed == None:
-             speed = 1
+            speed = 1
 
          matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed )
          sqlalchemysetup.session.add( matchrequest )
@@ -95,7 +95,7 @@ class APIService:
 
          sqlalchemysetup.session.commit()
 
-         return [True, '' ]
+         return [True, matchrequest.matchrequest_id]
       except:
          return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
       

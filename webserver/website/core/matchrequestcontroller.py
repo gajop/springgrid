@@ -46,17 +46,6 @@ def getcompatibleitemfromqueue( botrunnername, sessionid ):
 
    botrunner = botrunnerhelper.getBotRunner( botrunnername )
    botrunnersession = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
-'''
-   # TEMPORARY, YES, HATE ME :(
-   # Also, remove any requests that this engine was supposedly processing
-   # for which there are no results
-   matchrequests = sqlalchemysetup.session.query(MatchRequest).filter( MatchRequest.matchresult == None ).filter( MatchRequest.matchrequestinprogress != None )
-   for matchrequest in matchrequests:
-      if matchrequest.matchrequestinprogress.botrunner is botrunner:
-         if matchrequest.matchrequestinprogress.botrunnersession is botrunnersession:
-            sqlalchemysetup.session.delete( matchrequest.matchrequestinprogress )
-   sqlalchemysetup.session.commit()
-'''
    # now we've archived the old requests, we just pick a request
    # in the future, we'll pick a compatible request.  In the future ;-)
    # also, we need to handle options.  In the future ;-)
