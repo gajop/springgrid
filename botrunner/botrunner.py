@@ -50,6 +50,7 @@ try:
 except:
    pass
 
+
 config = None
 unitsync = None
 writabledatadirectory = None
@@ -852,6 +853,13 @@ def go():
       ok = setupConfig()
       if not ok:
          return
+   if config.maxinstances == 'auto':
+      try:
+         import multiprocessing
+         config.maxinstances = multiprocessing.cpu_count()
+      except:
+         print "failed to import multiprocessing, set maxinstances manually"
+         config.maxinstances = 1
 
    initUnitSync()
 
