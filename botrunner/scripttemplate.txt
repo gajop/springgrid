@@ -3,7 +3,7 @@
 	HostIP=localhost;
 	HostPort=0;
 	IsHost=1;
-	MyPlayerName=UnnamedPlayer;
+	MyPlayerName=Botrunner;
 
 	Mapname=%MAP%;
 	GameType=%MOD%;
@@ -44,7 +44,7 @@
 
 	[PLAYER2]
 	{
-		Name=UnnamedPlayer;
+		Name=Botrunner;
 		CountryCode=;
 		Spectator=1;
 		Rank=0;
@@ -53,7 +53,7 @@
 	}
 	[AI0]
 	{
-		Name=Bot1;
+		Name=%AI0%%AI0VERSION%;
 		ShortName=%AI0%;
 		Version=%AI0VERSION%;
 		Team=0;
@@ -65,7 +65,7 @@
 	}
 	[AI1]
 	{
-		Name=Bot2;
+		Name=%AI1%%AI1VERSION%;
 		ShortName=%AI1%;
 		Version=%AI1VERSION%;
 		Team=1;
