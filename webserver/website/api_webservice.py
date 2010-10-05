@@ -71,7 +71,7 @@ class APIService:
    #
    # note: later versions of this function should be added with a new version number
    # ie v2, v3 etc... to avoid breaking the api for old clients
-   # returns [True,''] or [False, errormessage ]
+   # returns [True, matchrequest_id] or [False, errormessage ]
    def schedulematchv1(self,map_name,mod_name,ais,options,speed):
       try:
          map = sqlalchemysetup.session.query(Map).filter(Map.map_name == map_name ).first()
@@ -121,6 +121,73 @@ class APIService:
          return [True, requeststoreturn ]
       except:
          return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
+   
+   def getmatchesv1(self, matchrequest_ids):
+      try:
+         requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequest_id.in_(matchrequest_ids))
+         resulttoreturn = []
+         for request in requests:
+            options = []
+            for option in request.options:
+               options.append(option.option_name)
+            newresulttoreturn = {
+               'matchrequest_id': request.matchrequest_id,
+               'map_name': request.map.map_name,
+               'mod_name': request.mod.mod_name,
+               'ais': [ { 'ai_name': request.ai0.ai_name, 'ai_version': request.ai0.ai_version },
+                  { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
+               'options': options
+            }
+            if request.matchrequestinprogress.botrunner != None:
+               newresulttoreturn['botrunner_name'] = [True, request.matchrequestinprogress.botrunner.botrunner_name]
+            else:
+               newresulttoreturn['botrunner_name'] = [False, '']
+            if request.matchresult != None:
+               newresulttoreturn['matchresult'] = [True, request.matchresult.matchresult]
+            else:
+               newresulttoreturn['matchresult'] = [False, '']
+            if os.path.isfile( replaycontroller.getReplayPath(request.matchrequest_id) ):
+               newresulttoreturn['replayrelativeurl'] = replaycontroller.getReplayWebRelativePath(request.matchrequest_id) 
+            if os.path.isfile( replaycontroller.getInfologPath(request.matchrequest_id) ):
+               newresulttoreturn['infologrelativeurl'] = replaycontroller.getInfologWebRelativePath(request.matchrequest_id) 
+            resulttoreturn.append( newresulttoreturn )
+         return [True, resulttoreturn]
+      except:
+         return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
+
+   def getmatchv1(self, matchrequest_id):
+      try:
+         request = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id).first()
+         if request is not None:
+            options = []
+            for option in request.options:
+               options.append(option.option_name)
+            newresulttoreturn = {
+               'matchrequest_id': request.matchrequest_id,
+               'map_name': request.map.map_name,
+               'mod_name': request.mod.mod_name,
+               'ais': [ { 'ai_name': request.ai0.ai_name, 'ai_version': request.ai0.ai_version },
+                  { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
+               'options': options
+            }
+            if request.matchrequestinprogress.botrunner != None:
+               newresulttoreturn['botrunner_name'] = [True, request.matchrequestinprogress.botrunner.botrunner_name]
+            else:
+               newresulttoreturn['botrunner_name'] = [False, '']
+            if request.matchresult != None:
+               newresulttoreturn['matchresult'] = [True, request.matchresult.matchresult]
+            else:
+               newresulttoreturn['matchresult'] = [False, '']
+            if os.path.isfile( replaycontroller.getReplayPath(request.matchrequest_id) ):
+               newresulttoreturn['replayrelativeurl'] = replaycontroller.getReplayWebRelativePath(request.matchrequest_id) 
+            if os.path.isfile( replaycontroller.getInfologPath(request.matchrequest_id) ):
+               newresulttoreturn['infologrelativeurl'] = replaycontroller.getInfologWebRelativePath(request.matchrequest_id) 
+            return [True, newresulttoreturn]
+         else:
+            return [False, 'no match with such id']
+      except:
+         return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
+
 
    # returns list of dictionaries
    # note: later versions of this function, with incompatiable changes, should be added with a new version number
