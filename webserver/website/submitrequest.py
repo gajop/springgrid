@@ -58,7 +58,7 @@ def go():
       jinjahelper.message( "Please login first." )
       return
 
-   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'mapname', 'modname', 'speed'])
+   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'mapname', 'modname', 'speed', 'softtimeout', 'hardtimeout'])
    if not result:
       jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
       return
@@ -72,6 +72,8 @@ def go():
    mapname = formhelper.getValue("mapname")
    modname = formhelper.getValue("modname")
    speed = formhelper.getValue("speed")
+   softtimeout = formhelper.getValue("softtimeout")
+   hardtimeout = formhelper.getValue("hardtimeout")
 
    #if matchrequestcontroller.submitrequest( matchrequest ):
     #  jinjahelper.message( "Submitted"
@@ -82,7 +84,7 @@ def go():
    ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai0name ).filter(AI.ai_version == ai0version ).first()
    ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai1name ).filter(AI.ai_version == ai1version ).first()
 
-   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed )
+   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
    sqlalchemysetup.session.add( matchrequest )
 
    # add options:

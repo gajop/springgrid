@@ -348,6 +348,8 @@ def rungame(serverrequest, instanceid ):
    scriptcontents = scriptcontents.replace("%SPEED%", str(serverrequest['speed']))
 
    speed = serverrequest['speed']
+   softtimeout = serverrequest['softtimeout']
+   hardtimeout = serverrequest['hardtimeout']
    map_info = unitsyncpkg.MapInfo()
    unitsync.GetMapInfoEx(str(serverrequest['map_name']), map_info, 1)
    team0startpos = map_info.StartPos[0]
@@ -450,7 +452,7 @@ def rungame(serverrequest, instanceid ):
          try:
             frames = int(numstring)
             print "frames: " + str( frames )
-            if frames / 30 > serverrequest['gametimeoutminutes'] * 60:
+            if frames / 30 > softtimeout * 60:
                # timeout
                print "Game timed out"
                gameresult['winningai'] = -1
@@ -462,7 +464,7 @@ def rungame(serverrequest, instanceid ):
             pass
 
       # check timeout (== draw)
-      if ( time.time() - starttimeseconds ) > serverrequest['gametimeoutminutes'] * 60.0: #magic
+      if ( time.time() - starttimeseconds ) > hardtimeout * 60.0: #magic
          # timeout
          print "Game timed out"
          gameresult['winningai'] = -1

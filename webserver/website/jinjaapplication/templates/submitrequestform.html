@@ -18,10 +18,13 @@
 </td>
 </tr>
 <tr><td>Speed:</td><td>{{formhelper.listtodropdown("speed", speeds)}}</td></tr>
+<tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout', timeouts)}}</td></tr>
+<tr><td>Hard timeout minutes</td><td>{{formhelper.listtodropdown('hardtimeout', timeouts)}}</td></tr>
 
 <tr><td></td><td><input type='submit' value='Submit Request' /></td></tr>
 </table>
 </form>
+<p>Note: Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached. Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs.</p>
 
 {% endblock %}
 
