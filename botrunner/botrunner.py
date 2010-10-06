@@ -383,13 +383,20 @@ def rungame(serverrequest, instanceid ):
    existingenv["SPRING_DATADIR"] = datadir
    if config.JAVA_HOME != None:
       existingenv[ "JAVA_HOME" ] = os.path.dirname( config.JAVA_HOME )
-   if config.debug:
-      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname],
-         env = existingenv)
-   else:
+   fnull = None
+   if not config.debug:
       fnull = open(os.devnull, 'w')
-      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
-         env = existingenv, stdout=fnull, stderr=fnull)
+   if os.name == 'nt':
+       try:
+          popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname], 
+                  env = existingenv, stdout=fnull, stderr=fnull, creationflags=0x40) #0x40 sets idle-level process priority for windows
+       except:
+          print "setting idle process priority failed for nt platform. trying to start without priority settings"
+          popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname],
+                  env = existingenv, stdout=fnull, stderr=fnull)
+   else:
+      popen = subprocess.Popen( [ config.springPath, writabledatadirectory + scriptname],
+              env = existingenv, stdout=fnull, stderr=fnull)
    finished = False
    starttimeseconds = time.time()
    doping( "playing game " + serverrequest['ai0_name'] + " vs " + serverrequest['ai1_name'] + " on " + serverrequest['map_name'] + " " + serverrequest['mod_name'] )
@@ -879,6 +886,12 @@ def go():
          except:
             print "Couldn't register capabilities to host " + host + " " + str( sys.exc_info() )
 
+   #try to set process niceness
+   if os.name == 'posix':
+      try:
+         os.nice(19)
+      except:
+         print "setting os niceness failed for posix platform"
    while True:
       # go through each host getting a request
       # Process each request, then go back to start of loop,
