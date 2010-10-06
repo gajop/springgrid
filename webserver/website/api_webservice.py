@@ -138,7 +138,7 @@ class APIService:
                   { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
                'options': options
             }
-            if request.matchrequestinprogress.botrunner != None:
+            if request.matchrequestinprogress != None and request.matchrequestinprogress.botrunner != None:
                newresulttoreturn['botrunner_name'] = [True, request.matchrequestinprogress.botrunner.botrunner_name]
             else:
                newresulttoreturn['botrunner_name'] = [False, '']
