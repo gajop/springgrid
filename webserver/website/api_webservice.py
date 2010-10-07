@@ -100,6 +100,44 @@ class APIService:
          return [True, matchrequest.matchrequest_id]
       except:
          return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
+
+   def schedulematchesv1(self,matches):
+      matchrequest_ids = []
+      for match in matches:
+         map_name = match["map_name"]
+         mod_name = match["mod_name"]
+         options = match["options"]
+         ais = match["ais"]
+         softtimeout = match["softtimeout"]
+         hardtimeout = match["hardtimeout"]
+         speed = match["speed"]
+         try:
+            map = sqlalchemysetup.session.query(Map).filter(Map.map_name == map_name ).first()
+            mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == mod_name ).first()
+            ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ais[0]['ai_name'] ).filter(AI.ai_version == ais[0]['ai_version'] ).first()
+            ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ais[1]['ai_name'] ).filter(AI.ai_version == ais[1]['ai_version'] ).first()
+
+            if map == None or mod == None or ai0 == None or ai1 == None:
+               return [False,'one of your parameters did not correspond to an existing map, mod or ai.  Please check and try again.']
+            if softtimeout == None or hardtimeout == None:
+                return [False,'you need to specify both a hard timeout and a soft timeout for the match']
+            if speed == None:
+               speed = 1
+
+            matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
+            sqlalchemysetup.session.add( matchrequest )
+
+            # add options:
+            availableoptions = sqlalchemysetup.session.query(AIOption)
+            for option in availableoptions:
+               if option.option_name in options:
+                  matchrequest.options.append( option )
+
+            matchrequest_ids.append(matchrequest.matchrequest_id)
+         except:
+            return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
+      sqlalchemysetup.session.commit()
+      return [True, matchrequest_ids]
       
    # returns list of dictionaries
    # note: later versions of this function, with incompatiable changes, should be added with a new version number
