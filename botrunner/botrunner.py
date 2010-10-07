@@ -78,8 +78,12 @@ class GameRunner(threading.Thread):
        threading.Thread.__init__(self)
 
    def run(self):
-       result = rungame(self.serverrequest, self.instanceid)
-       uploadresulttoserver(self.host, self.serverrequest, result, self.instanceid)
+       try:
+          result = rungame(self.serverrequest, self.instanceid)
+          uploadresulttoserver(self.host, self.serverrequest, result, self.instanceid)
+       except:
+          print "Something went wrong with botrunner, not uploading to server"
+          traceback.print_exc()
        global numinstances
        global numinstanceslock
        numinstanceslock.acquire()
@@ -407,7 +411,7 @@ def rungame(serverrequest, instanceid ):
    waitingcount = 0
    while not finished:
       if waitingcount % 30 == 0:
-         print "botrunner: waiting for game to terminate..."
+         print "botrunner instance " + str(instanceid) + ": waiting for game to terminate..."
       waitingcount = waitingcount + 1
       if time.time() - lastpingtimeseconds > config.pingintervalminutes * 60:
          doping ( "playing game " + serverrequest['ai0_name'] + " vs " + serverrequest['ai1_name'] + " on " + serverrequest['map_name'] + " " + serverrequest['mod_name'] )
@@ -423,7 +427,11 @@ def rungame(serverrequest, instanceid ):
          print "team 1 won!"
          gameresult['winningai'] = 1
          gameresult['resultstring'] = "ai1won"
-         popen.kill()
+         try:
+            popen.kill()
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          gameresult['replaypath'] = getreplaypath( infologcontents )
          return gameresult
       if infologcontents.find( ai0endstring ) == -1 and infologcontents.find(ai1endstring ) != - 1:
@@ -431,7 +439,11 @@ def rungame(serverrequest, instanceid ):
          print "team 0 won!"
          gameresult['winningai'] = 0
          gameresult['resultstring'] = "ai0won"
-         popen.kill()
+         try:
+            popen.kill()
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          gameresult['replaypath'] = getreplaypath( infologcontents )
          return gameresult
       if infologcontents.find( ai0endstring ) != -1 and infologcontents.find(ai1endstring ) != - 1:
@@ -439,7 +451,11 @@ def rungame(serverrequest, instanceid ):
          print "A draw..." 
          gameresult['winningai'] = -1
          gameresult['resultstring'] = "draw"
-         popen.kill()
+         try:
+            popen.kill()
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          gameresult['replaypath'] = getreplaypath( infologcontents )
          return gameresult
 
@@ -457,7 +473,11 @@ def rungame(serverrequest, instanceid ):
                print "Game timed out"
                gameresult['winningai'] = -1
                gameresult['resultstring'] = "gametimeout"
-               popen.kill()
+               try:
+                  popen.kill()
+               except:
+                  print "Failed killing the process"
+                  traceback.print_exc()
                gameresult['replaypath'] = getreplaypath( infologcontents )
                return gameresult
          except:
@@ -469,14 +489,23 @@ def rungame(serverrequest, instanceid ):
          print "Game timed out"
          gameresult['winningai'] = -1
          gameresult['resultstring'] = "gametimeout"
-         popen.kill()
+         try:
+            popen.kill()
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          gameresult['replaypath'] = getreplaypath( infologcontents )
          return gameresult
 
       if popen.poll() != None:
          # spring finished / died / crashed
          # presumably if we got here, it crashed, otherwise infolog would have been written   
-         print "Crashed" 
+         print "Crashed"
+         try:
+            popen.kill() # just to be on the safe side?
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          gameresult['winningai'] = -1
          gameresult['resultstring'] = "crashed"
          gameresult['replaypath'] = getreplaypath( infologcontents )
@@ -485,7 +514,11 @@ def rungame(serverrequest, instanceid ):
       proc = psutil.Process(popen.pid)
       rss = proc.get_memory_info()[0]
       if rss / (1024 * 1024) > config.maxmemory:
-         proc.kill()
+         try:
+            popen.kill()
+         except:
+            print "Failed killing the process"
+            traceback.print_exc()
          print "Killing, it's using too much memory"
          gameresult['winningai'] = -1
          gameresult['resultstring'] = "crashed"
