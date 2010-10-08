@@ -3,6 +3,13 @@
 {% block content %}
 
 <h3>SpringGrid - Match results</h3>
+{% for i in range(1, numPages + 1) %}
+{% if i != page %}
+<a href="./viewresults.py?page={{i}}">{{i}}</a> 
+{% else %}
+{{i}} 
+{% endif %}
+{% endfor %}
 <table>
 <tr class='tablehead'>
 <td>matchrequestid</td>

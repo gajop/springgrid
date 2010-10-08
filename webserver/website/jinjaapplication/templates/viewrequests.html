@@ -25,6 +25,13 @@ http://www.opensource.org/licenses/gpl-license.php
 
 {% block content %}
 <h3>SpringGrid - Match requests</h3>
+{% for i in range(1, numPages + 1) %}
+{% if i != page %}
+<a href="./viewrequests.py?page={{i}}">{{i}}</a> 
+{% else %}
+{{i}} 
+{% endif %}
+{% endfor %}
 <table border='1' padding='3'>
 <tr class='tablehead'>
 <td>matchrequestid</td>

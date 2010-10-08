@@ -20,8 +20,11 @@
 # You can find the licence also on the web at:
 # http://www.opensource.org/licenses/gpl-license.php
 #
+from __future__ import division
 
 import cgitb; cgitb.enable()
+import sys
+import math
 
 from utils import *
 from core import *
@@ -34,14 +37,28 @@ loginhelper.processCookie()
 botrunnerhelper.purgeExpiredSessions()
 sqlalchemysetup.session.commit()
 
-requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None )
+def go():
+   resultsPerPage = 100
+   page = formhelper.getValue('page')
+   if page == None:
+      page = 1
+   else:
+      page = int(page)
+   requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None )
+   numPages = math.ceil(requests.count() / resultsPerPage)
+   requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
 
-datetimeassignedbyrequest = {}
-for request in requests:
-   if request.matchrequestinprogress != None:
-      datetimeassignedbyrequest[request] = str( dates.dateStringToDateTime( request.matchrequestinprogress.datetimeassigned ) )
+   datetimeassignedbyrequest = {}
+   for request in requests:
+      if request.matchrequestinprogress != None:
+         datetimeassignedbyrequest[request] = str( dates.dateStringToDateTime( request.matchrequestinprogress.datetimeassigned ) )
 
-jinjahelper.rendertemplate('viewrequests.html', requests = requests, datetimeassignedbyrequest = datetimeassignedbyrequest )
+   jinjahelper.rendertemplate('viewrequests.html', requests = requests, datetimeassignedbyrequest = datetimeassignedbyrequest, numPages = numPages, page = page )
+
+try:
+   go()
+except:
+   jinjahelper.message("Something bad happened. " + str(sys.exc_value))
 
 sqlalchemysetup.close()
 
