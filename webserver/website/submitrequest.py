@@ -58,7 +58,7 @@ def go():
       jinjahelper.message( "Please login first." )
       return
 
-   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'mapname', 'modname', 'speed', 'softtimeout', 'hardtimeout'])
+   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'ai0side', 'ai1side', 'mapname', 'modname', 'speed', 'softtimeout', 'hardtimeout'])
    if not result:
       jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
       return
@@ -66,9 +66,11 @@ def go():
    ai0nameversion = formhelper.getValue("ai0nameversion")
    ai0name = ai0nameversion.split("|")[0]
    ai0version = ai0nameversion.split("|")[1]
+   ai0side = int(formhelper.getValue("ai0side"))
    ai1nameversion = formhelper.getValue("ai1nameversion")
    ai1name = ai1nameversion.split("|")[0]
    ai1version = ai1nameversion.split("|")[1]
+   ai1side = int(formhelper.getValue("ai1side"))
    mapname = formhelper.getValue("mapname")
    modname = formhelper.getValue("modname")
    speed = formhelper.getValue("speed")
@@ -83,9 +85,10 @@ def go():
    mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
    ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai0name ).filter(AI.ai_version == ai0version ).first()
    ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai1name ).filter(AI.ai_version == ai1version ).first()
+   ai0side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai0side).first()
+   ai1side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai1side).first()
 
-   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
-   sqlalchemysetup.session.add( matchrequest )
+   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout, ai0_side=ai0side, ai1_side=ai1side)
 
    # add options:
    availableoptions = sqlalchemysetup.session.query(AIOption)
@@ -93,15 +96,13 @@ def go():
    for option in availableoptions:
       if formhelper.getValue( "option_" + option.option_name ) != None:
          matchrequest.options.append( option )
-
+   sqlalchemysetup.session.add( matchrequest )
+   
    sqlalchemysetup.session.commit()
 
    jinjahelper.message( "Submitted ok." )
 
-try:
-   go()
-except:
-   jinjahelper.message( "An unexpected error occurred: " + str(sys.exc_info() ) )
+go()
 
 sqlalchemysetup.close()
 

@@ -37,7 +37,14 @@ sqlalchemysetup.setup()
 
 ais = sqlalchemysetup.session.query( tableclasses.AI.ai_name, tableclasses.AI.ai_version )
 maps = listhelper.tuplelisttolist( sqlalchemysetup.session.query( tableclasses.Map.map_name ) )
-mods = listhelper.tuplelisttolist( sqlalchemysetup.session.query( tableclasses.Mod.mod_name ) )
+mods = sqlalchemysetup.session.query( tableclasses.Mod)
+sidequery = sqlalchemysetup.session.query(tableclasses.ModSide)
+modsides = {}
+for i, mod in enumerate(mods):
+   modsides[mod.mod_id] = (i, [])
+for side in sidequery:
+   modsides[side.mod_id][1].append((side.mod_side_name, side.mod_side_id))
+mods = [mod.mod_name for mod in mods]
 
 options = listhelper.tuplelisttolist( sqlalchemysetup.session.query( tableclasses.AIOption.option_name ) )
 
@@ -50,7 +57,7 @@ speeds = [i for i in range(1, 10)]
 speeds.extend([i for i in range(10,101,5)])
 timeouts = speeds
 
-jinjahelper.rendertemplate('submitrequestform.html', ais = ais, maps = maps, mods = mods, aivalues = aivalues, aiitems = aiitems, options = options, speeds = speeds, timeouts = timeouts )
+jinjahelper.rendertemplate('submitrequestform.html', ais = ais, maps = maps, mods = mods, aivalues = aivalues, aiitems = aiitems, options = options, speeds = speeds, timeouts = timeouts, sides = modsides )
 
 sqlalchemysetup.close()
 

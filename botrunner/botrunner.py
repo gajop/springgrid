@@ -350,6 +350,8 @@ def rungame(serverrequest, instanceid ):
    scriptcontents = scriptcontents.replace("%AI1%", serverrequest['ai1_name'] )
    scriptcontents = scriptcontents.replace("%AI1VERSION%", serverrequest['ai1_version'] )
    scriptcontents = scriptcontents.replace("%SPEED%", str(serverrequest['speed']))
+   scriptcontents = scriptcontents.replace("%TEAM0SIDE%", serverrequest['ai0_side'])
+   scriptcontents = scriptcontents.replace("%TEAM1SIDE%", serverrequest['ai1_side'])
 
    speed = serverrequest['speed']
    softtimeout = serverrequest['softtimeout']
@@ -773,9 +775,15 @@ def registermods(host,registeredmods):
       if registeredmods.count( modname ) == 0:
          print "registering mod " + modname + " ..."
          unitsync.GetPrimaryModArchiveCount(i)
-         modarchive = unitsync.GetPrimaryModArchive(0)
+         modarchive = unitsync.GetPrimaryModArchive(i)
          modarchivechecksum = unitsync.GetArchiveChecksum( modarchive )
-         multicall.registersupportedmod( config.botrunnername, config.sharedsecret, modname, str(modarchivechecksum) )
+         unitsync.RemoveAllArchives()
+         unitsync.AddAllArchives(modarchive)
+         print unitsync.GetSideCount()
+         sides = [unitsync.GetSideName(i) for i in range(unitsync.GetSideCount())]
+         if len(sides) == 0:
+            raise Exception()
+         multicall.registersupportedmod( config.botrunnername, config.sharedsecret, modname, str(modarchivechecksum), sides )
    results = multicall()
    successcount = 0
    total = 0
@@ -783,6 +791,8 @@ def registermods(host,registeredmods):
       total = total + 1
       if result[0]:
          successcount = successcount + 1
+      else:
+         print result[1]
    if total > 0:
       print str(successcount) + " successes out of " + str(total)
 
@@ -919,7 +929,7 @@ def go():
             print "registering capabilities with " + host + " ..."
             registercapabilities(host)
          except:
-            print "Couldn't register capabilities to host " + host + " " + str( sys.exc_info() )
+            print "Couldn't register capabilities to host " + host + " " + str( sys.exc_info())
 
    #try to set process niceness
    if os.name == 'posix':

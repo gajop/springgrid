@@ -52,8 +52,21 @@ class Mod(Base):
    mod_archivechecksum = Column(String(255))
    mod_url = Column(String(255))
 
+   mod_sides = relation("ModSide")
+
    def __init__(self, mod_name ):
       self.mod_name = mod_name
+
+class ModSide(Base):
+   __tablename__ = 'mod_sides'
+
+   mod_side_id = Column(Integer, primary_key=True)
+   mod_side_name = Column(String(255), unique = False) #different mods can have the same side names
+   mod_id = Column(Integer,ForeignKey('mods.mod_id'), nullable=False)
+
+   def __init__(self, mod_side_name, mod_id):
+      self.mod_side_name = mod_side_name
+      self.mod_id = mod_id
 
 account_roles = Table('role_members', Base.metadata,
    Column('role_id', Integer,ForeignKey('roles.role_id'),nullable=False),
@@ -256,7 +269,9 @@ class MatchRequest(Base):
    map_id =Column(Integer, ForeignKey('maps.map_id'), nullable = False)
    mod_id =Column(Integer, ForeignKey('mods.mod_id'), nullable = False)
    ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)
+   ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)
    ai1_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)
+   ai1_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)
    speed = Column(Integer, nullable = False)
    softtimeout = Column(Integer, nullable = False)
    hardtimeout = Column(Integer, nullable = False)
@@ -265,12 +280,14 @@ class MatchRequest(Base):
    mod = relation("Mod" )
    ai0 = relation("AI", primaryjoin = ai0_id == AI.ai_id )
    ai1 = relation("AI", primaryjoin = ai1_id == AI.ai_id )
+   ai0_side = relation("ModSide", primaryjoin = ai0_side_id == ModSide.mod_side_id)
+   ai1_side = relation("ModSide", primaryjoin = ai1_side_id == ModSide.mod_side_id)
 
    matchrequestinprogress = relation("MatchRequestInProgress", uselist=False)
    matchresult = relation("MatchResult", uselist=False)
    options = relation("AIOption", secondary = matchrequest_options )
 
-   def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout):
+   def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout, ai0_side, ai1_side):
       self.ai0 = ai0
       self.ai1 = ai1
       self.map = map
@@ -278,6 +295,8 @@ class MatchRequest(Base):
       self.speed = speed
       self.softtimeout = softtimeout
       self.hardtimeout = hardtimeout
+      self.ai0_side = ai0_side
+      self.ai1_side = ai1_side
 
 class MatchRequestInProgress(Base):
    __tablename__ = 'matchrequests_inprogress'

@@ -47,6 +47,10 @@ class APIService:
    def getmods(self):
       return listhelper.tuplelisttolist( sqlalchemysetup.session.query(Mod.mod_name) )
 
+   # returns a dictionary of lists mapping from modname -> modname sides
+   def getmodsides(self):
+      return [{"mod_side_name" : i.mod_side_name, "mod_side_id" : i.mod_side_id, "mod_name" : sqlalchemysetup.session.query(Mod.mod_name).filter(Mod.mod_id == i.mod_id).first()[0]} for i in sqlalchemysetup.session.query(ModSide).all()]
+
    # returns [True, exists(map_name)] or [False, errormessage]
    def mapexists(self, map_name ):
       map = maphelper.getMap( map_name )
@@ -111,20 +115,24 @@ class APIService:
          softtimeout = match["softtimeout"]
          hardtimeout = match["hardtimeout"]
          speed = match["speed"]
+         ai0_side = ais[0]['ai_side']
+         ai1_side = ais[1]['ai_side']
          try:
             map = sqlalchemysetup.session.query(Map).filter(Map.map_name == map_name ).first()
             mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == mod_name ).first()
             ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ais[0]['ai_name'] ).filter(AI.ai_version == ais[0]['ai_version'] ).first()
             ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ais[1]['ai_name'] ).filter(AI.ai_version == ais[1]['ai_version'] ).first()
+            ai0_side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai0_side).first()
+            ai1_side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai1_side).first()
 
-            if map == None or mod == None or ai0 == None or ai1 == None:
-               return [False,'one of your parameters did not correspond to an existing map, mod or ai.  Please check and try again.']
+            if map == None or mod == None or ai0 == None or ai1 == None or ai0_side == None or ai1_side == None:
+               return [False,'one of your parameters did not correspond to an existing map, mod, ai or ai sides.  Please check and try again.']
             if softtimeout == None or hardtimeout == None:
                 return [False,'you need to specify both a hard timeout and a soft timeout for the match']
             if speed == None:
                speed = 1
 
-            matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
+            matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout, ai0_side = ai0_side, ai1_side = ai1_side )
             sqlalchemysetup.session.add( matchrequest )
 
             # add options:
@@ -157,7 +165,10 @@ class APIService:
                'mod_name': request.mod.mod_name,
                'ais': [ { 'ai_name': request.ai0.ai_name, 'ai_version': request.ai0.ai_version },
                   { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
-               'options': options } )
+               'options': options, 
+               'ai0_side': { 'mod_side_name' : request.ai0_side.mod_side_name, 'mod_side_id' : request.ai0_side.mod_side_id},
+               'ai1_side': { 'mod_side_name' : request.ai1_side.mod_side_name, 'mod_side_id' : request.ai1_side.mod_side_id}
+               } )
          return [True, requeststoreturn ]
       except:
          return (False,"An unexpected exception occurred: " + str( sys.exc_info() ) + "\n" + str( traceback.extract_tb( sys.exc_traceback ) ) )
@@ -176,7 +187,9 @@ class APIService:
                'mod_name': request.mod.mod_name,
                'ais': [ { 'ai_name': request.ai0.ai_name, 'ai_version': request.ai0.ai_version },
                   { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
-               'options': options
+               'options': options,
+               'ai0_side': { 'mod_side_name' : request.ai0_side.mod_side_name, 'mod_side_id' : request.ai0_side.mod_side_id},
+               'ai1_side': { 'mod_side_name' : request.ai1_side.mod_side_name, 'mod_side_id' : request.ai1_side.mod_side_id},
             }
             if request.matchrequestinprogress != None and request.matchrequestinprogress.botrunner != None:
                newresulttoreturn['botrunner_name'] = [True, request.matchrequestinprogress.botrunner.botrunner_name]
@@ -208,7 +221,9 @@ class APIService:
                'mod_name': request.mod.mod_name,
                'ais': [ { 'ai_name': request.ai0.ai_name, 'ai_version': request.ai0.ai_version },
                   { 'ai_name': request.ai1.ai_name, 'ai_version': request.ai1.ai_version } ],
-               'options': options
+               'options': options,
+               'ai0_side': { 'mod_side_name' : request.ai0_side.mod_side_name, 'mod_side_id' : request.ai0_side.mod_side_id},
+               'ai1_side': { 'mod_side_name' : request.ai1_side.mod_side_name, 'mod_side_id' : request.ai1_side.mod_side_id}
             }
             if request.matchrequestinprogress.botrunner != None:
                newresulttoreturn['botrunner_name'] = [True, request.matchrequestinprogress.botrunner.botrunner_name]

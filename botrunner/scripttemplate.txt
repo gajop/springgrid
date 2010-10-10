@@ -83,7 +83,7 @@
 		StartPosZ=%TEAM0STARTPOSZ%;
 		AllyTeam=1;
 		RGBColor=0.976471 1 0;
-		Side=ARM;
+		Side=%TEAM0SIDE%;
 		Handicap=0;
 	}
 	[TEAM1]
@@ -93,7 +93,7 @@
 		StartPosZ=%TEAM1STARTPOSZ%;
 		AllyTeam=2;
 		RGBColor=0.509804 0.498039 1;
-		Side=ARM;
+		Side=%TEAM1SIDE%;
 		Handicap=0;
 	}
 

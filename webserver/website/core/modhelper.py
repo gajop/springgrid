@@ -23,15 +23,21 @@ from utils import *
 import sqlalchemysetup
 from tableclasses import *
 import botrunnerhelper
+import sys
 
 # returns True if exists, or added ok, otherwise False
-def addmodifdoesntexist(modname, modarchivechecksum):
+def addmodifdoesntexist(modname, modarchivechecksum, sidenames):
    mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
    if mod == None:
       try:
          mod = Mod( modname )
          mod.mod_archivechecksum = modarchivechecksum
          sqlalchemysetup.session.add(mod)
+         sqlalchemysetup.session.commit()
+         sqlalchemysetup.session.flush()
+         mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
+         sides = [ModSide(sidename, mod.mod_id) for sidename in sidenames]
+         sqlalchemysetup.session.add_all(sides)
          sqlalchemysetup.session.commit()
       except:
          return(False, "error adding to db: " + str( sys.exc_value ) )

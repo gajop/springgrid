@@ -78,12 +78,13 @@ class SpringGridService:
 
    # return (True,'') if goes ok, otherwise (False,message)
    # needs to pass as string, since xmlrpc doesn't support long :-/
-   def registersupportedmod( self, botrunnername, sharedsecret, modname, modarchivechecksum_string ):
+   def registersupportedmod( self, botrunnername, sharedsecret, modname, modarchivechecksum_string, sides ):
       if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
          return (False, "Not authenticated")
 
-      if not modhelper.addmodifdoesntexist(modname, long(modarchivechecksum_string)):
-         return (False, "Couldn't register mod")
+      [success, errormessage] = modhelper.addmodifdoesntexist(modname, long(modarchivechecksum_string), sides)
+      if not success:
+         return (False, "Couldn't register mod " + errormessage)
 
       if not modhelper.setbotrunnersupportsthismod( botrunnername, modname ):
          return (False, "couldn't mark mod as supported for botrunner")
@@ -120,6 +121,9 @@ class SpringGridService:
 
    def getsupportedais( self, botrunnername, sharedsecret ):
       return aihelper.getsupportedais(botrunnername)
+
+   def getsupportedmodsides(self, botrunnername, sharedsecret):
+      return modhelper.getsupportedmodsides(botrunner)
 
    #  resultstring is: 'ai0won', 'draw', 'crashed', 'hung', ...
    # returns (True,message) or (False,message)
@@ -303,6 +307,8 @@ class SpringGridService:
          requestitemdict['ai0_version'] = requestitem.ai0.ai_version
          requestitemdict['ai1_name'] = requestitem.ai1.ai_name
          requestitemdict['ai1_version'] = requestitem.ai1.ai_version
+         requestitemdict['ai0_side'] = requestitem.ai0_side.mod_side_name
+         requestitemdict['ai1_side'] = requestitem.ai1_side.mod_side_name
          requestitemdict['map_name'] = requestitem.map.map_name
          requestitemdict['mod_name'] = requestitem.mod.mod_name
          requestitemdict['speed'] = requestitem.speed
