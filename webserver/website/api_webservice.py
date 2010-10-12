@@ -65,7 +65,7 @@ class APIService:
    def getais(self):
       ailist = []
       for ai in sqlalchemysetup.session.query(AI):
-         ailist.append({'ai_name': ai.ai_name, 'ai_version': ai.ai_version})
+         ailist.append({'ai_name': ai.ai_name, 'ai_version': ai.ai_version, 'ai_id':ai.ai_id})
       return ailist
 
    # schedule a single match
