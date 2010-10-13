@@ -61,6 +61,8 @@ numinstanceslock = threading.Lock()
 instanceids = 0
 instanceidslock = threading.Lock()
 
+unitsynclock = threading.Lock()
+
 scriptdir = os.path.dirname( os.path.realpath( __file__ ) )
 
 options = {}
@@ -339,7 +341,7 @@ def downloadai( host, downloadrequest ):
    return True
 
 def rungame(serverrequest, instanceid ):
-   global config, writabledatadirectory
+   global config, writabledatadirectory, unitsynclock
    scripttemplatecontents = filehelper.readFile( scriptdir + "/" + config.scripttemplatefilename )
 
    scriptcontents = scripttemplatecontents
@@ -356,10 +358,12 @@ def rungame(serverrequest, instanceid ):
    speed = serverrequest['speed']
    softtimeout = serverrequest['softtimeout']
    hardtimeout = serverrequest['hardtimeout']
+   unitsynclock.acquire()
    map_info = unitsyncpkg.MapInfo()
    unitsync.GetMapInfoEx(str(serverrequest['map_name']), map_info, 1)
    team0startpos = map_info.StartPos[0]
    team1startpos = map_info.StartPos[1]
+   unitsynclock.release()
    # we always play team 0 on startpos0 ,and team1 on startpos1, for repeatability
    # it is for hte website to decide which team should go on which side, not the
    # botrunner
@@ -744,9 +748,11 @@ def  setupConfig():
    return True
 
 def registermaps(host,registeredmaps):
+   global unitsynclock
    print registeredmaps
 
    multicall = xmlrpclib.MultiCall(getxmlrpcproxy(host))
+   unitsynclock.acquire()
    for i in xrange( unitsync.GetMapCount() ):
       mapname = unitsync.GetMapName(i)
       if registeredmaps.count( mapname ) == 0:
@@ -756,6 +762,7 @@ def registermaps(host,registeredmaps):
          #print unitsync.GetMapArchiveName(1)
          archivechecksum = unitsync.GetArchiveChecksum( archivename )
          multicall.registersupportedmap( config.botrunnername, config.sharedsecret, mapname, str(archivechecksum) )
+   unitsynclock.release()
    results = multicall()
    successcount = 0
    total = 0
@@ -767,9 +774,11 @@ def registermaps(host,registeredmaps):
       print str(successcount) + " successes out of " + str(total)
 
 def registermods(host,registeredmods):
+   global unitsynclock
    print registeredmods
 
    multicall = xmlrpclib.MultiCall(getxmlrpcproxy(host))
+   unitsynclock.acquire()
    for i in xrange( unitsync.GetPrimaryModCount() ):
       modname = unitsync.GetPrimaryModName(i)
       if registeredmods.count( modname ) == 0:
@@ -782,8 +791,10 @@ def registermods(host,registeredmods):
          print unitsync.GetSideCount()
          sides = [unitsync.GetSideName(i) for i in range(unitsync.GetSideCount())]
          if len(sides) == 0:
+            unitsynclock.release()
             raise Exception()
          multicall.registersupportedmod( config.botrunnername, config.sharedsecret, modname, str(modarchivechecksum), sides )
+   unitsynclock.release()
    results = multicall()
    successcount = 0
    total = 0
@@ -797,11 +808,13 @@ def registermods(host,registeredmods):
       print str(successcount) + " successes out of " + str(total)
 
 def registerais(host,registeredais):
+   global unitsynclock
    print registeredais
 
    multicall = xmlrpclib.MultiCall(getxmlrpcproxy(host))
    registeredaiswehave = []  # we'll go through this and figure out which ones we don't have,
                              # then unregister them
+   unitsynclock.acquire()
    for i in xrange( unitsync.GetSkirmishAICount() ):
       shortname = ''
       version = ''
@@ -817,6 +830,7 @@ def registerais(host,registeredais):
             multicall.registersupportedai( config.botrunnername, config.sharedsecret, shortname, version )
          else:
             registeredaiswehave.append( [shortname,version] )
+   unitsynclock.release()
 
    for shortname, version in registeredais:
       if registeredaiswehave.count( [shortname, version] ) == 0:
@@ -874,10 +888,12 @@ def initUnitSync():
    initUnitSyncWithUnitSyncPath(config.unitsyncPath)
 
 def initUnitSyncWithUnitSyncPath(unitsyncpath):
-   global unitsync, writabledatadirectory
+   global unitsync, writabledatadirectory, unitsynclock
+   unitsynclock.acquire()
    unitsync = unitsyncpkg.Unitsync(unitsyncpath)
    unitsync.Init(True,1)
    writabledatadirectory = unitsync.GetWritableDataDirectory()
+   unitsynclock.release()
 
 def go():
    global config, unitsync, writabledatadirectory
