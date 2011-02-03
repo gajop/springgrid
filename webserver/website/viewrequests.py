@@ -45,7 +45,7 @@ def go():
    else:
       page = int(page)
    requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None )
-   numPages = math.ceil(requests.count() / resultsPerPage)
+   numPages = int(math.ceil(requests.count() / resultsPerPage))
    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
 
    datetimeassignedbyrequest = {}
