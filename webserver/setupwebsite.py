@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
@@ -142,7 +142,7 @@ def main():
          while virtualenvpath == '':
             print "Please enter the path to the virtual env you wish to use or create:"
             virtualenvpath = sys.stdin.readline().strip()
-            os.chdir(scriptdir + "/dependencies/virtualenv-1.3.4")
+            os.chdir(scriptdir + "/dependencies/virtualenv-1.5.1")
             popen = subprocess.Popen([sys.executable, "virtualenv.py", virtualenvpath] )
             popen.wait()
             newpythonexecutable = virtualenvpath + "/bin/python"
