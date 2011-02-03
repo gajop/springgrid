@@ -7,6 +7,9 @@ config_vbox.pyc
 # exclude all compiled modules
 *.pyc
 
+# exclude swap files
+.*.swp
+
 # various scripts that should not be included
 updatesite.cgi
 reloaddb.cgi

@@ -110,15 +110,6 @@ def main():
       print "If you are on a dedicated machine, global installation is probably best."
       print "If you are on a shared webhosting, you probably should use a virtual environment."
       installlocation = userinput.choice("Please choose target installation environment", { 'global': 'install globally', 'virtualenv': 'install to virtual environment' } )
-      while installlocation == None:
-         print "Please choose target installation environment:"
-         print "g: install globally"
-         print "v: install to a virtual environment."
-         line = sys.stdin.readline().strip().lower()
-         if line == 'g':
-            installlocation = 'global'
-         if line == 'v':
-            installlocation = 'virtualenv'
 
       if installlocation == 'global':
          if 'sqlalchemy' in neededpackages:
