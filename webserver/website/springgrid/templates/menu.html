@@ -1,5 +1,4 @@
-{% extends 'menu.html' %}
-{% block headers %}{{headers}}{% endblock %}
+{% block headers %}{% endblock %}
 
 {#
 Copyright Hugh Perkins 2009
@@ -23,6 +22,27 @@ You can find the licence also on the web at:
 http://www.opensource.org/licenses/gpl-license.php
 #}
 
-{% block content %}
-{{message}}
-{% endblock %}
+<html>
+<head>
+<title>SpringGrid</title>
+<link rel="stylesheet" rev="stylesheet" href="/style.css">
+</head>
+<body {% block bodytag %}{% endblock %}>
+<div class="mainmenu">
+{% for menu in c.menus %}
+    <div class="menu">
+    <div class="popuptitle">{{menu[0]}}</div>
+    <div class="popup">
+    {%for menuitem in menu[1]%}
+        <a href={{menuitem[1]}}><div class="menuitem">{{menuitem[0]}}</div></a>
+    {%endfor%}
+    </div>
+    </div>
+{%endfor%}
+</div>
+<div class="contents">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>
+

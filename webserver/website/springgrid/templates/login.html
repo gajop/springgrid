@@ -1,5 +1,4 @@
-Content-type: text/html
-{% block headers %}{% endblock %}
+{% extends 'menu.html' %}
 
 {#
 Copyright Hugh Perkins 2009
@@ -23,27 +22,15 @@ You can find the licence also on the web at:
 http://www.opensource.org/licenses/gpl-license.php
 #}
 
-<html>
-<head>
-<title>SpringGrid</title>
-<link rel="stylesheet" rev="stylesheet" href="style.css">
-</head>
-<body {% block bodytag %}{% endblock %}>
-<div class="mainmenu">
-{%for menu in menus%}
-<div class="menu">
-<div class="popuptitle">{{menu[0]}}</div>
-<div class="popup">
-{%for menuitem in menu[1]%}
-<a href={{menuitem[1]}}><div class="menuitem">{{menuitem[0]}}</div></a>
-{%endfor%}
-</div>
-</div>
-{%endfor%}
-</div>
-<div class="contents">
-{% block content %}{% endblock %}
-</div>
-</body>
-</html>
+{% block content %}
+<h3>SpringGrid - login</h3>
+<h4>Login using username and password:</h4>
+<form action='/login/submit' method='post'>
+<table border='1' cellpadding='3'>
+<tr><td>Username:</td><td><input type='text' name='username'></td></tr>
+<tr><td>Password:</td><td><input type='password' name='password'></td></tr>
+<tr><td></td><td><input type='submit' value='Login'></td></tr>
+</table>
+</form>
+{% endblock %}
 
