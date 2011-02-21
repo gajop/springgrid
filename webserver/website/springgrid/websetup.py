@@ -16,3 +16,4 @@ def setup_app(command, conf, vars):
 
     # Create the tables if they don't already exist
     Base.metadata.create_all(bind=Session.bind)
+    print "created tables"

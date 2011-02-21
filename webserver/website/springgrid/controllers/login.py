@@ -8,8 +8,8 @@ from springgrid.lib.base import BaseController, render
 log = logging.getLogger(__name__)
 
 class LoginController(BaseController):
-    def login(self):
-        """Show login form. Submit to /login/submit"""
+    def form(self):
+        """Show login form. """
         return render('login.html')
 
     def submit(self):

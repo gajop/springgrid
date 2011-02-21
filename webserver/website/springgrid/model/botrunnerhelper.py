@@ -19,14 +19,10 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-import cgi
-import datetime
-
-from utils import *
-import sqlalchemysetup
-import tableclasses
+#from springgrid.utils import *
 import confighelper
-from tableclasses import *
+from meta import BotRunner
+from springgrid.lib.base import Session
 
 botrunnername = ""
 
@@ -38,7 +34,7 @@ def botrunnerauthorized():
    return validatesharedsecret( botrunnername, sharedsecret )
 
 def getBotRunner(botrunnername ):
-   return sqlalchemysetup.session.query(BotRunner).filter(tableclasses.BotRunner.botrunner_name == botrunnername ).first()
+   return Session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername).first()
 
 def getBotRunnerSession(botrunnername, botrunner_session_id ):
    botrunner = getBotRunner( botrunnername )
@@ -51,17 +47,17 @@ def getBotRunnerSession(botrunnername, botrunner_session_id ):
 
 def expireBotRunnerSession( botrunner, session ):
    # first, remove any matchrequests in progress attached to this session
-   requestsinprogress = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None).filter(MatchRequest.matchrequestinprogress != None)
+   requestsinprogress = Session.query(MatchRequest).filter(MatchRequest.matchresult == None).filter(MatchRequest.matchrequestinprogress != None)
    for request in requestsinprogress:
       if request.matchrequestinprogress.botrunner == botrunner and request.matchrequestinprogress.botrunnersession == session:
-         sqlalchemysetup.session.delete( request.matchrequestinprogress )
-   sqlalchemysetup.session.delete( session )
+         Session.delete( request.matchrequestinprogress )
+   Session.delete( session )
 
    # then, delete session
-   sqlalchemysetup.session.delete( session )
+   Session.delete( session )
 
 def purgeExpiredSessions():
-   botrunners = sqlalchemysetup.session.query(BotRunner)
+   botrunners = Session.query(BotRunner)
    for botrunner in botrunners:
       for session in botrunner.sessions:
          lastpingtime =  session.lastpingtime
@@ -79,8 +75,8 @@ def validatesharedsecret(lbotrunnername, sharedsecret):
    if botrunner == None: 
       # Never seen this botrunner before, just add it
       botrunner = BotRunner( lbotrunnername, sharedsecret )
-      sqlalchemysetup.session.add(botrunner)
-      sqlalchemysetup.session.commit()
+      Session.add(botrunner)
+      Session.commit()
 
       # if this fails, return true anyway
       return True

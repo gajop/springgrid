@@ -1,0 +1,536 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AI	meta.py	/^class AI(Base):$/;"	c	inherits:Base
+AI	tableclasses.py	/^class AI(Base):$/;"	c	inherits:Base
+AIOption	meta.py	/^class AIOption(Base):$/;"	c	inherits:Base
+AIOption	tableclasses.py	/^class AIOption(Base):$/;"	c	inherits:Base
+Account	meta.py	/^class Account(Base):$/;"	c	inherits:Base
+Account	tableclasses.py	/^class Account(Base):$/;"	c	inherits:Base
+Base	__init__.py	/^from springgrid.model.meta import Session, Base$/;"	i
+Base	meta.py	/^Base = declarative_base()$/;"	v
+Base	tableclasses.py	/^Base = sqlalchemy.ext.declarative.declarative_base()$/;"	v
+Boolean	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Boolean	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+BotRunner	meta.py	/^class BotRunner(Base):$/;"	c	inherits:Base
+BotRunner	tableclasses.py	/^class BotRunner(Base):$/;"	c	inherits:Base
+BotRunnerSession	meta.py	/^class BotRunnerSession(Base):$/;"	c	inherits:Base
+BotRunnerSession	tableclasses.py	/^class BotRunnerSession(Base):$/;"	c	inherits:Base
+Column	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Column	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Config	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+Config	meta.py	/^class Config(Base):$/;"	c	inherits:Base
+Config	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+Config	tableclasses.py	/^class Config(Base):$/;"	c	inherits:Base
+Cookie	loginhelper.py	/^import Cookie$/;"	i
+Cookie	meta.py	/^class Cookie(Base):$/;"	c	inherits:Base
+Cookie	tableclasses.py	/^class Cookie(Base):$/;"	c	inherits:Base
+Environment	menu.py	/^from jinja2 import Environment, PackageLoader$/;"	i
+ForeignKey	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+ForeignKey	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+GenerateRef	loginhelper.py	/^def GenerateRef():$/;"	f	access:public
+Integer	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Integer	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Map	entity/map.py	/^class Map(Base):$/;"	c	inherits:Base
+Map	meta.py	/^class Map(Base):$/;"	c	inherits:Base
+Map	tableclasses.py	/^class Map(Base):$/;"	c	inherits:Base
+MatchRequest	meta.py	/^class MatchRequest(Base):$/;"	c	inherits:Base
+MatchRequest	tableclasses.py	/^class MatchRequest(Base):$/;"	c	inherits:Base
+MatchRequestInProgress	meta.py	/^class MatchRequestInProgress(Base):$/;"	c	inherits:Base
+MatchRequestInProgress	tableclasses.py	/^class MatchRequestInProgress(Base):$/;"	c	inherits:Base
+MatchResult	meta.py	/^class MatchResult(Base):$/;"	c	inherits:Base
+MatchResult	tableclasses.py	/^class MatchResult(Base):$/;"	c	inherits:Base
+Mod	meta.py	/^class Mod(Base):$/;"	c	inherits:Base
+Mod	tableclasses.py	/^class Mod(Base):$/;"	c	inherits:Base
+ModSide	meta.py	/^class ModSide(Base):$/;"	c	inherits:Base
+ModSide	tableclasses.py	/^class ModSide(Base):$/;"	c	inherits:Base
+OpenID	meta.py	/^class OpenID(Base):$/;"	c	inherits:Base
+OpenID	tableclasses.py	/^class OpenID(Base):$/;"	c	inherits:Base
+PackageLoader	menu.py	/^from jinja2 import Environment, PackageLoader$/;"	i
+PasswordInfo	meta.py	/^class PasswordInfo(Base):$/;"	c	inherits:Base
+PasswordInfo	tableclasses.py	/^class PasswordInfo(Base):$/;"	c	inherits:Base
+Role	meta.py	/^class Role(Base):$/;"	c	inherits:Base
+Role	tableclasses.py	/^class Role(Base):$/;"	c	inherits:Base
+Session	__init__.py	/^from springgrid.model.meta import Session, Base$/;"	i
+Session	meta.py	/^Session = scoped_session(sessionmaker())$/;"	v
+Session	sqlalchemysetup.py	/^Session = None$/;"	v
+String	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+String	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Table	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+Table	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+UniqueConstraint	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+UniqueConstraint	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+__all__	__init__.py	/^__all__ = ['roles', 'botrunnerhelper','matchrequestcontroller',$/;"	v
+__all__	meta.py	/^__all__ = ['Base', 'Session']$/;"	v
+__init__	entity/map.py	/^   def __init__(self, map_name):$/;"	m	class:Map	access:public
+__init__	meta.py	/^   def __init__( self, ai_name, ai_version ):$/;"	m	class:AI	access:public
+__init__	meta.py	/^   def __init__( self, botrunner_name, botrunner_sharedsecret ):$/;"	m	class:BotRunner	access:public
+__init__	meta.py	/^   def __init__( self, cookiereference, account ):$/;"	m	class:Cookie	access:public
+__init__	meta.py	/^   def __init__( self, openid ):$/;"	m	class:OpenID	access:public
+__init__	meta.py	/^   def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout, ai0_side, ai1_side):$/;"	m	class:MatchRequest	access:public
+__init__	meta.py	/^   def __init__(self, botrunner, botrunnersession, datetimeassigned ):$/;"	m	class:MatchRequestInProgress	access:public
+__init__	meta.py	/^   def __init__(self, botrunner_session_id ):$/;"	m	class:BotRunnerSession	access:public
+__init__	meta.py	/^   def __init__(self, config_key, config_value ):$/;"	m	class:Config	access:public
+__init__	meta.py	/^   def __init__(self, map_name ):$/;"	m	class:Map	access:public
+__init__	meta.py	/^   def __init__(self, matchresult ):$/;"	m	class:MatchResult	access:public
+__init__	meta.py	/^   def __init__(self, mod_name ):$/;"	m	class:Mod	access:public
+__init__	meta.py	/^   def __init__(self, mod_side_name, mod_id):$/;"	m	class:ModSide	access:public
+__init__	meta.py	/^   def __init__(self, option_name):$/;"	m	class:AIOption	access:public
+__init__	meta.py	/^   def __init__(self, password ):$/;"	m	class:PasswordInfo	access:public
+__init__	meta.py	/^   def __init__(self, role_name ):$/;"	m	class:Role	access:public
+__init__	meta.py	/^   def __init__(self, username, userfullname ):$/;"	m	class:Account	access:public
+__init__	tableclasses.py	/^   def __init__( self, ai_name, ai_version ):$/;"	m	class:AI	access:public
+__init__	tableclasses.py	/^   def __init__( self, botrunner_name, botrunner_sharedsecret ):$/;"	m	class:BotRunner	access:public
+__init__	tableclasses.py	/^   def __init__( self, cookiereference, account ):$/;"	m	class:Cookie	access:public
+__init__	tableclasses.py	/^   def __init__( self, openid ):$/;"	m	class:OpenID	access:public
+__init__	tableclasses.py	/^   def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout, ai0_side, ai1_side):$/;"	m	class:MatchRequest	access:public
+__init__	tableclasses.py	/^   def __init__(self, botrunner, botrunnersession, datetimeassigned ):$/;"	m	class:MatchRequestInProgress	access:public
+__init__	tableclasses.py	/^   def __init__(self, botrunner_session_id ):$/;"	m	class:BotRunnerSession	access:public
+__init__	tableclasses.py	/^   def __init__(self, config_key, config_value ):$/;"	m	class:Config	access:public
+__init__	tableclasses.py	/^   def __init__(self, map_name ):$/;"	m	class:Map	access:public
+__init__	tableclasses.py	/^   def __init__(self, matchresult ):$/;"	m	class:MatchResult	access:public
+__init__	tableclasses.py	/^   def __init__(self, mod_name ):$/;"	m	class:Mod	access:public
+__init__	tableclasses.py	/^   def __init__(self, mod_side_name, mod_id):$/;"	m	class:ModSide	access:public
+__init__	tableclasses.py	/^   def __init__(self, option_name):$/;"	m	class:AIOption	access:public
+__init__	tableclasses.py	/^   def __init__(self, password ):$/;"	m	class:PasswordInfo	access:public
+__init__	tableclasses.py	/^   def __init__(self, role_name ):$/;"	m	class:Role	access:public
+__init__	tableclasses.py	/^   def __init__(self, username, userfullname ):$/;"	m	class:Account	access:public
+__table_args__	meta.py	/^   __table_args__ = (schema.ForeignKeyConstraint(('botrunner_id','botrunner_session_id'),('botrunner_sessions.botrunner_id','botrunner_sessions.botrunner_session_id')), {} )$/;"	v	class:MatchRequestInProgress
+__table_args__	meta.py	/^   __table_args__ = (schema.UniqueConstraint('ai_name','ai_version'), {} )$/;"	v	class:AI
+__table_args__	tableclasses.py	/^   __table_args__ = (schema.ForeignKeyConstraint(('botrunner_id','botrunner_session_id'),('botrunner_sessions.botrunner_id','botrunner_sessions.botrunner_session_id')), {} )$/;"	v	class:MatchRequestInProgress
+__table_args__	tableclasses.py	/^   __table_args__ = (schema.UniqueConstraint('ai_name','ai_version'), {} )$/;"	v	class:AI
+__tablename__	entity/map.py	/^   __tablename__ = 'maps'$/;"	v	class:Map
+__tablename__	meta.py	/^   __tablename__ = 'accounts'$/;"	v	class:Account
+__tablename__	meta.py	/^   __tablename__ = 'aioptions'$/;"	v	class:AIOption
+__tablename__	meta.py	/^   __tablename__ = 'ais'$/;"	v	class:AI
+__tablename__	meta.py	/^   __tablename__ = 'botrunner_sessions'$/;"	v	class:BotRunnerSession
+__tablename__	meta.py	/^   __tablename__ = 'botrunners'$/;"	v	class:BotRunner
+__tablename__	meta.py	/^   __tablename__ = 'config'$/;"	v	class:Config
+__tablename__	meta.py	/^   __tablename__ = 'cookies'$/;"	v	class:Cookie
+__tablename__	meta.py	/^   __tablename__ = 'maps'$/;"	v	class:Map
+__tablename__	meta.py	/^   __tablename__ = 'matchrequestqueue'$/;"	v	class:MatchRequest
+__tablename__	meta.py	/^   __tablename__ = 'matchrequests_inprogress'$/;"	v	class:MatchRequestInProgress
+__tablename__	meta.py	/^   __tablename__ = 'matchresults'$/;"	v	class:MatchResult
+__tablename__	meta.py	/^   __tablename__ = 'mod_sides'$/;"	v	class:ModSide
+__tablename__	meta.py	/^   __tablename__ = 'mods'$/;"	v	class:Mod
+__tablename__	meta.py	/^   __tablename__ = 'openids'$/;"	v	class:OpenID
+__tablename__	meta.py	/^   __tablename__ = 'passwords'$/;"	v	class:PasswordInfo
+__tablename__	meta.py	/^   __tablename__ = 'roles'$/;"	v	class:Role
+__tablename__	tableclasses.py	/^   __tablename__ = 'accounts'$/;"	v	class:Account
+__tablename__	tableclasses.py	/^   __tablename__ = 'aioptions'$/;"	v	class:AIOption
+__tablename__	tableclasses.py	/^   __tablename__ = 'ais'$/;"	v	class:AI
+__tablename__	tableclasses.py	/^   __tablename__ = 'botrunner_sessions'$/;"	v	class:BotRunnerSession
+__tablename__	tableclasses.py	/^   __tablename__ = 'botrunners'$/;"	v	class:BotRunner
+__tablename__	tableclasses.py	/^   __tablename__ = 'config'$/;"	v	class:Config
+__tablename__	tableclasses.py	/^   __tablename__ = 'cookies'$/;"	v	class:Cookie
+__tablename__	tableclasses.py	/^   __tablename__ = 'maps'$/;"	v	class:Map
+__tablename__	tableclasses.py	/^   __tablename__ = 'matchrequestqueue'$/;"	v	class:MatchRequest
+__tablename__	tableclasses.py	/^   __tablename__ = 'matchrequests_inprogress'$/;"	v	class:MatchRequestInProgress
+__tablename__	tableclasses.py	/^   __tablename__ = 'matchresults'$/;"	v	class:MatchResult
+__tablename__	tableclasses.py	/^   __tablename__ = 'mod_sides'$/;"	v	class:ModSide
+__tablename__	tableclasses.py	/^   __tablename__ = 'mods'$/;"	v	class:Mod
+__tablename__	tableclasses.py	/^   __tablename__ = 'openids'$/;"	v	class:OpenID
+__tablename__	tableclasses.py	/^   __tablename__ = 'passwords'$/;"	v	class:PasswordInfo
+__tablename__	tableclasses.py	/^   __tablename__ = 'roles'$/;"	v	class:Role
+account	meta.py	/^   account = relation("Account")$/;"	v	class:Cookie
+account	tableclasses.py	/^   account = relation("Account")$/;"	v	class:Cookie
+account_id	meta.py	/^   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)$/;"	v	class:OpenID
+account_id	meta.py	/^   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)$/;"	v	class:PasswordInfo
+account_id	meta.py	/^   account_id = Column(Integer,ForeignKey('accounts.account_id'), nullable = False)$/;"	v	class:Cookie
+account_id	meta.py	/^   account_id = Column(Integer,primary_key=True)$/;"	v	class:Account
+account_id	tableclasses.py	/^   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)$/;"	v	class:OpenID
+account_id	tableclasses.py	/^   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)$/;"	v	class:PasswordInfo
+account_id	tableclasses.py	/^   account_id = Column(Integer,ForeignKey('accounts.account_id'), nullable = False)$/;"	v	class:Cookie
+account_id	tableclasses.py	/^   account_id = Column(Integer,primary_key=True)$/;"	v	class:Account
+account_roles	meta.py	/^account_roles = Table('role_members', Base.metadata,$/;"	v
+account_roles	tableclasses.py	/^account_roles = Table('role_members', Base.metadata,$/;"	v
+accountadmin	roles.py	/^accountadmin = 'accountadmin'$/;"	v
+addRole	meta.py	/^   def addRole( self, role ):$/;"	m	class:Account	access:public
+addRole	tableclasses.py	/^   def addRole( self, role ):$/;"	m	class:Account	access:public
+addaiifdoesntexist	aihelper.py	/^def addaiifdoesntexist(ainame, aiversion):$/;"	f	access:public
+addmapifdoesntexist	maphelper.py	/^def addmapifdoesntexist(mapname, maparchivechecksum):$/;"	f	access:public
+addmatchrequest	matchrequestcontroller.py	/^def addmatchrequest( ai0, ai1, mod, map, speed, softtimeout, hardtimeout):$/;"	f	access:public
+addmodifdoesntexist	modhelper.py	/^def addmodifdoesntexist(modname, modarchivechecksum, sidenames):$/;"	f	access:public
+addstaticdata	meta.py	/^def addstaticdata(session):$/;"	f	access:public
+addstaticdata	optionshelper.py	/^def addstaticdata():$/;"	f	access:public
+addstaticdata	roles.py	/^def addstaticdata():$/;"	f	access:public
+addstaticdata	tableclasses.py	/^def addstaticdata(session):$/;"	f	access:public
+ai0	meta.py	/^   ai0 = relation("AI", primaryjoin = ai0_id == AI.ai_id )$/;"	v	class:MatchRequest
+ai0	tableclasses.py	/^   ai0 = relation("AI", primaryjoin = ai0_id == AI.ai_id )$/;"	v	class:MatchRequest
+ai0_id	meta.py	/^   ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)$/;"	v	class:MatchRequest
+ai0_id	tableclasses.py	/^   ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)$/;"	v	class:MatchRequest
+ai0_side	meta.py	/^   ai0_side = relation("ModSide", primaryjoin = ai0_side_id == ModSide.mod_side_id)$/;"	v	class:MatchRequest
+ai0_side	tableclasses.py	/^   ai0_side = relation("ModSide", primaryjoin = ai0_side_id == ModSide.mod_side_id)$/;"	v	class:MatchRequest
+ai0_side_id	meta.py	/^   ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)$/;"	v	class:MatchRequest
+ai0_side_id	tableclasses.py	/^   ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)$/;"	v	class:MatchRequest
+ai1	meta.py	/^   ai1 = relation("AI", primaryjoin = ai1_id == AI.ai_id )$/;"	v	class:MatchRequest
+ai1	tableclasses.py	/^   ai1 = relation("AI", primaryjoin = ai1_id == AI.ai_id )$/;"	v	class:MatchRequest
+ai1_id	meta.py	/^   ai1_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)$/;"	v	class:MatchRequest
+ai1_id	tableclasses.py	/^   ai1_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)$/;"	v	class:MatchRequest
+ai1_side	meta.py	/^   ai1_side = relation("ModSide", primaryjoin = ai1_side_id == ModSide.mod_side_id)$/;"	v	class:MatchRequest
+ai1_side	tableclasses.py	/^   ai1_side = relation("ModSide", primaryjoin = ai1_side_id == ModSide.mod_side_id)$/;"	v	class:MatchRequest
+ai1_side_id	meta.py	/^   ai1_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)$/;"	v	class:MatchRequest
+ai1_side_id	tableclasses.py	/^   ai1_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)$/;"	v	class:MatchRequest
+ai_allowedmaps	meta.py	/^ai_allowedmaps = Table( 'ai_allowedmaps', Base.metadata,$/;"	v
+ai_allowedmaps	tableclasses.py	/^ai_allowedmaps = Table( 'ai_allowedmaps', Base.metadata,$/;"	v
+ai_allowedmods	meta.py	/^ai_allowedmods = Table( 'ai_allowedmods', Base.metadata,$/;"	v
+ai_allowedmods	tableclasses.py	/^ai_allowedmods = Table( 'ai_allowedmods', Base.metadata,$/;"	v
+ai_allowedoptions	meta.py	/^ai_allowedoptions = Table('ai_allowedoptions', Base.metadata,$/;"	v
+ai_allowedoptions	tableclasses.py	/^ai_allowedoptions = Table('ai_allowedoptions', Base.metadata,$/;"	v
+ai_downloadurl	meta.py	/^   ai_downloadurl = Column(String(255))$/;"	v	class:AI
+ai_downloadurl	tableclasses.py	/^   ai_downloadurl = Column(String(255))$/;"	v	class:AI
+ai_id	meta.py	/^   ai_id = Column(Integer,primary_key=True)$/;"	v	class:AI
+ai_id	tableclasses.py	/^   ai_id = Column(Integer,primary_key=True)$/;"	v	class:AI
+ai_name	meta.py	/^   ai_name = Column(String(64), nullable = False)$/;"	v	class:AI
+ai_name	tableclasses.py	/^   ai_name = Column(String(64), nullable = False)$/;"	v	class:AI
+ai_needscompiling	meta.py	/^   ai_needscompiling = Column(Boolean )$/;"	v	class:AI
+ai_needscompiling	tableclasses.py	/^   ai_needscompiling = Column(Boolean )$/;"	v	class:AI
+ai_owneraccount_id	meta.py	/^   ai_owneraccount_id = Column(Integer,ForeignKey('accounts.account_id'))$/;"	v	class:AI
+ai_owneraccount_id	tableclasses.py	/^   ai_owneraccount_id = Column(Integer,ForeignKey('accounts.account_id'))$/;"	v	class:AI
+ai_version	meta.py	/^   ai_version = Column(String(64), nullable = False)$/;"	v	class:AI
+ai_version	tableclasses.py	/^   ai_version = Column(String(64), nullable = False)$/;"	v	class:AI
+aiadmin	roles.py	/^aiadmin = 'aiadmin'$/;"	v
+allowedmaps	meta.py	/^   allowedmaps = relation("Map", secondary = ai_allowedmaps )$/;"	v	class:AI
+allowedmaps	tableclasses.py	/^   allowedmaps = relation("Map", secondary = ai_allowedmaps )$/;"	v	class:AI
+allowedmods	meta.py	/^   allowedmods = relation("Mod", secondary = ai_allowedmods )$/;"	v	class:AI
+allowedmods	tableclasses.py	/^   allowedmods = relation("Mod", secondary = ai_allowedmods )$/;"	v	class:AI
+allowedoptions	meta.py	/^   allowedoptions = relation("AIOption", secondary = ai_allowedoptions)$/;"	v	class:AI
+allowedoptions	tableclasses.py	/^   allowedoptions = relation("AIOption", secondary = ai_allowedoptions)$/;"	v	class:AI
+and_	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+and_	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+apiclient	roles.py	/^apiclient = 'apiclient'$/;"	v
+applydefaults	confighelper.py	/^def applydefaults():$/;"	f	access:public
+archiveoldrequests	matchrequestcontroller.py	/^def archiveoldrequests():$/;"	f	access:public
+backref	meta.py	/^from sqlalchemy.orm import backref, relation$/;"	i
+backref	tableclasses.py	/^from sqlalchemy.orm import backref, relation$/;"	i
+botrunner	meta.py	/^   botrunner= relation("BotRunner")$/;"	v	class:MatchRequestInProgress
+botrunner	tableclasses.py	/^   botrunner= relation("BotRunner")$/;"	v	class:MatchRequestInProgress
+botrunner_assignedoptions	meta.py	/^botrunner_assignedoptions = Table( 'botrunner_assignedoptions', Base.metadata,$/;"	v
+botrunner_assignedoptions	tableclasses.py	/^botrunner_assignedoptions = Table( 'botrunner_assignedoptions', Base.metadata,$/;"	v
+botrunner_id	meta.py	/^   botrunner_id = Column(Integer,ForeignKey('botrunners.botrunner_id'), nullable = False)$/;"	v	class:MatchRequestInProgress
+botrunner_id	meta.py	/^   botrunner_id = Column(Integer,ForeignKey('botrunners.botrunner_id'), primary_key = True )$/;"	v	class:BotRunnerSession
+botrunner_id	meta.py	/^   botrunner_id = Column(Integer,primary_key=True)$/;"	v	class:BotRunner
+botrunner_id	tableclasses.py	/^   botrunner_id = Column(Integer,ForeignKey('botrunners.botrunner_id'), nullable = False)$/;"	v	class:MatchRequestInProgress
+botrunner_id	tableclasses.py	/^   botrunner_id = Column(Integer,ForeignKey('botrunners.botrunner_id'), primary_key = True )$/;"	v	class:BotRunnerSession
+botrunner_id	tableclasses.py	/^   botrunner_id = Column(Integer,primary_key=True)$/;"	v	class:BotRunner
+botrunner_name	meta.py	/^   botrunner_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:BotRunner
+botrunner_name	tableclasses.py	/^   botrunner_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:BotRunner
+botrunner_owneraccountid	meta.py	/^   botrunner_owneraccountid = Column(Integer, ForeignKey('accounts.account_id') )$/;"	v	class:BotRunner
+botrunner_owneraccountid	tableclasses.py	/^   botrunner_owneraccountid = Column(Integer, ForeignKey('accounts.account_id') )$/;"	v	class:BotRunner
+botrunner_session_id	meta.py	/^   botrunner_session_id = Column(String(255), nullable = False)$/;"	v	class:MatchRequestInProgress
+botrunner_session_id	meta.py	/^   botrunner_session_id = Column(String(255), primary_key = True)$/;"	v	class:BotRunnerSession
+botrunner_session_id	tableclasses.py	/^   botrunner_session_id = Column(String(255), nullable = False)$/;"	v	class:MatchRequestInProgress
+botrunner_session_id	tableclasses.py	/^   botrunner_session_id = Column(String(255), primary_key = True)$/;"	v	class:BotRunnerSession
+botrunner_sharedsecret	meta.py	/^   botrunner_sharedsecret = Column(String(255), nullable = False)$/;"	v	class:BotRunner
+botrunner_sharedsecret	tableclasses.py	/^   botrunner_sharedsecret = Column(String(255), nullable = False)$/;"	v	class:BotRunner
+botrunner_supportedais	meta.py	/^botrunner_supportedais = Table( 'botrunner_supportedais', Base.metadata,$/;"	v
+botrunner_supportedais	tableclasses.py	/^botrunner_supportedais = Table( 'botrunner_supportedais', Base.metadata,$/;"	v
+botrunner_supportedmaps	meta.py	/^botrunner_supportedmaps = Table( 'botrunner_supportedmaps', Base.metadata,$/;"	v
+botrunner_supportedmaps	tableclasses.py	/^botrunner_supportedmaps = Table( 'botrunner_supportedmaps', Base.metadata,$/;"	v
+botrunner_supportedmods	meta.py	/^botrunner_supportedmods = Table( 'botrunner_supportedmods', Base.metadata,$/;"	v
+botrunner_supportedmods	tableclasses.py	/^botrunner_supportedmods = Table( 'botrunner_supportedmods', Base.metadata,$/;"	v
+botrunneradmin	roles.py	/^botrunneradmin = 'botrunneradmin'$/;"	v
+botrunnerauthorized	botrunnerhelper.py	/^def botrunnerauthorized():$/;"	f	access:public
+botrunnerhelper	aihelper.py	/^import botrunnerhelper$/;"	i
+botrunnerhelper	maphelper.py	/^import botrunnerhelper$/;"	i
+botrunnerhelper	matchrequestcontroller.py	/^import botrunnerhelper$/;"	i
+botrunnerhelper	modhelper.py	/^import botrunnerhelper$/;"	i
+botrunnername	botrunnerhelper.py	/^botrunnername = ""$/;"	v
+botrunnersession	meta.py	/^   botrunnersession = relation("BotRunnerSession", primaryjoin=and_( botrunner_id == BotRunnerSession.botrunner_id, botrunner_session_id == BotRunnerSession.botrunner_session_id ) )$/;"	v	class:MatchRequestInProgress
+botrunnersession	tableclasses.py	/^   botrunnersession = relation("BotRunnerSession", primaryjoin=and_( botrunner_id == BotRunnerSession.botrunner_id, botrunner_session_id == BotRunnerSession.botrunner_session_id ) )$/;"	v	class:MatchRequestInProgress
+can	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+can	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+cgi	botrunnerhelper.py	/^import cgi$/;"	i
+cgi	loginhelper.py	/^import cgi$/;"	i
+cgitb	menu.py	/^import cgitb; cgitb.enable()$/;"	i
+changePassword	loginhelper.py	/^def changePassword( username, password ):$/;"	f	access:public
+changePassword	meta.py	/^   def changePassword( self, newpassword ):$/;"	m	class:PasswordInfo	access:public
+changePassword	tableclasses.py	/^   def changePassword( self, newpassword ):$/;"	m	class:PasswordInfo	access:public
+checkPassword	meta.py	/^   def checkPassword( self, password ):$/;"	m	class:PasswordInfo	access:public
+checkPassword	tableclasses.py	/^   def checkPassword( self, password ):$/;"	m	class:PasswordInfo	access:public
+close	sqlalchemysetup.py	/^def close():$/;"	f	access:public
+config	sqlalchemysetup.py	/^   import config$/;"	i
+config_key	meta.py	/^   config_key = Column(String(255),primary_key = True )$/;"	v	class:Config
+config_key	tableclasses.py	/^   config_key = Column(String(255),primary_key = True )$/;"	v	class:Config
+config_type	meta.py	/^   config_type = Column(String(255), nullable = False)$/;"	v	class:Config
+config_type	tableclasses.py	/^   config_type = Column(String(255), nullable = False)$/;"	v	class:Config
+config_value	meta.py	/^   config_value = Column(String(255), nullable = False)$/;"	v	class:Config
+config_value	tableclasses.py	/^   config_value = Column(String(255), nullable = False)$/;"	v	class:Config
+confighelper	botrunnerhelper.py	/^import confighelper$/;"	i
+confighelper	matchrequestcontroller.py	/^import confighelper$/;"	i
+confighelper	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+confighelper	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+containsOption	optionshelper.py	/^def containsOption(option, options):$/;"	f	access:public
+cookie	loginhelper.py	/^cookie = Cookie.SimpleCookie()$/;"	v
+cookiereference	loginhelper.py	/^cookiereference = ''$/;"	v
+cookiereference	meta.py	/^   cookiereference = Column(String(255),primary_key=True)$/;"	v	class:Cookie
+cookiereference	tableclasses.py	/^   cookiereference = Column(String(255),primary_key=True)$/;"	v	class:Cookie
+createSalt	loginhelper.py	/^def createSalt():$/;"	f	access:public
+createall	meta.py	/^def createall(engine):$/;"	f	access:public
+createall	tableclasses.py	/^def createall(engine):$/;"	f	access:public
+createalltables	sqlalchemysetup.py	/^def createalltables():$/;"	f	access:public
+datetime	botrunnerhelper.py	/^import datetime$/;"	i
+datetime	matchrequestcontroller.py	/^import datetime$/;"	i
+datetime	menu.py	/^import datetime$/;"	i
+datetimeassigned	meta.py	/^   datetimeassigned = Column(String(255), nullable = False)$/;"	v	class:MatchRequestInProgress
+datetimeassigned	tableclasses.py	/^   datetimeassigned = Column(String(255), nullable = False)$/;"	v	class:MatchRequestInProgress
+declarative	tableclasses.py	/^import sqlalchemy.ext.declarative$/;"	i
+declarative_base	meta.py	/^from sqlalchemy.ext.declarative import declarative_base$/;"	i
+defaults	confighelper.py	/^defaults = {$/;"	v
+downloadingai	meta.py	/^   downloadingai = relation("AI")  # keep track of any ai being downloaded by this session$/;"	v	class:BotRunnerSession
+downloadingai	tableclasses.py	/^   downloadingai = relation("AI")  # keep track of any ai being downloaded by this session$/;"	v	class:BotRunnerSession
+downloadingai_id	meta.py	/^   downloadingai_id = Column(Integer,ForeignKey('ais.ai_id'), nullable = True)$/;"	v	class:BotRunnerSession
+downloadingai_id	tableclasses.py	/^   downloadingai_id = Column(Integer,ForeignKey('ais.ai_id'), nullable = True)$/;"	v	class:BotRunnerSession
+dropall	meta.py	/^def dropall(engine):$/;"	f	access:public
+dropall	tableclasses.py	/^def dropall(engine):$/;"	f	access:public
+dropalltables	sqlalchemysetup.py	/^def dropalltables():$/;"	f	access:public
+enable	menu.py	/^import cgitb; cgitb.enable()$/;"	i
+engine	sqlalchemysetup.py	/^engine = None$/;"	v
+expireBotRunnerSession	botrunnerhelper.py	/^def expireBotRunnerSession( botrunner, session ):$/;"	f	access:public
+ext	tableclasses.py	/^import sqlalchemy.ext.declarative$/;"	i
+getAI	aihelper.py	/^def getAI( ainame, aiversion ):$/;"	f	access:public
+getAIOption	aihelper.py	/^def getAIOption( optionname ):$/;"	f	access:public
+getAIs	aihelper.py	/^def getAIs():$/;"	f	access:public
+getAccount	accounthelper.py	/^def getAccount( username ):$/;"	f	access:public
+getBotRunner	botrunnerhelper.py	/^def getBotRunner(botrunnername ):$/;"	f	access:public
+getBotRunnerSession	botrunnerhelper.py	/^def getBotRunnerSession(botrunnername, botrunner_session_id ):$/;"	f	access:public
+getInfologPath	replaycontroller.py	/^def getInfologPath( matchrequestid ):$/;"	f	access:public
+getInfologWebRelativePath	replaycontroller.py	/^def getInfologWebRelativePath( matchrequestid ):$/;"	f	access:public
+getKeys	confighelper.py	/^def getKeys():$/;"	f	access:public
+getLeague	leaguehelper.py	/^def getLeague( league_name ):$/;"	f	access:public
+getLeagueGroup	leaguehelper.py	/^def getLeagueGroup( leaguegroup_name ):$/;"	f	access:public
+getMap	maphelper.py	/^def getMap( mapname ):$/;"	f	access:public
+getMod	modhelper.py	/^def getMod( modname ):$/;"	f	access:public
+getOption	optionshelper.py	/^def getOption( optionname ):$/;"	f	access:public
+getOwnerUsername	botrunnerhelper.py	/^def getOwnerUsername(botrunnername):$/;"	f	access:public
+getReplayPath	replaycontroller.py	/^def getReplayPath( matchrequestid ):$/;"	f	access:public
+getReplayWebRelativePath	replaycontroller.py	/^def getReplayWebRelativePath( matchrequestid ):$/;"	f	access:public
+getRole	roles.py	/^def getRole(rolename ):$/;"	f	access:public
+getUsername	loginhelper.py	/^def getUsername():$/;"	f	access:public
+getValue	confighelper.py	/^def getValue( key_name ):$/;"	f	access:public
+getValue	meta.py	/^   def getValue(self):$/;"	m	class:Config	access:public
+getValue	tableclasses.py	/^   def getValue(self):$/;"	m	class:Config	access:public
+getallais	aihelper.py	/^def getallais():$/;"	f	access:public
+getcompatibleitemfromqueue	matchrequestcontroller.py	/^def getcompatibleitemfromqueue( botrunnername, sessionid ):$/;"	f	access:public
+getconfigdict	confighelper.py	/^def getconfigdict():$/;"	f	access:public
+getmatchrequest	matchrequestcontroller.py	/^def getmatchrequest(matchrequest_id):$/;"	f	access:public
+getmenus	menu.py	/^def getmenus():$/;"	f	access:public
+getsupportedais	aihelper.py	/^def getsupportedais( botrunnername ):$/;"	f	access:public
+getsupportedmaps	maphelper.py	/^def getsupportedmaps( botrunnername ):$/;"	f	access:public
+getsupportedmods	modhelper.py	/^def getsupportedmods( botrunnername ):$/;"	f	access:public
+gusername	loginhelper.py	/^gusername = ""  # first call loginhelper.processCookie().  If the user$/;"	v
+hardtimeout	meta.py	/^   hardtimeout = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+hardtimeout	tableclasses.py	/^   hardtimeout = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+hasPassword	loginhelper.py	/^def hasPassword():$/;"	f	access:public
+have	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+have	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+here	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+here	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+import	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+import	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+init_model	__init__.py	/^def init_model(engine):$/;"	f	access:public
+isInRole	roles.py	/^def isInRole(rolename):$/;"	f	access:public
+isInRole2	roles.py	/^def isInRole2(username, rolename):$/;"	f	access:public
+isLoggedOn	loginhelper.py	/^def isLoggedOn():$/;"	f	access:public
+it	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+it	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+jinja2	jinjahelper.py	/^import jinja2$/;"	i
+jinjahelper	menu.py	/^import jinjahelper$/;"	i
+join	loginhelper.py	/^from sqlalchemy.orm import join$/;"	i
+join	matchrequestcontroller.py	/^from sqlalchemy.orm import join$/;"	i
+join	optionshelper.py	/^from sqlalchemy.orm import join$/;"	i
+join	roles.py	/^from sqlalchemy.orm import join$/;"	i
+lastpingstatus	meta.py	/^   lastpingstatus = Column(String(255), nullable = False)$/;"	v	class:BotRunnerSession
+lastpingstatus	tableclasses.py	/^   lastpingstatus = Column(String(255), nullable = False)$/;"	v	class:BotRunnerSession
+lastpingtime	meta.py	/^   lastpingtime = Column(String(255), nullable = False)$/;"	v	class:BotRunnerSession
+lastpingtime	tableclasses.py	/^   lastpingtime = Column(String(255), nullable = False)$/;"	v	class:BotRunnerSession
+leagueadmin	roles.py	/^leagueadmin = 'leagueadmin'$/;"	v
+loginhelper	menu.py	/^import loginhelper$/;"	i
+loginhelper	optionshelper.py	/^import loginhelper$/;"	i
+loginhelper	roles.py	/^import loginhelper$/;"	i
+loginhelper	tableclasses.py	/^import loginhelper$/;"	i
+loginhtml	loginhelper.py	/^loginhtml = ""$/;"	v
+logonUserWithAuthenticatedOpenID	loginhelper.py	/^def logonUserWithAuthenticatedOpenID( openidurl ):$/;"	f	access:public
+logonUserWithPassword	loginhelper.py	/^def logonUserWithPassword(username, password):$/;"	f	access:public
+logoutUser	loginhelper.py	/^def logoutUser():$/;"	f	access:public
+map	meta.py	/^   map = relation("Map" )$/;"	v	class:MatchRequest
+map	tableclasses.py	/^   map = relation("Map" )$/;"	v	class:MatchRequest
+map_archivechecksum	entity/map.py	/^   map_archivechecksum = Column(String(255))$/;"	v	class:Map
+map_archivechecksum	meta.py	/^   map_archivechecksum = Column(String(255))$/;"	v	class:Map
+map_archivechecksum	tableclasses.py	/^   map_archivechecksum = Column(String(255))$/;"	v	class:Map
+map_id	entity/map.py	/^   map_id = Column(Integer, primary_key = True)$/;"	v	class:Map
+map_id	meta.py	/^   map_id = Column(Integer,primary_key=True)$/;"	v	class:Map
+map_id	meta.py	/^   map_id =Column(Integer, ForeignKey('maps.map_id'), nullable = False)$/;"	v	class:MatchRequest
+map_id	tableclasses.py	/^   map_id = Column(Integer,primary_key=True)$/;"	v	class:Map
+map_id	tableclasses.py	/^   map_id =Column(Integer, ForeignKey('maps.map_id'), nullable = False)$/;"	v	class:MatchRequest
+map_name	entity/map.py	/^   map_name = Column(String(255), unique = True)$/;"	v	class:Map
+map_name	meta.py	/^   map_name = Column(String(255), unique = True)$/;"	v	class:Map
+map_name	tableclasses.py	/^   map_name = Column(String(255), unique = True)$/;"	v	class:Map
+map_url	entity/map.py	/^   map_url = Column(String(255))$/;"	v	class:Map
+map_url	meta.py	/^   map_url = Column(String(255))$/;"	v	class:Map
+map_url	tableclasses.py	/^   map_url = Column(String(255))$/;"	v	class:Map
+mapadmin	roles.py	/^mapadmin = 'mapadmin'$/;"	v
+matchrequest_id	meta.py	/^   matchrequest_id = Column(Integer,ForeignKey('matchrequestqueue.matchrequest_id'),primary_key=True )$/;"	v	class:MatchRequestInProgress
+matchrequest_id	meta.py	/^   matchrequest_id = Column(Integer,ForeignKey('matchrequestqueue.matchrequest_id'),primary_key=True )$/;"	v	class:MatchResult
+matchrequest_id	meta.py	/^   matchrequest_id=Column(Integer,primary_key=True)$/;"	v	class:MatchRequest
+matchrequest_id	tableclasses.py	/^   matchrequest_id = Column(Integer,ForeignKey('matchrequestqueue.matchrequest_id'),primary_key=True )$/;"	v	class:MatchRequestInProgress
+matchrequest_id	tableclasses.py	/^   matchrequest_id = Column(Integer,ForeignKey('matchrequestqueue.matchrequest_id'),primary_key=True )$/;"	v	class:MatchResult
+matchrequest_id	tableclasses.py	/^   matchrequest_id=Column(Integer,primary_key=True)$/;"	v	class:MatchRequest
+matchrequest_options	meta.py	/^matchrequest_options = Table( 'matchrequest_options', Base.metadata,$/;"	v
+matchrequest_options	tableclasses.py	/^matchrequest_options = Table( 'matchrequest_options', Base.metadata,$/;"	v
+matchrequestinprogress	meta.py	/^   matchrequestinprogress = relation("MatchRequestInProgress", uselist=False)$/;"	v	class:MatchRequest
+matchrequestinprogress	tableclasses.py	/^   matchrequestinprogress = relation("MatchRequestInProgress", uselist=False)$/;"	v	class:MatchRequest
+matchrequestvalidforthisserver	matchrequestcontroller.py	/^def matchrequestvalidforthisserver( botrunnername, matchrequest_id ):$/;"	f	access:public
+matchresult	meta.py	/^   matchresult = Column(String(255), nullable = False)$/;"	v	class:MatchResult
+matchresult	meta.py	/^   matchresult = relation("MatchResult", uselist=False)$/;"	v	class:MatchRequest
+matchresult	tableclasses.py	/^   matchresult = Column(String(255), nullable = False)$/;"	v	class:MatchResult
+matchresult	tableclasses.py	/^   matchresult = relation("MatchResult", uselist=False)$/;"	v	class:MatchRequest
+md5	loginhelper.py	/^import md5$/;"	i
+md5	tableclasses.py	/^import md5$/;"	i
+menu	jinjahelper.py	/^import menu$/;"	i
+message	jinjahelper.py	/^def message( message ):$/;"	f	access:public
+mod	meta.py	/^   mod = relation("Mod" )$/;"	v	class:MatchRequest
+mod	tableclasses.py	/^   mod = relation("Mod" )$/;"	v	class:MatchRequest
+mod_archivechecksum	meta.py	/^   mod_archivechecksum = Column(String(255))$/;"	v	class:Mod
+mod_archivechecksum	tableclasses.py	/^   mod_archivechecksum = Column(String(255))$/;"	v	class:Mod
+mod_id	meta.py	/^   mod_id = Column(Integer,ForeignKey('mods.mod_id'), nullable=False)$/;"	v	class:ModSide
+mod_id	meta.py	/^   mod_id =Column(Integer, ForeignKey('mods.mod_id'), nullable = False)$/;"	v	class:MatchRequest
+mod_id	meta.py	/^   mod_id =Column(Integer,primary_key=True)$/;"	v	class:Mod
+mod_id	tableclasses.py	/^   mod_id = Column(Integer,ForeignKey('mods.mod_id'), nullable=False)$/;"	v	class:ModSide
+mod_id	tableclasses.py	/^   mod_id =Column(Integer, ForeignKey('mods.mod_id'), nullable = False)$/;"	v	class:MatchRequest
+mod_id	tableclasses.py	/^   mod_id =Column(Integer,primary_key=True)$/;"	v	class:Mod
+mod_name	meta.py	/^   mod_name = Column(String(255), unique = True)$/;"	v	class:Mod
+mod_name	tableclasses.py	/^   mod_name = Column(String(255), unique = True)$/;"	v	class:Mod
+mod_side_id	meta.py	/^   mod_side_id = Column(Integer, primary_key=True)$/;"	v	class:ModSide
+mod_side_id	tableclasses.py	/^   mod_side_id = Column(Integer, primary_key=True)$/;"	v	class:ModSide
+mod_side_name	meta.py	/^   mod_side_name = Column(String(255), unique = False) #different mods can have the same side names$/;"	v	class:ModSide
+mod_side_name	tableclasses.py	/^   mod_side_name = Column(String(255), unique = False) #different mods can have the same side names$/;"	v	class:ModSide
+mod_sides	meta.py	/^   mod_sides = relation("ModSide")$/;"	v	class:Mod
+mod_sides	tableclasses.py	/^   mod_sides = relation("ModSide")$/;"	v	class:Mod
+mod_url	meta.py	/^   mod_url = Column(String(255))$/;"	v	class:Mod
+mod_url	tableclasses.py	/^   mod_url = Column(String(255))$/;"	v	class:Mod
+modadmin	roles.py	/^modadmin = 'modadmin'$/;"	v
+openid	meta.py	/^   openid = Column(String(255), primary_key = True)$/;"	v	class:OpenID
+openid	tableclasses.py	/^   openid = Column(String(255), primary_key = True)$/;"	v	class:OpenID
+openids	meta.py	/^   openids = relation('OpenID')$/;"	v	class:Account
+openids	tableclasses.py	/^   openids = relation('OpenID')$/;"	v	class:Account
+option_id	meta.py	/^   option_id = Column(Integer,primary_key=True)$/;"	v	class:AIOption
+option_id	tableclasses.py	/^   option_id = Column(Integer,primary_key=True)$/;"	v	class:AIOption
+option_name	meta.py	/^   option_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:AIOption
+option_name	tableclasses.py	/^   option_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:AIOption
+optionnames	optionshelper.py	/^optionnames = [ 'instancelocaldata', 'dummymatch' ]$/;"	v
+options	meta.py	/^   options = relation("AIOption", secondary = botrunner_assignedoptions )$/;"	v	class:BotRunner
+options	meta.py	/^   options = relation("AIOption", secondary = matchrequest_options )$/;"	v	class:MatchRequest
+options	tableclasses.py	/^   options = relation("AIOption", secondary = botrunner_assignedoptions )$/;"	v	class:BotRunner
+options	tableclasses.py	/^   options = relation("AIOption", secondary = matchrequest_options )$/;"	v	class:MatchRequest
+optionshelper	meta.py	/^   import optionshelper$/;"	i
+optionshelper	tableclasses.py	/^   import optionshelper$/;"	i
+orm	tableclasses.py	/^import sqlalchemy.orm$/;"	i
+os	loginhelper.py	/^import os$/;"	i
+os	loginhelper.py	/^import os.path$/;"	i
+os	menu.py	/^import os$/;"	i
+os	replaycontroller.py	/^import os$/;"	i
+otherwise	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+otherwise	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+owneraccount	meta.py	/^   owneraccount = relation("Account")$/;"	v	class:AI
+owneraccount	meta.py	/^   owneraccount = relation("Account")$/;"	v	class:BotRunner
+owneraccount	tableclasses.py	/^   owneraccount = relation("Account")$/;"	v	class:AI
+owneraccount	tableclasses.py	/^   owneraccount = relation("Account")$/;"	v	class:BotRunner
+passwordhash	meta.py	/^   passwordhash = Column(String(255), nullable = False)$/;"	v	class:PasswordInfo
+passwordhash	tableclasses.py	/^   passwordhash = Column(String(255), nullable = False)$/;"	v	class:PasswordInfo
+passwordinfo	meta.py	/^   passwordinfo = relation('PasswordInfo', uselist = False)$/;"	v	class:Account
+passwordinfo	tableclasses.py	/^   passwordinfo = relation('PasswordInfo', uselist = False)$/;"	v	class:Account
+passwordsalt	meta.py	/^   passwordsalt = Column(String(255), nullable = False)$/;"	v	class:PasswordInfo
+passwordsalt	tableclasses.py	/^   passwordsalt = Column(String(255), nullable = False)$/;"	v	class:PasswordInfo
+path	loginhelper.py	/^import os.path$/;"	i
+populatedefault	confighelper.py	/^def populatedefault(key_name):$/;"	f	access:public
+processCookie	loginhelper.py	/^def processCookie():$/;"	f	access:public
+purgeExpiredSessions	botrunnerhelper.py	/^def purgeExpiredSessions():$/;"	f	access:public
+random	loginhelper.py	/^import random$/;"	i
+relation	meta.py	/^from sqlalchemy.orm import backref, relation$/;"	i
+relation	tableclasses.py	/^from sqlalchemy.orm import backref, relation$/;"	i
+reloadalltables	sqlalchemysetup.py	/^def reloadalltables():$/;"	f	access:public
+rendertemplate	jinjahelper.py	/^def rendertemplate( templatename, **args ):$/;"	f	access:public
+requestadmin	roles.py	/^requestadmin = 'requestadmin'$/;"	v
+role_id	meta.py	/^   role_id = Column(Integer,primary_key=True)$/;"	v	class:Role
+role_id	tableclasses.py	/^   role_id = Column(Integer,primary_key=True)$/;"	v	class:Role
+role_name	meta.py	/^   role_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:Role
+role_name	tableclasses.py	/^   role_name = Column(String(255), unique = True, nullable = False)$/;"	v	class:Role
+roles	meta.py	/^   import roles$/;"	i
+roles	meta.py	/^   roles = relation("Role", secondary = account_roles )$/;"	v	class:Account
+roles	tableclasses.py	/^   import roles$/;"	i
+roles	tableclasses.py	/^   roles = relation("Role", secondary = account_roles )$/;"	v	class:Account
+rowspan	meta.py	/^   rowspan = 0 # used by viewbotrunners.py$/;"	v	class:BotRunner
+rowspan	meta.py	/^   rowspan = 0$/;"	v	class:BotRunner
+rowspan	tableclasses.py	/^   rowspan = 0 # used by viewbotrunners.py$/;"	v	class:BotRunner
+rowspan	tableclasses.py	/^   rowspan = 0$/;"	v	class:BotRunner
+saltlength	loginhelper.py	/^saltlength = 200$/;"	v
+schema	meta.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+schema	tableclasses.py	/^from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schema, Table, UniqueConstraint$/;"	i
+scoped_session	meta.py	/^from sqlalchemy.orm import scoped_session, sessionmaker$/;"	i
+scriptdir	replaycontroller.py	/^scriptdir = os.path.dirname( os.path.realpath( __file__ ) )$/;"	v
+session	sqlalchemysetup.py	/^session = None$/;"	v
+sessionmaker	meta.py	/^from sqlalchemy.orm import scoped_session, sessionmaker$/;"	i
+sessions	meta.py	/^   sessions = relation("BotRunnerSession",uselist = True)$/;"	v	class:BotRunner
+sessions	tableclasses.py	/^   sessions = relation("BotRunnerSession",uselist = True)$/;"	v	class:BotRunner
+setValue	confighelper.py	/^def setValue(key_name, key_value):$/;"	f	access:public
+setValue	meta.py	/^   def setValue( self, config_value ):$/;"	m	class:Config	access:public
+setValue	tableclasses.py	/^   def setValue( self, config_value ):$/;"	m	class:Config	access:public
+setbotrunnernotsupportsthisai	aihelper.py	/^def setbotrunnernotsupportsthisai( botrunnername, ainame, aiversion ):$/;"	f	access:public
+setbotrunnersupportsthisai	aihelper.py	/^def setbotrunnersupportsthisai( botrunnername, ainame, aiversion ):$/;"	f	access:public
+setbotrunnersupportsthismap	maphelper.py	/^def setbotrunnersupportsthismap( botrunnername, mapname ):$/;"	f	access:public
+setbotrunnersupportsthismod	modhelper.py	/^def setbotrunnersupportsthismod( botrunnername, modname ):$/;"	f	access:public
+setup	sqlalchemysetup.py	/^def setup():$/;"	f	access:public
+setupwithcredentials	sqlalchemysetup.py	/^def setupwithcredentials( rdbmsname, dbuser, dbpassword, dbhost, dbname ):$/;"	f	access:public
+softtimeout	meta.py	/^   softtimeout = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+softtimeout	tableclasses.py	/^   softtimeout = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+speed	meta.py	/^   speed = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+speed	tableclasses.py	/^   speed = Column(Integer, nullable = False)$/;"	v	class:MatchRequest
+sqlalchemy	entity/tablesetup.py	/^import sqlalchemy$/;"	i
+sqlalchemy	sqlalchemysetup.py	/^import sqlalchemy$/;"	i
+sqlalchemy	tableclasses.py	/^import sqlalchemy$/;"	i
+sqlalchemy	tableclasses.py	/^import sqlalchemy.ext.declarative$/;"	i
+sqlalchemy	tableclasses.py	/^import sqlalchemy.orm$/;"	i
+sqlalchemysetup	accounthelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	aihelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	botrunnerhelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	confighelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	leaguehelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	loginhelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	maphelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	matchrequestcontroller.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	modhelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	optionshelper.py	/^import sqlalchemysetup$/;"	i
+sqlalchemysetup	roles.py	/^import sqlalchemysetup$/;"	i
+storeresult	matchrequestcontroller.py	/^def storeresult( botrunnername, matchrequest_id, result ):$/;"	f	access:public
+string	loginhelper.py	/^import string$/;"	i
+supportedais	meta.py	/^   supportedais = relation("AI", secondary = botrunner_supportedais )$/;"	v	class:BotRunner
+supportedais	tableclasses.py	/^   supportedais = relation("AI", secondary = botrunner_supportedais )$/;"	v	class:BotRunner
+supportedmaps	meta.py	/^   supportedmaps = relation("Map", secondary = botrunner_supportedmaps )$/;"	v	class:BotRunner
+supportedmaps	tableclasses.py	/^   supportedmaps = relation("Map", secondary = botrunner_supportedmaps )$/;"	v	class:BotRunner
+supportedmods	meta.py	/^   supportedmods = relation("Mod", secondary = botrunner_supportedmods )$/;"	v	class:BotRunner
+supportedmods	tableclasses.py	/^   supportedmods = relation("Mod", secondary = botrunner_supportedmods )$/;"	v	class:BotRunner
+sys	menu.py	/^import sys$/;"	i
+sys	modhelper.py	/^import sys$/;"	i
+table	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+table	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+tableclasses	botrunnerhelper.py	/^import tableclasses$/;"	i
+tableclasses	loginhelper.py	/^import tableclasses$/;"	i
+tableclasses	optionshelper.py	/^import tableclasses$/;"	i
+tableclasses	roles.py	/^import tableclasses$/;"	i
+tableclasses	sqlalchemysetup.py	/^import tableclasses$/;"	i
+test	optionshelper.py	/^def test():$/;"	f	access:public
+test	roles.py	/^def test():$/;"	f	access:public
+to	meta.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+to	tableclasses.py	/^   import confighelper # have to import it here, otherwise Config table can't be easily$/;"	i
+useremailaddress	meta.py	/^   useremailaddress = Column(String(255))$/;"	v	class:Account
+useremailaddress	tableclasses.py	/^   useremailaddress = Column(String(255))$/;"	v	class:Account
+userfullname	meta.py	/^   userfullname = Column(String(255))$/;"	v	class:Account
+userfullname	tableclasses.py	/^   userfullname = Column(String(255))$/;"	v	class:Account
+username	meta.py	/^   username = Column(String(255), unique = True, nullable = False)$/;"	v	class:Account
+username	tableclasses.py	/^   username = Column(String(255), unique = True, nullable = False)$/;"	v	class:Account
+validateUsernamePassword	loginhelper.py	/^def validateUsernamePassword( username, password ):$/;"	f	access:public
+validatesharedsecret	botrunnerhelper.py	/^def validatesharedsecret(lbotrunnername, sharedsecret):$/;"	f	access:public

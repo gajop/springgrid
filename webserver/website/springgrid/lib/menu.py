@@ -3,30 +3,40 @@
 from pylons import session
 
 from jinja2 import Environment, PackageLoader
+import springgrid.lib.helpers as h
 
 def getMenus():
     menus = []
     if 'user' in session:
         accountmenus = []
-        accountmenus.append( ['Change Password...', 'changepasswordform.py'] )
-        accountmenus.append( ['Logout', '/login/logout'] )
+        accountmenus.append( ['Change Password...', 
+            h.url(controller='changepassword', action='form')] )
+        accountmenus.append( ['Logout', 
+            h.url(controller='login', action='logout')] )
         menus.append([session['user'], accountmenus ])
     else:
         menus.append(["Login", [
-                     [ 'Login ...', '/login/login' ]
+                     [ 'Login ...', 
+                         h.url(controller='login', action='form')]
                      ]])
     menus.append(['Results', [
-      ['View match results', 'viewresults.py']
+      ['View match results', 
+          h.url(controller='matches', action='results')]
     ]])
     menus.append([ 'Runner', [
-      ['View request queue', 'viewrequests.py'],
-      ['Add request to queue...', 'submitrequestform.py'],
-      ['Start botrunner instance...', 'startbotrunner.py']
+      ['View request queue', 
+          h.url(controller='matches', action='requests')],
+      ['Add request to queue...', 
+          h.url(controller='submit_request', action='form')],
+      ['Start botrunner instance...', 
+          h.url(controller='info', action='botrunner')]
     ]])
 
     menus.append([ 'Configuration', [
-      ['Setup notes', 'setupnotes.py'],
-      ['View available bot runners', 'viewbotrunners.py'],
+      ['Setup notes', 
+          h.url(controller='info', action='setupnotes')],
+      ['View available bot runners', 
+          h.url(controller='botrunner', action='list')],
       ['View available maps', 'viewmaps.py'],
       ['View available mods', 'viewmods.py'],
       ['View available ais', 'viewais.py'],
@@ -36,7 +46,7 @@ def getMenus():
     ]])
 
     menus.append([ 'About', [
-      ['About', 'about.py']
+      ['About', h.url(controller='about', action='view')]
     ]])
 
     return menus

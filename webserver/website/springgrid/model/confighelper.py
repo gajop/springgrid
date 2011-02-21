@@ -22,8 +22,7 @@
 # This could ideally be converted to static methods on Config class, once 
 # I have an internet connectoin and can google for how to do that ;-)
 
-import sqlalchemysetup
-from tableclasses import *
+from meta import *
 
 defaults = {
    'expiresessionminutes': 20,
@@ -34,33 +33,33 @@ defaults = {
 
 def getKeys():
    keys = []
-   for config in sqlalchemysetup.session.query(Config):
+   for config in Session.query(Config):
       keys.append(config.config_key)
    return keys
 
 def getconfigdict():
    applydefaults()
    dict = {}
-   for config in sqlalchemysetup.session.query(Config):
+   for config in Session.query(Config):
       dict[config.config_key] = config.getValue()
    return dict
 
 def applydefaults():
    global defaults
    for key_name in defaults.keys():
-      configrow = sqlalchemysetup.session.query(Config).filter(Config.config_key == key_name).first()
+      configrow = Session.query(Config).filter(Config.config_key == key_name).first()
       if configrow == None:
          setValue( key_name, defaults[key_name] )    
    # purge extraneous values
-   for configrow in sqlalchemysetup.session.query(Config):
+   for configrow in Session.query(Config):
       if not defaults.has_key(configrow.config_key):
-         sqlalchemysetup.session.delete(configrow)
-   sqlalchemysetup.session.flush()
+         Session.delete(configrow)
+   Session.flush()
 
 # adds default for this value, and populates row in the database
 def populatedefault(key_name):
    global defaults
-   configrow = sqlalchemysetup.session.query(Config).filter(Config.config_key == key_name).first()
+   configrow = Session.query(Config).filter(Config.config_key == key_name).first()
    if configrow != None:
       return configrow.getValue()
 
@@ -78,7 +77,7 @@ def getValue( key_name ):
    if not defaults.has_key(key_name):
       raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
 
-   configrow = sqlalchemysetup.session.query(Config).filter(Config.config_key == key_name ).first()
+   configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
    if configrow == None:
       return populatedefault(key_name)
    return configrow.getValue()
@@ -89,10 +88,10 @@ def setValue(key_name, key_value):
    if not defaults.has_key(key_name):
       raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
 
-   configrow = sqlalchemysetup.session.query(Config).filter(Config.config_key == key_name ).first()
+   configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
    if configrow == None:
       config = Config(key_name, key_value)
-      sqlalchemysetup.session.add(config)
+      Session.add(config)
    else:
       configrow.setValue( key_value)
 

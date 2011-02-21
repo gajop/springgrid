@@ -5,11 +5,9 @@ from pylons.controllers.util import abort, redirect
 
 from springgrid.lib.base import BaseController, render
 
-from jinja2 import Environment, PackageLoader
-
 log = logging.getLogger(__name__)
 
 class AboutController(BaseController):
 
-    def index(self):
+    def view(self):
         return render('about.html')
