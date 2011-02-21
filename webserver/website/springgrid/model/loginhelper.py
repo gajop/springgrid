@@ -23,7 +23,6 @@
 
 import Cookie
 import random
-import cgi
 import string
 import os
 import os.path
@@ -31,10 +30,10 @@ import md5
 
 from sqlalchemy.orm import join
 
-from utils import *
+#from utils import *
 
-import sqlalchemysetup
-import tableclasses
+from springgrid.lib.base import Session
+import springgrid.model.meta
 # from tableclasses import *
 
 gusername = ""  # first call loginhelper.processCookie().  If the user
@@ -52,7 +51,7 @@ def GenerateRef():
    return stringhelper.getRandomAlphaNumericString(40)
 
 def hasPassword():
-   account = sqlalchemysetup.session.query(tableclasses.Account).filter( tableclasses.Account.username == gusername ).first()
+   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == gusername ).first()
    if account == None:
       return False
    if account.passwordinfo == None:
@@ -76,7 +75,7 @@ def createSalt():
 def validateUsernamePassword( username, password ):
    global authmethod
 
-   account = sqlalchemysetup.session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
+   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
    if account == None:
       return False
    if account.passwordinfo == None:
@@ -98,7 +97,7 @@ def logonUserWithAuthenticatedOpenID( openidurl ):
 
    account = None
    # note: this could be optimized a little...
-   for thisaccount in sqlalchemysetup.session.query(tableclasses.Account):
+   for thisaccount in Session.query(tableclasses.Account):
       for openid in thisaccount.openids:
          if openid.openid == openidurl:
             account = thisaccount
@@ -106,11 +105,11 @@ def logonUserWithAuthenticatedOpenID( openidurl ):
       # create new account
       account = tableclasses.Account(openidurl, openidurl )
       account.openids.append( tableclasses.OpenID( openidurl ) )
-      sqlalchemysetup.session.add( account )
+      Session.add( account )
 
    cookierow = tableclasses.Cookie( cookiereference, account )
-   sqlalchemysetup.session.add(cookierow)
-   sqlalchemysetup.session.commit()
+   Session.add(cookierow)
+   Session.commit()
 
    gusername = account.username
    loginhtml = "<p>Logged in as: " + gusername + "</p>"
@@ -131,22 +130,22 @@ def logonUserWithPassword(username, password):
    cookie = Cookie.SimpleCookie()
    cookie["cookiereference"] = cookiereference
 
-   accountrow = sqlalchemysetup.session.query(tableclasses.Account).filter(tableclasses.Account.username == username ).first()
+   accountrow = Session.query(tableclasses.Account).filter(tableclasses.Account.username == username ).first()
    if accountrow == None:
       loginhtml =  "<h4>Logon error: Please check your username and password.</h4>"
       return 
 
    cookierow = tableclasses.Cookie( cookiereference, accountrow )
-   sqlalchemysetup.session.add(cookierow)
-   sqlalchemysetup.session.commit()
+   Session.add(cookierow)
+   Session.commit()
 
    gusername = username
    loginhtml = "<p>Logged in as: " + gusername + "</p>"
 
 def changePassword( username, password ):
-   account = sqlalchemysetup.session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
+   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
    account.passwordinfo.changePassword( password )
-   sqlalchemysetup.session.commit()
+   Session.commit()
    return True
 
 # can use commandline arguments to login, or just use querystring
@@ -169,7 +168,7 @@ def processCookie():
 
    cookiereference = str( cookie["cookiereference"].value )
 
-   cookierow = sqlalchemysetup.session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
+   cookierow = Session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
    if cookierow == None:
       return
 
@@ -184,10 +183,10 @@ def processCookie():
 def logoutUser():
    global cookie, cookiereference, gusername, loginhtml
    
-   cookierow = sqlalchemysetup.session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
+   cookierow = Session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
    if cookierow != None:
-      sqlalchemysetup.session.delete(cookierow)
-      sqlalchemysetup.session.commit()
+      Session.delete(cookierow)
+      Session.commit()
    
    cookiereference = '0'
    cookie = Cookie.SimpleCookie()

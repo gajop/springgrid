@@ -4,7 +4,7 @@ from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
 
 from springgrid.lib.base import BaseController, render, Session
-from springgrid.model import botrunnerhelper
+from springgrid.model import botrunnerhelper, loginhelper
 from springgrid.model.meta import BotRunner
 
 log = logging.getLogger(__name__)
