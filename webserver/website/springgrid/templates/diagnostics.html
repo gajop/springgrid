@@ -1,0 +1,23 @@
+{% extends 'menu.html' %}
+{% block content %}
+<h3>Diagnostics</h3>
+{% if c.dirExists %}
+<div class="success">
+    Replay directory exists
+</div>
+{% else %}
+<div class="failiure">
+    Replay directory doesn't exist
+</div>
+{% endif %}
+<br/>
+{% if c.canWrite %}
+<div class="success">
+    Replay directory is writable
+</div>
+{% else %}
+<div class="failiure">    
+    Replay directory isn't writable
+</div>    
+{% endif %}
+{% endblock %}

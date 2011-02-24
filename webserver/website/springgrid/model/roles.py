@@ -25,11 +25,11 @@
 
 from sqlalchemy.orm import join
 
-from utils import *
+from pylons import session
+from springgrid.lib.base import Session
+from meta import Role
+import botrunnerhelper
 import loginhelper
-import tableclasses
-import sqlalchemysetup
-from tableclasses import *
 
 # list rolenames here
 # they're also in the roles table, and should match
@@ -47,7 +47,7 @@ apiclient = 'apiclient'
 
 # adds any missing roles to the table, can be called as many times as you like
 def addstaticdata():
-   rolerows = sqlalchemysetup.session.query(Role).all()
+   rolerows = Session.query(Role).all()
    for rolename in [ 'accountadmin', 'aiadmin', 'mapadmin', 'modadmin', 'leagueadmin', 'botrunneradmin', 'requestadmin', 'apiclient' ]:
       rolefound = False
       for rolerow in rolerows:
@@ -55,17 +55,17 @@ def addstaticdata():
             rolefound = True
       if not rolefound:
          role = Role( rolename )
-         sqlalchemysetup.session.add(role)
-         sqlalchemysetup.session.flush()
+         Session.add(role)
+         Session.flush()
 
 # returns Role object using sqlalchemy
 def getRole(rolename ):
    addstaticdata()
-   return sqlalchemysetup.session.query(Role).filter(Role.role_name == rolename ).first()
+   return Session.query(Role).filter(Role.role_name == rolename ).first()
 
 # returns if the logged-in user is in the named role
 def isInRole(rolename):
-   if not loginhelper.isLoggedOn():
+   if not 'user' in session:
       return False
    username = loginhelper.getUsername()
    return isInRole2( username, rolename )
@@ -81,12 +81,12 @@ def isInRole2(username, rolename):
 
    # validate rolename:
    addstaticdata()
-   rolerow = sqlalchemysetup.session.query(Role).filter(Role.role_name == rolename ).first()
+   rolerow = Session.query(Role).filter(Role.role_name == rolename ).first()
    if rolerow == None:
       print "ERROR: invalid rolename specified"
       return False
 
-   account = sqlalchemysetup.session.query(Account).\
+   account = Session.query(Account).\
       filter(Account.username == username ).\
       filter( Account.roles.any( role_name = rolename )).first()
    return ( account != None )

@@ -24,26 +24,26 @@ http://www.opensource.org/licenses/gpl-license.php
 
 {% block content %}
 
-<h3>SpringGrid - Mod '{{mod.mod_name|e}}</h3>
+<h3>SpringGrid - Mod '{{c.mod.mod_name|e}}</h3>
 
-{% if showform %}
-<form action="updatemod.py" method="post">
-<table border='1' padding='3'>
-<tr class='tablehead'>
-<tr><td>Mod name</td><td><input type="text" name="modnewname" value="{{mod.mod_name|e}}" /></td></tr>
-<tr><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td><input type="text" name="modarchivechecksum" value="{% if not mod.mod_archivechecksum is none %}{{mod.mod_archivechecksum|e}}{%endif%}" /></td></tr>
-<tr><td>Mod download url</td><td><input type="text" name="modurl" value="{% if not mod.mod_url is none %}{{mod.mod_url|e}}{%endif%}" /></td></tr>
-<input type="hidden" name="modname" value="{{mod.mod_name|e}}" />
-<tr><td></td><td><input type="submit" value="Update" /></td></tr>
-</table>
-</form>
+{% if c.showForm %}
+	<form action="updatemod.py" method="post">
+	<table border='1' padding='3'>
+	<tr class='tablehead'>
+	<tr><td>Mod name</td><td><input type="text" name="modnewname" value="{{c.mod.mod_name|e}}" /></td></tr>
+	<tr><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td><input type="text" name="modarchivechecksum" value="{% if not mod.mod_archivechecksum is none %}{{c.mod.mod_archivechecksum|e}}{%endif%}" /></td></tr>
+	<tr><td>Mod download url</td><td><input type="text" name="modurl" value="{% if not c.mod.mod_url is none %}{{c.mod.mod_url|e}}{%endif%}" /></td></tr>
+	<input type="hidden" name="modname" value="{{c.mod.mod_name|e}}" />
+	<tr><td></td><td><input type="submit" value="Update" /></td></tr>
+	</table>
+	</form>
 {% else %}
-<table border='1' padding='3'>
-<tr class='tablehead'>
-<tr><td>Mod name</td><td>{{mod.mod_name|e}}</td></tr>
-<tr><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td>{{mod.mod_archivechecksum}}</tr>
-<tr><td>Mod download url</td><td>{% if not mod.mod_url is none %}<a href='{{mod.mod_url|e}}' rel="nofollow">{{mod.mod_url|e}}</a>{%endif%}&nbsp;</td></tr>
-</table>
+	<table border='1' padding='3'>
+	<tr class='tablehead'>
+	<tr><td>Mod name</td><td>{{c.mod.mod_name|e}}</td></tr>
+	<tr><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td>{{c.mod.mod_archivechecksum}}</tr>
+	<tr><td>Mod download url</td><td>{% if not c.mod.mod_url is none %}<a href='{{c.mod.mod_url|e}}' rel="nofollow">{{c.mod.mod_url|e}}</a>{%endif%}&nbsp;</td></tr>
+	</table>
 {% endif %}
 
 {% endblock %}

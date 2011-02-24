@@ -25,10 +25,9 @@ import datetime
 
 from sqlalchemy.orm import join
 
-from utils import *
-#from core import *
-from tableclasses import *
-import sqlalchemysetup
+from springgrid.lib.base import Session
+from meta import MatchRequest, MatchRequestInProgress, MatchResult
+from springgrid.utils import dates
 import botrunnerhelper
 import confighelper
 
@@ -49,7 +48,7 @@ def getcompatibleitemfromqueue( botrunnername, sessionid ):
    # now we've archived the old requests, we just pick a request
    # in the future, we'll pick a compatible request.  In the future ;-)
    # also, we need to handle options.  In the future ;-)
-   matchrequests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None ).filter(MatchRequest.matchresult == None ).all()
+   matchrequests = Session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None ).filter(MatchRequest.matchresult == None ).all()
    for matchrequest in matchrequests:
       mapok = False
       modok = False
@@ -76,7 +75,7 @@ def getcompatibleitemfromqueue( botrunnername, sessionid ):
    return None
 
 def getmatchrequest(matchrequest_id):
-   return sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id ).first()
+   return Session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id ).first()
 
 # validate that an incoming result is for a match assigned to this server
 # return true if so, otherwise false
@@ -92,11 +91,11 @@ def storeresult( botrunnername, matchrequest_id, result ):
    if matchrequest == None:
       return
    matchrequest.matchresult  = MatchResult( result )
-   sqlalchemysetup.session.commit()
+   Session.commit()
 
 # returns the new match request, so can add options and so on
 # doesn't commit
 def addmatchrequest( ai0, ai1, mod, map, speed, softtimeout, hardtimeout):
    newmatchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, mod = mod, map = map, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
-   sqlalchemysetup.session.add(newmatchrequest)
+   Session.add(newmatchrequest)
 

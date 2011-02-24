@@ -22,7 +22,8 @@
 # This could ideally be converted to static methods on Config class, once 
 # I have an internet connectoin and can google for how to do that ;-)
 
-from meta import *
+from springgrid.model.meta import Config
+from springgrid.lib.base import Session
 
 defaults = {
    'expiresessionminutes': 20,

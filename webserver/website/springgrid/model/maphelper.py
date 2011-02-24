@@ -19,20 +19,19 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from utils import *
-import sqlalchemysetup
-from tableclasses import *
+from springgrid.lib.base import Session
+from meta import Map
 import botrunnerhelper
 
 # returns True if exists, or added ok, otherwise False
 def addmapifdoesntexist(mapname, maparchivechecksum):
-   map = sqlalchemysetup.session.query(Map).filter(Map.map_name == mapname ).first()
+   map = Session.query(Map).filter(Map.map_name == mapname ).first()
    if map == None:
       try:
          map = Map( mapname )
          map.map_archivechecksum = maparchivechecksum
-         sqlalchemysetup.session.add(map)
-         sqlalchemysetup.session.commit()
+         Session.add(map)
+         Session.commit()
       except:
          return(False, "error adding to db: " + str( sys.exc_value ) )
 
@@ -41,7 +40,7 @@ def addmapifdoesntexist(mapname, maparchivechecksum):
    if map.map_archivechecksum == None:
       map.map_archivechecksum = maparchivechecksum
       try:
-         sqlalchemysetup.session.commit()
+         Session.commit()
          return (True,'')          
       except:
          return(False, "error updating db: " + str( sys.exc_value ) )
@@ -51,12 +50,12 @@ def addmapifdoesntexist(mapname, maparchivechecksum):
 
    return (True,'')
 
-def getMap( mapname ):
-   return sqlalchemysetup.session.query(Map).filter(Map.map_name == mapname ).first()
+def getMap(mapname):
+   return Session.query(Map).filter(Map.map_name == mapname).first()
 
 # return list of supported mapnames
-def getsupportedmaps( botrunnername ):
-   botrunner = botrunnerhelper.getBotRunner( botrunnername )
+def getsupportedmaps(botrunnername):
+   botrunner = botrunnerhelper.getBotRunner(botrunnername)
    if botrunner == None:
       return []
    if botrunner.supportedmaps == None:
@@ -66,14 +65,14 @@ def getsupportedmaps( botrunnername ):
       supportedmapnames.append(map.map_name)
    return supportedmapnames
 
-def setbotrunnersupportsthismap( botrunnername, mapname ):
+def setbotrunnersupportsthismap(botrunnername, mapname):
    # Now, register the map as supported map
-   botrunner = botrunnerhelper.getBotRunner( botrunnername )
+   botrunner = botrunnerhelper.getBotRunner(botrunnername)
    for map in botrunner.supportedmaps:
       if map.map_name == mapname:
        return (True,'')
    map = getMap(mapname)
    botrunner.supportedmaps.append(map)
-   sqlalchemysetup.session.commit()
+   Session.commit()
    return (True,'')
 

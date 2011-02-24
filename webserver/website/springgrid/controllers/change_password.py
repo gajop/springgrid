@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 class ChangePasswordController(BaseController):
     def form(self):
         """Show the ChangePassword form."""
-        pass
+        return render('changepasswordform.html')
 
     def submit(self):
-        return render('changepasswordform.html')
+        pass

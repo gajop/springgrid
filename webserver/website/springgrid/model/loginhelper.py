@@ -21,177 +21,42 @@
 
 # functions for login, cookies etc...
 
-import Cookie
-import random
-import string
-import os
-import os.path
-import md5
-
-from sqlalchemy.orm import join
-
-#from utils import *
-
 from springgrid.lib.base import Session
-import springgrid.model.meta
-# from tableclasses import *
-
-gusername = ""  # first call loginhelper.processCookie().  If the user
-                # is already logged in after that, then gusername will no
-                # longer be blank
-                # testing gusername != '' is sufficient to check if the user
-                # is logged in
-loginhtml = ""
-cookiereference = ''
-cookie = Cookie.SimpleCookie()
-
-saltlength = 200
-
-def GenerateRef():
-   return stringhelper.getRandomAlphaNumericString(40)
-
-def hasPassword():
-   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == gusername ).first()
-   if account == None:
-      return False
-   if account.passwordinfo == None:
-      return False
-   return True
-   
-def isLoggedOn():
-   global gusername
-   return ( gusername != '')
-
-def getUsername():
-   global gusername
-   return gusername
-
-# returns a salt string
-def createSalt():
-   global saltlength
-   return stringhelper.getRandomPrintableString(saltlength)
+from springgrid.model.meta import Account
+from pylons import session
 
 # returns True if password correct, otherwise false
-def validateUsernamePassword( username, password ):
-   global authmethod
+def validateUsernamePassword(username, password):
+    account = Session.query(Account).filter(Account.username == username ).first()
+    if account == None:
+        return False
+    if account.passwordinfo == None:
+        return False
+    result = account.passwordinfo.checkPassword(password)
+    return result
 
-   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
-   if account == None:
-      return False
-   if account.passwordinfo == None:
-      return False
-   result = account.passwordinfo.checkPassword( password )
-   return result
+def logonUserWithAuthenticatedOpenID(openidurl):
+    account = None
+    # note: this could be optimized a little...
+    for thisaccount in Session.query(Account):
+        for openid in thisaccount.openids:
+            if openid.openid == openidurl:
+                account = thisaccount
+    if account == None:
+        # create new account
+        account = Account(openidurl, openidurl)
+        account.openids.append(OpenID(openidurl))
+        Session.add(account)
+    
+    session['username'] = openidurl
 
-def logonUserWithAuthenticatedOpenID( openidurl ):
-   global gusername
-   global loginhtml
-   global cookie
-   global cookiereference
-   global authmethod
-
-   cookiereference = GenerateRef()
-
-   cookie = Cookie.SimpleCookie()
-   cookie["cookiereference"] = cookiereference
-
-   account = None
-   # note: this could be optimized a little...
-   for thisaccount in Session.query(tableclasses.Account):
-      for openid in thisaccount.openids:
-         if openid.openid == openidurl:
-            account = thisaccount
-   if account == None:
-      # create new account
-      account = tableclasses.Account(openidurl, openidurl )
-      account.openids.append( tableclasses.OpenID( openidurl ) )
-      Session.add( account )
-
-   cookierow = tableclasses.Cookie( cookiereference, account )
-   Session.add(cookierow)
-   Session.commit()
-
-   gusername = account.username
-   loginhtml = "<p>Logged in as: " + gusername + "</p>"
-
-def logonUserWithPassword(username, password):
-   global gusername
-   global loginhtml
-   global cookie
-   global cookiereference
-
-   gusername = ""
-   if not validateUsernamePassword( username, password ):
-      loginhtml =  "<h4>Logon error: Please check your username and password.</h4>"
-      return
-
-   cookiereference = GenerateRef()
-
-   cookie = Cookie.SimpleCookie()
-   cookie["cookiereference"] = cookiereference
-
-   accountrow = Session.query(tableclasses.Account).filter(tableclasses.Account.username == username ).first()
-   if accountrow == None:
-      loginhtml =  "<h4>Logon error: Please check your username and password.</h4>"
-      return 
-
-   cookierow = tableclasses.Cookie( cookiereference, accountrow )
-   Session.add(cookierow)
-   Session.commit()
-
-   gusername = username
-   loginhtml = "<p>Logged in as: " + gusername + "</p>"
-
-def changePassword( username, password ):
-   account = Session.query(tableclasses.Account).filter( tableclasses.Account.username == username ).first()
-   account.passwordinfo.changePassword( password )
-   Session.commit()
-   return True
-
-# can use commandline arguments to login, or just use querystring
-# if there is a cookie, uses that
-def processCookie():
-   global cookie, cookiereference, gusername, loginhtml
-
-   gusername = ''
-   cookie = Cookie.SimpleCookie( os.environ.get("HTTP_COOKIE"))
-   c = cookie.output( "Cookie: " )
-   if(not c):
-      # check query string, and if username and password are ok, set gusername from that
-      if formhelper.getValue('username') != '' and formhelper.getValue('password') != '':
-         if validateUsernamePassword( formhelper.getValue('username'), formhelper.getValue('password') ):
-            gusername = formhelper.getValue('username')
-      return    
-
-   if not cookie.has_key( "cookiereference" ):
-      return
-
-   cookiereference = str( cookie["cookiereference"].value )
-
-   cookierow = Session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
-   if cookierow == None:
-      return
-
-   # Note: could consider migrating from username string to account object
-   gusername = cookierow.account.username
-
-   if gusername == '':
-      return
-
-   loginhtml = "<p>Logged in as: " + gusername + "</p>"
+def changePassword(username, password):
+    account = Session.query(Account).filter(Account.username == username).first()
+    account.passwordinfo.changePassword(password)
+    Session.commit()
+    return True
 
 def logoutUser():
-   global cookie, cookiereference, gusername, loginhtml
-   
-   cookierow = Session.query(tableclasses.Cookie).filter(tableclasses.Cookie.cookiereference == cookiereference ).first()
-   if cookierow != None:
-      Session.delete(cookierow)
-      Session.commit()
-   
-   cookiereference = '0'
-   cookie = Cookie.SimpleCookie()
-   gusername = ""
-   loginhtml = ""
-
+    pass       
 
 

@@ -43,15 +43,15 @@
     <td>{{request.matchrequestinprogress.datetimeassigned}}</td>
     <td>{{request.matchresult.matchresult|e}}</td>
     <td>
-    {% if infologpathbyrequest[request] is defined %}
-      <a href='{{infologpathbyrequest[request]|e}}'>infolog</a>
+    {% if c.infologPaths[request] is defined %}
+      <a href='{{c.infologPaths[request]|e}}'>infolog</a>
     {% else %}
     No infolog available
     {% endif %}
     </td>
     <td>
-    {% if replaypathbyrequest[request] is defined %}
-      <a href='{{replaypathbyrequest[request]|e}}'>replay</a>
+    {% if c.replayPaths[request] is defined %}
+      <a href='{{c.replayPaths[request]|e}}'>replay</a>
     {% else %}
     No replay available
     {% endif %}

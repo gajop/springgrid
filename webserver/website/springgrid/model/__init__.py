@@ -1,5 +1,5 @@
 """The application's model objects"""
-from springgrid.model.meta import Session, Base
+from springgrid.model.meta import Session
 
 
 def init_model(engine):
@@ -7,6 +7,6 @@ def init_model(engine):
  
     Session.configure(bind=engine)
 
-__all__ = ['roles', 'botrunnerhelper','matchrequestcontroller',
-   'replaycontroller', 'menu', 'maphelper', 'modhelper','aihelper',
-   'loginhelper', 'sqlalchemysetup', 'tableclasses', 'accounthelper', 'leaguehelper', 'confighelper', 'jinjahelper' ]
+#__all__ = ['entity', 'roles', 'botrunnerhelper','matchrequestcontroller',
+#   'replaycontroller', 'menu', 'maphelper', 'modhelper','aihelper',
+#   'loginhelper', 'sqlalchemysetup', 'tableclasses', 'accounthelper', 'leaguehelper', 'confighelper', 'jinjahelper' ]

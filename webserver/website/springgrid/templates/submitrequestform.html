@@ -24,7 +24,7 @@
             ];
         {% endfor %}
         var selectedItems = items[index];
-        for (i in c.selectedItems) {
+        for (i in selectedItems) {
             var newOpt = document.createElement("option");
             newOpt.text = selectedItems[i][0];
             newOpt.value = selectedItems[i][1];
@@ -46,15 +46,13 @@
 </script>
 
 <h3>SpringGrid - submit game request</h3>
-<form action='submitrequest.py' method='post'>
+<form action='{{ h.url(controller='submit_request', action='submit') }}' method='post'>
 <table border='1' padding='3'>
-<tr><td>AI0
-        name</td><td>{{formhelper.itemsandvaluestodropdown("ai0nameversion",
-        c.aiitems, c.aivalues ) }}</td></tr>
+<tr><td>AI0 name</td>
+    <td>{{formhelper.itemsandvaluestodropdown("ai0", c.aiitems, c.aivalues ) }}</td></tr>
 <tr><td>AI0 side</td><td><select id='ai0side' name='ai0side'/></td></tr>
-<tr><td>AI1
-        name</td><td>{{formhelper.itemsandvaluestodropdown("ai1nameversion",
-        c.aiitems, c.aivalues ) }}</td></tr>
+<tr><td>AI1 name</td>
+    <td>{{formhelper.itemsandvaluestodropdown("ai1", c.aiitems, c.aivalues ) }}</td></tr>
 <tr><td>AI1 side</td><td><select id='ai1side' name='ai1side'/></td></tr>
 <tr><td>Map</td><td>{{formhelper.listtodropdown( 'mapname', c.maps ) }}</td></tr>
 <tr><td>Mod</td>

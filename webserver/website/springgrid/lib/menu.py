@@ -10,7 +10,7 @@ def getMenus():
     if 'user' in session:
         accountmenus = []
         accountmenus.append( ['Change Password...', 
-            h.url(controller='changepassword', action='form')] )
+            h.url(controller='change_password', action='form')] )
         accountmenus.append( ['Logout', 
             h.url(controller='login', action='logout')] )
         menus.append([session['user'], accountmenus ])
@@ -39,11 +39,16 @@ def getMenus():
           h.url(controller='botrunner', action='list')],
       ['View available maps', 
           h.url(controller='map', action='list')],
-      ['View available mods', 'viewmods.py'],
-      ['View available ais', 'viewais.py'],
-      ['View accounts', 'viewaccounts.py'],
-      ['View global config', 'viewconfig.py' ],
-      ['Run website diagnostics', 'diagnostics.py']
+      ['View available mods', 
+          h.url(controller='mod', action='list')],
+      ['View available ais', 
+          h.url(controller='ai', action='list')],
+      ['View accounts', 
+          h.url(controller='account', action='list')],
+      ['View global config', 
+          h.url(controller='info', action='config') ],
+      ['Run website diagnostics', 
+          h.url(controller='info', action='diagnostics')]
     ]])
 
     menus.append([ 'About', [

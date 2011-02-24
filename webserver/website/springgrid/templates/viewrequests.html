@@ -67,7 +67,7 @@ http://www.opensource.org/licenses/gpl-license.php
    {% if request.matchrequestinprogress != None: %}
       <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
       <td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
-      <td>{{datetimeassignedbyrequest[request]}}</td>
+      <td>{{c.datetimeassignedbyrequest[request]}}</td>
       <td>&nbsp;</td>
    {% else %}
       <td>&nbsp;</td>

@@ -24,26 +24,26 @@ http://www.opensource.org/licenses/gpl-license.php
 
 {% block content %}
 
-<h3>SpringGrid - Map '{{map.map_name|e}}</h3>
+<h3>SpringGrid - Map '{{c.map.map_name|e}}</h3>
 
-{% if showform %}
-<form action="updatemap.py" method="post">
-<table border='1' padding='3'>
-<tr class='tablehead'>
-<tr><td>Map name</td><td><input type="text" name="mapnewname" value="{{map.map_name|e}}" /></td></tr>
-<tr><td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td><td><input type="text" name="maparchivechecksum" value="{% if not map.map_archivechecksum is none %}{{map.map_archivechecksum|e}}{%endif%}" /></td></tr>
-<tr><td>Map download url</td><td><input type="text" name="mapurl" value="{% if not map.map_url is none %}{{map.map_url|e}}{%endif%}" /></td></tr>
-<input type="hidden" name="mapname" value="{{map.map_name|e}}" />
-<tr><td></td><td><input type="submit" value="Update" /></td></tr>
-</table>
-</form>
+{% if c.showForm %}
+	<form action="updatemap.py" method="post">
+	<table border='1' padding='3'>
+	<tr class='tablehead'>
+	<tr><td>Map name</td><td><input type="text" name="mapnewname" value="{{c.map.map_name|e}}" /></td></tr>
+	<tr><td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td><td><input type="text" name="maparchivechecksum" value="{% if not map.map_archivechecksum is none %}{{map.map_archivechecksum|e}}{%endif%}" /></td></tr>
+	<tr><td>Map download url</td><td><input type="text" name="mapurl" value="{% if not c.map.map_url is none %}{{c.map.map_url|e}}{%endif%}" /></td></tr>
+	<input type="hidden" name="mapname" value="{{c.map.map_name|e}}" />
+	<tr><td></td><td><input type="submit" value="Update" /></td></tr>
+	</table>
+	</form>
 {% else %}
-<table border='1' padding='3'>
-<tr class='tablehead'>
-<tr><td>Map name</td><td>{{map.map_name|e}}</td></tr>
-<tr><td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td><td>{{map.map_archivechecksum}}</tr>
-<tr><td>Map download url</td><td>{% if not map.map_url is none %}<a href='{{map.map_url|e}}' rel="nofollow">{{map.map_url|e}}</a>{%endif%}&nbsp;</td></tr>
-</table>
+	<table border='1' padding='3'>
+	<tr class='tablehead'>
+	<tr><td>Map name</td><td>{{c.map.map_name|e}}</td></tr>
+	<tr><td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td><td>{{c.map.map_archivechecksum}}</tr>
+	<tr><td>Map download url</td><td>{% if not c.map.map_url is none %}<a href='{{c.map.map_url|e}}' rel="nofollow">{{c.map.map_url|e}}</a>{%endif%}&nbsp;</td></tr>
+	</table>
 {% endif %}
 
 {% endblock %}

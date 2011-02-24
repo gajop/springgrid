@@ -7,9 +7,9 @@
 <table border='1' padding='3'>
 <tr class='tablehead'><td>AI Name</td><td>AI Version</td><td>Compatible Options</td><td>Download url</td><td>Needs compiling?</td></tr>
 
-{% for ai in ais %}
+{% for ai in c.ais %}
    <tr>
-   <td><a href='viewai.py?ainame={{ai.ai_name|e}}&aiversion={{ai.ai_version|e}}'>{{ai.ai_name|e}}</a></td>
+   <td><a href='{{ url(controller='ai', action='view', id=ai.ai_id) }}'>{{ai.ai_name|e}}</a></td>
    <td>{{ai.ai_version|e}}</td>
 
    <td>
@@ -33,7 +33,7 @@
 
 </table>
 
-{% if showform %}
+{% if c.showForm %}
 
    <p />
    <hr />

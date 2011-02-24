@@ -24,40 +24,40 @@ http://www.opensource.org/licenses/gpl-license.php
 
 {% block content %}
 
-   <h3>SpringGrid - Account List</h3>
-   <table border='1' padding='3'>
-   <tr class='tablehead'><td>username</td><td>User full name</td><td>Delete</td></tr>
+<h3>SpringGrid - Account List</h3>
+<table border='1' padding='3'>
+<tr class='tablehead'><td>username</td><td>User full name</td><td>Delete</td></tr>
 
-   {% for account in accounts %}
-      <tr>
-      <td><a href='viewaccount.py?username={{account.username|e}}'>{{account.username|e}}</td><td>{{account.userfullname|e}}</a></td>
-      {% if not roles.isInRole2( account.username, roles.accountadmin ) %}
-         <td><a href='removeaccount.py?username={{account.username|e}}'>Delete account</a></td>
-      {% else %}
-         <td>(Drop accountadmin role before deleting account)</td>
-      {% endif %}
-      </tr>
-   {% endfor %}
-
-   </table>
-
-   {% if showform %}
-
-      <p />
-      <hr />
-      <p />
-
-      <h4>Create new account:</h4>
-      <form action='addaccount.py' method='post'>
-      <table border='1' padding='3'>
-      <tr><td>Username</td><td><input name='username'</td></tr>
-      <tr><td>User full name</td><td><input name='userfullname'</td></tr>
-      <tr><td>User email address</td><td><input name='useremailaddress'</td></tr>
-      <tr><td>User password</td><td><input type='password' name='userpassword'</td></tr>
-      <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-      </table>
-      </form>
+{% for account in c.accounts %}
+   <tr>
+   <td><a href='viewaccount.py?username={{account.username|e}}'>{{account.username|e}}</td><td>{{account.userfullname|e}}</a></td>
+   {% if not roles.isInRole2( account.username, roles.accountadmin ) %}
+      <td><a href='removeaccount.py?username={{account.username|e}}'>Delete account</a></td>
+   {% else %}
+      <td>(Drop accountadmin role before deleting account)</td>
    {% endif %}
+   </tr>
+{% endfor %}
+
+</table>
+
+{% if c.showForm %}
+
+   <p />
+   <hr />
+   <p />
+
+   <h4>Create new account:</h4>
+   <form action='addaccount.py' method='post'>
+   <table border='1' padding='3'>
+   <tr><td>Username</td><td><input name='username'</td></tr>
+   <tr><td>User full name</td><td><input name='userfullname'</td></tr>
+   <tr><td>User email address</td><td><input name='useremailaddress'</td></tr>
+   <tr><td>User password</td><td><input type='password' name='userpassword'</td></tr>
+   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
+   </table>
+   </form>
+{% endif %}
 
 {% endblock %}
 

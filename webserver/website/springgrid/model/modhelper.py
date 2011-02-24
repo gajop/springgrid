@@ -17,28 +17,28 @@
 # 1307 USA
 # You can find the licence also on the web at:
 # http://www.opensource.org/licenses/gpl-license.php
-#
 
-from utils import *
-import sqlalchemysetup
-from tableclasses import *
-import botrunnerhelper
 import sys
+
+from springgrid.lib.base import Session
+from meta import Mod, ModSide
+import botrunnerhelper
+
 
 # returns True if exists, or added ok, otherwise False
 def addmodifdoesntexist(modname, modarchivechecksum, sidenames):
-   mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
+   mod = Session.query(Mod).filter(Mod.mod_name == modname ).first()
    if mod == None:
       try:
          mod = Mod( modname )
          mod.mod_archivechecksum = modarchivechecksum
-         sqlalchemysetup.session.add(mod)
-         sqlalchemysetup.session.commit()
-         sqlalchemysetup.session.flush()
-         mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
+         Session.add(mod)
+         Session.commit()
+         Session.flush()
+         mod = Session.query(Mod).filter(Mod.mod_name == modname ).first()
          sides = [ModSide(sidename, mod.mod_id) for sidename in sidenames]
-         sqlalchemysetup.session.add_all(sides)
-         sqlalchemysetup.session.commit()
+         Session.add_all(sides)
+         Session.commit()
       except:
          return(False, "error adding to db: " + str( sys.exc_value ) )
 
@@ -46,12 +46,12 @@ def addmodifdoesntexist(modname, modarchivechecksum, sidenames):
 
    if mod.mod_name != modname:
       mod.mod_name = modname
-      sqlalchemysetup.session.flush()
+      Session.flush()
 
    if mod.mod_archivechecksum == None:
       mod.mod_archivechecksum = modarchivechecksum
       try:
-         sqlalchemysetup.session.commit()
+         Session.commit()
          return (True,'')          
       except:
          return(False, "error updating db: " + str( sys.exc_value ) )
@@ -62,7 +62,7 @@ def addmodifdoesntexist(modname, modarchivechecksum, sidenames):
    return (True,'')
 
 def getMod( modname ):
-   return sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
+   return Session.query(Mod).filter(Mod.mod_name == modname ).first()
 
 # return list of supported modnames
 def getsupportedmods( botrunnername ):
@@ -84,6 +84,6 @@ def setbotrunnersupportsthismod( botrunnername, modname ):
        return (True,'')
    mod = getMod(modname)
    botrunner.supportedmods.append(mod)
-   sqlalchemysetup.session.commit()
+   Session.commit()
    return (True,'')
 

@@ -1,3 +1,9 @@
+div.success {
+	color : green;
+}
+div.failiure {
+	color : red;
+}
 div.header {
    position: absolute;
    top: 20px;

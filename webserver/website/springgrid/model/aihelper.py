@@ -19,13 +19,12 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from utils import *
-from tableclasses import *
-import sqlalchemysetup
+from springgrid.lib.base import Session
+from meta import AI
 import botrunnerhelper
 
 def getallais():
-   return sqlalchemysetup.session.query(AI)
+   return Session.query(AI)
 
 # return list of supported (ainame,aiversion) tuples
 def getsupportedais( botrunnername ):
@@ -39,21 +38,21 @@ def getsupportedais( botrunnername ):
    return supportedais
 
 def getAIs():
-   return sqlalchemysetup.session.query(AI).all()
+   return Session.query(AI).all()
 
 def getAI( ainame, aiversion ):
-   return sqlalchemysetup.session.query(AI).filter(AI.ai_name == ainame ).filter(AI.ai_version == aiversion ).first()
+   return Session.query(AI).filter(AI.ai_name == ainame ).filter(AI.ai_version == aiversion ).first()
 
 def getAIOption( optionname ):
-   return sqlalchemysetup.session.query(AIOption).filter(AIOption.option_name == optionname ).first()
+   return Session.query(AIOption).filter(AIOption.option_name == optionname ).first()
 
 def addaiifdoesntexist(ainame, aiversion):
    ai = getAI( ainame, aiversion )
    if ai == None:
       try:
          ai = AI(ainame, aiversion )
-         sqlalchemysetup.session.add( ai )
-         sqlalchemysetup.session.commit()
+         Session.add( ai )
+         Session.commit()
       except:
          return(False,"error adding to db: " + str( sys.exc_value ) )
 
@@ -67,7 +66,7 @@ def setbotrunnersupportsthisai( botrunnername, ainame, aiversion ):
 
    ai = getAI(ainame,aiversion)
    botrunner.supportedais.append(ai)
-   sqlalchemysetup.session.commit()
+   Session.commit()
    return (True,'')
 
 def setbotrunnernotsupportsthisai( botrunnername, ainame, aiversion ):
@@ -75,6 +74,6 @@ def setbotrunnernotsupportsthisai( botrunnername, ainame, aiversion ):
    for ai in botrunner.supportedais:
       if ai.ai_name == ainame and ai.ai_version == aiversion:
        botrunner.supportedais.remove( ai )
-   sqlalchemysetup.session.commit()
+   Session.commit()
    return (True,'')
 

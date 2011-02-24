@@ -28,16 +28,16 @@ http://www.opensource.org/licenses/gpl-license.php
 <table border='1' padding='3'>
 <tr class='tablehead'><td>Mod name</td><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td>Mod download url</td>{% if showform %}<td>&nbsp;</td>{% endif %}</tr>
 
-{% for mod in mods %}
-<tr><td><a href="viewmod.py?modname={{mod.mod_name|e}}">{{mod.mod_name|e}}</a></td><td>{{mod.mod_archivechecksum}}</td>
-   <td>{% if not mod.mod_url is none %}<a href='{{mod.mod_url|e}}' rel="nofollow">{{mod.mod_url|e}}</a>{%endif%}&nbsp;</td>
-{% if showform %}<td><a href="removemod.py?modname={{mod.mod_name|e}}">Delete</a></td>{% endif %}
-</tr>
+{% for mod in c.mods %}
+	<tr><td><a href="{{ url(controller='mod', action='view', id=mod.mod_id) }}">{{mod.mod_name|e}}</a></td><td>{{mod.mod_archivechecksum}}</td>
+	   <td>{% if not mod.mod_url is none %}<a href='{{mod.mod_url|e}}' rel="nofollow">{{mod.mod_url|e}}</a>{%endif%}&nbsp;</td>
+	{% if c.showForm %}<td><a href="removemod.py?modname={{mod.mod_name|e}}">Delete</a></td>{% endif %}
+	</tr>
 {% endfor %}
 
 </table>
 
-{% if showform %}
+{% if c.showForm %}
    <p />
    <hr />
    <p />

@@ -4,16 +4,16 @@
 
 {% block content %}
 
-<h3>SpringGrid - Bot Runner '{{botrunner.botrunner_name|e}}'</h3>
+<h3>SpringGrid - Bot Runner '{{c.botrunner.botrunner_name|e}}'</h3>
 <table border='1' padding='3'>
 
-{% if botrunner.owneraccount != none %}
-   <tr><td>Bot runner owner: </td><td>{{botrunner.owneraccount.userfullname|e}}</td></tr>
+{% if c.botrunner.owneraccount != none %}
+   <tr><td>Bot runner owner: </td><td>{{c.botrunner.owneraccount.userfullname|e}}</td></tr>
 {% else %}
    <tr><td>Bot runner owner: </td><td>None assigned</td></tr>
 {% endif %}
 {% if isbotrunnerowner %}
-   <tr><td>Shared secret: </td><td>{{botrunner.botrunner_sharedsecret|e}}</td></tr>
+   <tr><td>Shared secret: </td><td>{{c.botrunner.botrunner_sharedsecret|e}}</td></tr>
 {% else %}
    <tr><td>Shared secret: </td><td>&lt;only visible to owner&gt;</td></tr>
 {% endif %}
@@ -31,7 +31,7 @@
    <tr class='tablehead'><td>Option name</td></tr>
 {% endif %}
 
-{% for option in botrunner.options %}
+{% for option in c.botrunner.options %}
    <tr><td>{{option.option_name|e}}</td>
    {% if showform %}
       <td><a href='deleteoptionfrombotrunner.py?botrunnername={{botrunner.botrunner_name|e}}&optionname={{option.option_name|e}}'>Delete option</a></td>
@@ -45,7 +45,7 @@
 
 <table>
 <tr class='tablehead'><td>AI Name</td><td>AI Version</td></tr>
-{% for ai in botrunner.supportedais %}
+{% for ai in c.botrunner.supportedais %}
    <tr class='success'><td>{{ai.ai_name|e}}</td><td>{{ai.ai_version|e}}</td></tr>
 {% endfor %}
 </table>
@@ -54,7 +54,7 @@
 
 <table>
 <tr class='tablehead'><td>Map</td>
-{% for map in botrunner.supportedmaps %}
+{% for map in c.botrunner.supportedmaps %}
    <tr class='success'><td>{{map.map_name|e}}</td>
 {% endfor %}
 </table>
@@ -63,7 +63,7 @@
 
 <table>
 <tr class='tablehead'><td>Mod</td>
-{% for mod in botrunner.supportedmods %}
+{% for mod in c.botrunner.supportedmods %}
    <tr class='success'><td>{{mod.mod_name|e}}</td>
 {% endfor %}
 </table>
@@ -79,7 +79,7 @@
    <tr><td>Option to add:</td><td>{{formhelper.listtodropdown( 'optionname', potentialoptions )}}</td></tr>
    <tr><td></td><td><input type='submit' value='Add' /></td></tr>
    </table>
-   <input type='hidden' name='botrunnername' value='{{botrunner.botrunner_name|e}}' />
+   <input type='hidden' name='botrunnername' value='{{c.botrunner.botrunner_name|e}}' />
    </form>
 {% endif %}
 
