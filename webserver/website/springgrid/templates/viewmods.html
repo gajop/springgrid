@@ -26,12 +26,15 @@ http://www.opensource.org/licenses/gpl-license.php
 
 <h3>SpringGrid - Mod List</h3>
 <table border='1' padding='3'>
-<tr class='tablehead'><td>Mod name</td><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td>Mod download url</td>{% if showform %}<td>&nbsp;</td>{% endif %}</tr>
+    <tr class='tablehead'><td>Mod name</td><td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td><td>Mod download url</td>{% if showform %}<td>&nbsp;</td>{% endif %}</tr>
 
 {% for mod in c.mods %}
-	<tr><td><a href="{{ url(controller='mod', action='view', id=mod.mod_id) }}">{{mod.mod_name|e}}</a></td><td>{{mod.mod_archivechecksum}}</td>
+	<tr>
+	   <td><a href="{{ url(controller='mod', action='view', id=mod.mod_id) }}">{{mod.mod_name|e}}</a></td><td>{{mod.mod_archivechecksum}}</td>
 	   <td>{% if not mod.mod_url is none %}<a href='{{mod.mod_url|e}}' rel="nofollow">{{mod.mod_url|e}}</a>{%endif%}&nbsp;</td>
-	{% if c.showForm %}<td><a href="removemod.py?modname={{mod.mod_name|e}}">Delete</a></td>{% endif %}
+	   {% if c.showForm %}
+	   <td><a href="removemod.py?modname={{mod.mod_name|e}}">Delete</a></td>
+	   {% endif %}
 	</tr>
 {% endfor %}
 
@@ -47,11 +50,20 @@ http://www.opensource.org/licenses/gpl-license.php
    in the startscript, so an easy way to get them is to start a game
    from the lobby, then look at the file 'script.txt' in the spring
    game directory</p>
-   <form action='addmod.py' method='post'>
+   <form action='{{ url(controller='mod', action='add') }}' method='post'>
    <table border='1' padding='3'>
-   <tr><td>Mod name (this should be what would be in the startscript)</td><td><input name='modname'</td></tr>
-   <tr><td>Mod download url</td><td><input name='modurl'</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
+	   <tr>
+	       <td>Mod name (this should be what would be in the startscript)</td>
+	       <td><input name='modName'/></td>
+	   </tr>
+	   <tr>
+	       <td>Mod download url</td>
+	       <td><input name='modUrl'/></td>
+	   </tr>
+	   <tr>
+	       <td></td>
+	       <td><input type='submit' value='Add' /></td>
+	   </tr>
    </table>
    </form>
 {% endif %}

@@ -24,9 +24,18 @@ class ModController(BaseController):
     def list(self):
         mods = Session.query(Mod)
         showForm = False
-        #if roles.isInRole(roles.moddmin):
-        #    showForm = True
+        if roles.isInRole(roles.modadmin):
+            showForm = True
             
         c.showForm = showForm
         c.mods = mods
         return render('viewmods.html')
+
+    def add(self):
+        pass
+    
+    def remove(self, id):
+        pass
+    
+    def update(self, id):
+        pass

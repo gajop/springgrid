@@ -64,7 +64,7 @@ class PasswordInfo(Base):
    passwordhash = Column(String(255), nullable = False)
 
    def __init__(self, password):
-       changePassword(password)      
+       self.changePassword(password)      
 
    def checkPassword(self, password):
        return bcrypt.hashpw(password, self.passwordsalt) == self.passwordhash
@@ -139,7 +139,7 @@ class Config(Base):
             return True
          return False
       
-def addstaticdata(session):
+def addStaticData():
    import confighelper # have to import it here, otherwise Config table can't be easily
                        # imported inside confighelper, because circular import loop
    confighelper.applydefaults()
@@ -150,16 +150,17 @@ def addstaticdata(session):
    import optionshelper
    optionshelper.addstaticdata()
 
-   account = Account("admin","admin" )
+   account = Account("admin", "admin")
    account.passwordinfo = PasswordInfo('admin')
-   session.add(account)
-   account.addRole( roles.getRole('accountadmin') )
-   account.addRole( roles.getRole('aiadmin') )
-   account.addRole( roles.getRole('mapadmin') )
-   account.addRole( roles.getRole('modadmin') )
-   account.addRole( roles.getRole('leagueadmin') )
-   account.addRole( roles.getRole('botrunneradmin') )
-   account.addRole( roles.getRole('requestadmin') )
+   Session.add(account)
+   account.addRole(roles.getRole('accountadmin'))
+   account.addRole(roles.getRole('aiadmin'))
+   account.addRole(roles.getRole('mapadmin'))
+   account.addRole(roles.getRole('modadmin'))
+   account.addRole(roles.getRole('leagueadmin'))
+   account.addRole(roles.getRole('botrunneradmin'))
+   account.addRole(roles.getRole('requestadmin'))
+   Session.commit()
 
 def createall(engine):
    Base.metadata.create_all(engine)

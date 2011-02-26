@@ -27,7 +27,7 @@ from sqlalchemy.orm import join
 
 from pylons import session
 from springgrid.lib.base import Session
-from meta import Role
+from meta import Role, Account
 import botrunnerhelper
 import loginhelper
 
@@ -54,7 +54,7 @@ def addstaticdata():
          if rolerow.role_name == rolename:
             rolefound = True
       if not rolefound:
-         role = Role( rolename )
+         role = Role(rolename)
          Session.add(role)
          Session.flush()
 
@@ -67,8 +67,8 @@ def getRole(rolename ):
 def isInRole(rolename):
    if not 'user' in session:
       return False
-   username = loginhelper.getUsername()
-   return isInRole2( username, rolename )
+   username = session['user']
+   return isInRole2(username, rolename)
 
 # This is slightly easier to test, so factor it out:
 def isInRole2(username, rolename):

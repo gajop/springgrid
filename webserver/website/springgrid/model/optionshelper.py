@@ -25,11 +25,7 @@
 
 from sqlalchemy.orm import join
 
-from utils import *
-import loginhelper
-import tableclasses
-import sqlalchemysetup
-from tableclasses import *
+from meta import *
 
 optionnames = [ 'instancelocaldata', 'dummymatch' ]
 
@@ -37,7 +33,7 @@ optionnames = [ 'instancelocaldata', 'dummymatch' ]
 def addstaticdata():
    global optionnames
 
-   optionrows = sqlalchemysetup.session.query(AIOption).all()
+   optionrows = Session.query(AIOption).all()
    for optionname in optionnames:
       optionfound = False
       for optionrow in optionrows:
@@ -45,8 +41,8 @@ def addstaticdata():
             optionfound = True
       if not optionfound:
          option = AIOption( optionname )
-         sqlalchemysetup.session.add(option)
-         sqlalchemysetup.session.flush()
+         Session.add(option)
+         Session.flush()
 
 # returns AIOption object using sqlalchemy
 def getOption( optionname ):
@@ -54,7 +50,7 @@ def getOption( optionname ):
    addstaticdata()
    if optionname not in optionnames:
       raise Exception("Invalid option name " + optionnaame )
-   return sqlalchemysetup.session.query(AIOption).filter(AIOption.option_name == optionname ).first()
+   return Session.query(AIOption).filter(AIOption.option_name == optionname ).first()
 
 # in:
 # - options is a list of option objects to search

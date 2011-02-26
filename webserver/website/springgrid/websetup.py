@@ -5,6 +5,7 @@ import pylons.test
 
 from springgrid.config.environment import load_environment
 from springgrid.model.meta import Session, Base
+from springgrid.model.meta import addStaticData
 
 #log = logging.getLogger(__name__)
 
@@ -17,3 +18,5 @@ def setup_app(command, conf, vars):
     # Create the tables if they don't already exist
     Base.metadata.create_all(bind=Session.bind)
     print "created tables"
+
+    addStaticData()

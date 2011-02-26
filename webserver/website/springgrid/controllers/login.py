@@ -1,4 +1,5 @@
 import logging
+import formencode
 
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
@@ -8,7 +9,7 @@ from springgrid.model.meta import Account
 from springgrid.model import loginhelper
 
 from springgrid.lib.base import BaseController, render
-import formencode
+
 
 log = logging.getLogger(__name__)
 

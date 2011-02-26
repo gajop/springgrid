@@ -25,19 +25,19 @@ http://www.opensource.org/licenses/gpl-license.php
 {% import 'formhelper.html' as formhelper %}
 {% block content %}
 
-<h3>SpringGrid - View account {{account.username|e}}</h3>
+<h3>SpringGrid - View account {{c.account.username|e}}</h3>
 <table border='1' padding='3'>
 <tr class='tablehead'><td>Role:</td><td></td></tr>
 
-{% for role in account.roles %}
+{% for role in c.account.roles %}
    <tr>
    <td>{{role.role_name|e}}</td>
-   <td><a href='removerolefromaccount.py?username={{account.username}}&rolename={{role.role_name}}'>Remove from role</a></td>
+   <td><a href='removerolefromaccount.py?username={{c.account.username}}&rolename={{role.role_name}}'>Remove from role</a></td>
    </tr>
 {% endfor %}
 </table>
 
-{% if showform %}
+{% if c.showForm %}
    <p />
    <hr />
    <p />
@@ -51,7 +51,7 @@ http://www.opensource.org/licenses/gpl-license.php
 
    <tr><td></td><td><input type='submit' value='Add' /></td></tr>
    </table>
-   <input type='hidden' name='username' value='{{account.username}}' />
+   <input type='hidden' name='username' value='{{c.account.username}}' />
    </form>
 {% endif %}
 
