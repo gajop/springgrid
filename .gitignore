@@ -57,3 +57,5 @@ webserver/dependencies/Jinja2-2.2.1/dist
 
 build
 
+# exclude vim files
+*.vim
