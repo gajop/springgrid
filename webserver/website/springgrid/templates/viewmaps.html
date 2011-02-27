@@ -26,12 +26,23 @@ http://www.opensource.org/licenses/gpl-license.php
 
 <h3>SpringGrid - Map List</h3>
 <table border='1' padding='3'>
-<tr class='tablehead'><td>Map name</td><td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td><td>Map download url</td>{% if showform %}<td>&nbsp;</td>{% endif %}</tr>
+    <tr class='tablehead'>
+        <td>Map name</td>
+        <td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td>
+        <td>Map download url</td>
+        {% if c.showForm %}
+        <td>&nbsp;</td>
+        {% endif %}
+        </tr>
 
 {% for map in c.maps %}
-	<tr><td><a href="{{ url(controller='map', action='view', id=map.map_id) }}">{{map.map_name|e}}</a></td><td>{{map.map_archivechecksum}}</td>
-	   <td>{% if not map.map_url is none %}<a href='{{map.map_url|e}}' rel="nofollow">{{map.map_url|e}}</a>{%endif%}&nbsp;</td>
-	{% if c.showForm %}<td><a href="removemap.py?mapname={{map.map_name|e}}">Delete</a></td>{% endif %}
+    <tr>
+        <td><a href="{{ url(controller='map', action='view', id=map.map_id) }}">{{map.map_name|e}}</a></td>
+        <td>{{map.map_archivechecksum}}</td>
+	    <td>{% if not map.map_url is none %}<a href='{{map.map_url|e}}' rel="nofollow">{{map.map_url|e}}</a>{%endif%}&nbsp;</td>
+	    {% if c.showForm %}
+        <td><a href="{{ h.url(controller='map', action='remove', id=map.map_id) }}">Delete</a></td>
+        {% endif %}
 	</tr>
 {% endfor %}
 
@@ -47,11 +58,24 @@ http://www.opensource.org/licenses/gpl-license.php
    in the startscript, so an easy way to get them is to start a game
    from the lobby, then look at the file 'script.txt' in the spring
    game directory</p>
-   <form action='addmap.py' method='post'>
+   <form action='{{ h.url(controller='map', action='add') }}' method='post'>
    <table border='1' padding='3'>
-   <tr><td>Map name (this should be what would be in the startscript)</td><td><input name='mapname'</td></tr>
-   <tr><td>Map download url</td><td><input name='mapurl'</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
+       <tr>
+           <td>Map name (this should be what would be in the startscript)</td>
+           <td><input name='mapName'/></td>
+       </tr>
+       <tr>
+           <td>Map download url</td>
+           <td><input name='mapUrl'/></td>
+       </tr>
+       <tr>
+            <td>Map archive checksum (Note: this is NOT the maphash seen in the start script)</td>
+            <td><input type="text" name="mapArchiveChecksum"/></td>
+       </tr>
+       <tr>
+           <td></td>
+           <td><input type='submit' value='Add' /></td>
+       </tr>
    </table>
    </form>
 {% endif %}

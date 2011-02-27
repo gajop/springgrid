@@ -8,14 +8,21 @@
 {% if c.showForm %}
 <h4>Update AI properties</h4>
 
-<form method='post' action='updateai.py'>
+<form method='post' action='{{ h.url(controller='ai', action='update', id=c.ai.ai_id) }}'>
 <table>
-   <tr><td>Download url</td><td><input name='downloadurl' value="{{c.ai.ai_downloadurl|e}}"</td></tr>
-   <tr><td>Needs compiling?</td><td><select name="needscompiling">{% if c.ai.ai_needscompiling %}<option value="yes" selected="selected">Yes</option><option value="no">No</option>{% else %}<option value="yes">Yes</option><option value="no" selected="selected">No</option>{% endif %}</select></tr>
-   <tr><td></td><td><input type='submit' value='Update' /></td></tr>
+    <tr>
+        <td>Download url</td>
+        <td><input name='downloadurl' value="{{c.ai.ai_downloadurl|e}}"/></td>
+    </tr>
+    <tr>
+        <td>Needs compiling?</td>
+        <td><select name="needscompiling">{% if c.ai.ai_needscompiling %}<option value="yes" selected="selected">Yes</option><option value="no">No</option>{% else %}<option value="yes">Yes</option><option value="no" selected="selected">No</option>{% endif %}</select></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type='submit' value='Update' /></td>
+    </tr>
 </table>
-<input type='hidden' name='ainame' value="{{c.ai.ai_name}}" />
-<input type='hidden' name='aiversion' value="{{c.ai.ai_version}}" />
 </form>
 {% endif %}
 
@@ -25,7 +32,10 @@
 <p>For example, if it can run when cheating is allowed, then add the option 'cheatingallowed', or, if it can run when cheating is banned, then add the option 'cheatingequalslose'.</p>
 
 <table border='1' padding='3'>
-<tr><td>Compatible options</td><td></td></tr>
+    <tr>
+        <td>Compatible options</td>
+        <td></td>
+    </tr>
 
 {% for option in c.ai.allowedoptions %}
    <tr>
@@ -44,11 +54,15 @@
 
    <form action='addoptiontoai.py' method='post'>
    <table border='1' padding='3'>
-   <tr><td>Option to add:</td><td>{{formhelper.listtodropdown( 'aioption', potentialoptions )}}</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
-   <input type='hidden' name='ainame' value='{{c.ai.ai_name|e}}' />
-   <input type='hidden' name='aiversion' value='{{c.ai.ai_version|e}}' />
+       <tr>
+           <td>Option to add:</td>
+           <td>{{formhelper.listtodropdown( 'aioption', potentialoptions )}}</td>
+       </tr>
+       <tr>
+           <td></td>
+           <td><input type='submit' value='Add' /></td>
+       </tr>
+       </table>
    </form>
 {% endif %}
 

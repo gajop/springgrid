@@ -34,12 +34,12 @@ class BotRunner(Base):
    botrunner_owneraccountid = Column(Integer, ForeignKey('accounts.account_id') )
    rowspan = 0 # used by viewbotrunners.py
 
-   owneraccount = relation("Account")
-   options = relation("AIOption", secondary = botrunner_assignedoptions )
-   supportedmaps = relation("Map", secondary = botrunner_supportedmaps )
-   supportedmods = relation("Mod", secondary = botrunner_supportedmods )
-   supportedais = relation("AI", secondary = botrunner_supportedais )
-   sessions = relation("BotRunnerSession",uselist = True)
+   owneraccount = relationship("Account")
+   options = relationship("AIOption", secondary = botrunner_assignedoptions )
+   supportedmaps = relationship("Map", secondary = botrunner_supportedmaps )
+   supportedmods = relationship("Mod", secondary = botrunner_supportedmods )
+   supportedais = relationship("AI", secondary = botrunner_supportedais )
+   sessions = relationship("BotRunnerSession",uselist = True)
 
    rowspan = 0
 

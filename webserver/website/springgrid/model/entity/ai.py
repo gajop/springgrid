@@ -30,11 +30,11 @@ class AI(Base):
 
    __table_args__ = (schema.UniqueConstraint('ai_name','ai_version'), {} )
 
-   allowedmaps = relation("Map", secondary = ai_allowedmaps )
-   allowedmods = relation("Mod", secondary = ai_allowedmods )
-   allowedoptions = relation("AIOption", secondary = ai_allowedoptions)
+   allowedmaps = relationship("Map", secondary = ai_allowedmaps )
+   allowedmods = relationship("Mod", secondary = ai_allowedmods )
+   allowedoptions = relationship("AIOption", secondary = ai_allowedoptions)
 
-   owneraccount = relation("Account")
+   owneraccount = relationship("Account")
 
    def __init__( self, ai_name, ai_version ):
       self.ai_name = ai_name

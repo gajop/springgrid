@@ -11,9 +11,9 @@ matchrequest_options = Table( 'matchrequest_options', Base.metadata,
 class MatchRequest(Base):
    __tablename__ = 'matchrequestqueue'
 
-   matchrequest_id=Column(Integer,primary_key=True)
-   map_id =Column(Integer, ForeignKey('maps.map_id'), nullable = False)
-   mod_id =Column(Integer, ForeignKey('mods.mod_id'), nullable = False)
+   matchrequest_id = Column(Integer, primary_key=True)
+   map_id = Column(Integer, ForeignKey('maps.map_id'), nullable = False)
+   mod_id = Column(Integer, ForeignKey('mods.mod_id'), nullable = False)
    ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)
    ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'), nullable = False)
    ai1_id = Column(Integer, ForeignKey('ais.ai_id'), nullable = False)
@@ -22,16 +22,16 @@ class MatchRequest(Base):
    softtimeout = Column(Integer, nullable = False)
    hardtimeout = Column(Integer, nullable = False)
 
-   map = relation("Map" )
-   mod = relation("Mod" )
-   ai0 = relation("AI", primaryjoin = ai0_id == AI.ai_id )
-   ai1 = relation("AI", primaryjoin = ai1_id == AI.ai_id )
-   ai0_side = relation("ModSide", primaryjoin = ai0_side_id == ModSide.mod_side_id)
-   ai1_side = relation("ModSide", primaryjoin = ai1_side_id == ModSide.mod_side_id)
+   map = relationship("Map" )
+   mod = relationship("Mod" )
+   ai0 = relationship("AI", primaryjoin = ai0_id == AI.ai_id )
+   ai1 = relationship("AI", primaryjoin = ai1_id == AI.ai_id )
+   ai0_side = relationship("ModSide", primaryjoin = ai0_side_id == ModSide.mod_side_id)
+   ai1_side = relationship("ModSide", primaryjoin = ai1_side_id == ModSide.mod_side_id)
 
-   matchrequestinprogress = relation("MatchRequestInProgress", uselist=False)
-   matchresult = relation("MatchResult", uselist=False)
-   options = relation("AIOption", secondary = matchrequest_options )
+   matchrequestinprogress = relationship("MatchRequestInProgress", uselist=False)
+   matchresult = relationship("MatchResult", uselist=False)
+   options = relationship("AIOption", secondary = matchrequest_options )
 
    def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout, ai0_side, ai1_side):
       self.ai0 = ai0

@@ -11,8 +11,8 @@ class MatchRequestInProgress(Base):
 
    __table_args__ = (schema.ForeignKeyConstraint(('botrunner_id','botrunner_session_id'),('botrunner_sessions.botrunner_id','botrunner_sessions.botrunner_session_id')), {} )
 
-   botrunner= relation("BotRunner")
-   botrunnersession = relation("BotRunnerSession", primaryjoin=and_( botrunner_id == BotRunnerSession.botrunner_id, botrunner_session_id == BotRunnerSession.botrunner_session_id ) )
+   botrunner = relationship("BotRunner")
+   botrunnersession = relationship("BotRunnerSession", primaryjoin=and_( botrunner_id == BotRunnerSession.botrunner_id, botrunner_session_id == BotRunnerSession.botrunner_session_id ) )
 
    def __init__(self, botrunner, botrunnersession, datetimeassigned ):
       self.botrunner = botrunner

@@ -4,15 +4,15 @@ let s:cpo_save=&cpo
 set cpo&vim
 imap <S-Tab> 
 inoremap <C-Tab> 	
-vnoremap <silent>  :call RangeCommentLine()
 nnoremap <silent>  :call CommentLine()
+vnoremap <silent>  :call RangeCommentLine()
 onoremap <silent>  :call CommentLine()
 noremap  h
 noremap <NL> j
 noremap  k
 noremap  l
-vnoremap <silent>  :call RangeUnCommentLine()
 nnoremap <silent>  :call UnCommentLine()
+vnoremap <silent>  :call RangeUnCommentLine()
 onoremap <silent>  :call UnCommentLine()
 map F :TlistToggle
 map Q gq
@@ -111,10 +111,12 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +9 ../lib/menu.py
-badd +0 ../config/routing.py
+badd +50 mod.py
+badd +12 ../model/entity/botrunner_session.py
+badd +42 ../model/entity/botrunner.py
+badd +0 botrunner_webservice.py
 args ../lib/menu.py
-edit ../config/routing.py
+edit botrunner_webservice.py
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -133,11 +135,11 @@ wincmd t
 set winheight=1 winwidth=1
 exe '1resize ' . ((&lines * 1 + 22) / 45)
 exe '2resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 2resize ' . ((&columns * 30 + 86) / 173)
+exe 'vert 2resize ' . ((&columns * 15 + 86) / 173)
 exe '3resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 3resize ' . ((&columns * 71 + 86) / 173)
+exe 'vert 3resize ' . ((&columns * 80 + 86) / 173)
 exe '4resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 4resize ' . ((&columns * 70 + 86) / 173)
+exe 'vert 4resize ' . ((&columns * 76 + 86) / 173)
 argglobal
 enew
 file -MiniBufExplorer-
@@ -147,9 +149,9 @@ nnoremap <buffer> 	 :call search('\[[0-9]*:[^\]]*\]'):<BS>
 nnoremap <buffer> j gj
 nnoremap <buffer> k gk
 nnoremap <buffer> p :wincmd p:<BS>
-nnoremap <buffer> <S-Tab> :call search('\[[0-9]*:[^\]]*\]','b'):<BS>
-nnoremap <buffer> <Up> gk
 nnoremap <buffer> <Down> gj
+nnoremap <buffer> <Up> gk
+nnoremap <buffer> <S-Tab> :call search('\[[0-9]*:[^\]]*\]','b'):<BS>
 let &cpo=s:cpo_save
 unlet s:cpo_save
 setlocal keymap=
@@ -480,15 +482,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 25 - ((7 * winheight(0) + 20) / 41)
+let s:l = 38 - ((7 * winheight(0) + 20) / 41)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-25
-normal! 046l
+38
+normal! 049l
 wincmd w
 argglobal
-edit ../lib/menu.py
+edit mod.py
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -590,21 +592,21 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 28 - ((25 * winheight(0) + 20) / 41)
+let s:l = 24 - ((17 * winheight(0) + 20) / 41)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-28
-normal! 034l
+24
+normal! 073l
 wincmd w
 3wincmd w
 exe '1resize ' . ((&lines * 1 + 22) / 45)
 exe '2resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 2resize ' . ((&columns * 30 + 86) / 173)
+exe 'vert 2resize ' . ((&columns * 15 + 86) / 173)
 exe '3resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 3resize ' . ((&columns * 71 + 86) / 173)
+exe 'vert 3resize ' . ((&columns * 80 + 86) / 173)
 exe '4resize ' . ((&lines * 41 + 22) / 45)
-exe 'vert 4resize ' . ((&columns * 70 + 86) / 173)
+exe 'vert 4resize ' . ((&columns * 76 + 86) / 173)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

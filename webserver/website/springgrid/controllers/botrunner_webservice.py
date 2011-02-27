@@ -11,7 +11,7 @@ from springgrid.utils import dates
 from springgrid.lib.base_xmlrpc import BaseXMLRPCController, Session
 from springgrid.model import confighelper
 
-#log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 class BotrunnerWebserviceController(BaseXMLRPCController):
     
@@ -43,7 +43,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
 
    # return (True,'') if goes ok, otherwise (False,message)
    # needs to pass as string, since xmlrpc doesn't support long :-/
-    def registersupportedmap( self, botrunnername, sharedsecret, mapname, maparchivechecksum_string ):
+    def registersupportedmap(self, botrunnername, sharedsecret, mapname, maparchivechecksum_string):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
 
@@ -57,7 +57,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
 
    # return (True,'') if goes ok, otherwise (False,message)
    # needs to pass as string, since xmlrpc doesn't support long :-/
-    def registersupportedmod( self, botrunnername, sharedsecret, modname, modarchivechecksum_string, sides ):
+    def registersupportedmod(self, botrunnername, sharedsecret, modname, modarchivechecksum_string, sides):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
 
@@ -65,7 +65,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         if not success:
             return (False, "Couldn't register mod " + errormessage)
 
-        if not modhelper.setbotrunnersupportsthismod( botrunnername, modname ):
+        if not modhelper.setbotrunnersupportsthismod(botrunnername, modname):
             return (False, "couldn't mark mod as supported for botrunner")
 
         return (True,'')
@@ -77,7 +77,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         if not aihelper.addaiifdoesntexist(ainame, aiversion):
             return (False, "Couldn't register ai")
 
-        if not aihelper.setbotrunnersupportsthisai( botrunnername, ainame, aiversion ):
+        if not aihelper.setbotrunnersupportsthisai(botrunnername, ainame, aiversion):
             return (False, "couldn't mark ai as supported for botrunner")
 
         return (True,'')
