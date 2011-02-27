@@ -59,9 +59,9 @@ def addstaticdata():
             Session.flush()
 
 # returns Role object using sqlalchemy
-def getRole(rolename ):
+def getRole(rolename):
     addstaticdata()
-    return Session.query(Role).filter(Role.role_name == rolename ).first()
+    return Session.query(Role).filter(Role.role_name == rolename).first()
 
 # returns if the logged-in user is in the named role
 def isInRole(rolename):

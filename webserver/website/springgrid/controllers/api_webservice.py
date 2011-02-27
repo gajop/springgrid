@@ -41,11 +41,11 @@ import config
 class APIService:
     # returns a list of mapnames
     def getmaps(self):
-        return listhelper.tuplelisttolist( sqlalchemysetup.session.query(Map.map_name) )
+        return [i[0] for i in sqlalchemysetup.session.query(Map.map_name)]
 
     # returns a list of modnames
     def getmods(self):
-        return listhelper.tuplelisttolist( sqlalchemysetup.session.query(Mod.mod_name) )
+        return [i[0] for i in sqlalchemysetup.session.query(Mod.mod_name)]
 
     # returns a dictionary of lists mapping from modname -> modname sides
     def getmodsides(self):

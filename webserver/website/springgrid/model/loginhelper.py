@@ -27,7 +27,7 @@ from pylons import session
 
 # returns True if password correct, otherwise false
 def validateUsernamePassword(username, password):
-    account = Session.query(Account).filter(Account.username == username ).first()
+    account = Session.query(Account).filter(Account.username == username).first()
     if account == None:
         return False
     if account.passwordinfo == None:

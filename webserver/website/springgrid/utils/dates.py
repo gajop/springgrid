@@ -29,33 +29,37 @@ import stringhelper
 # yyyymmddhhmmss
 #
 
-def dateStringToDateTime( datestring ):
+
+def dateStringToDateTime(datestring):
     # strptime is not available on older versions of python, so rewrite...
     # return datetime.datetime.strptime(datestring,"%Y%m%d%H%M%S")
-    (year, datestring ) = stringhelper.eatAsInt(datestring, 4 )
-    (month, datestring ) = stringhelper.eatAsInt(datestring, 2 )
-    (day, datestring ) = stringhelper.eatAsInt(datestring, 2 )
-    (hour, datestring ) = stringhelper.eatAsInt(datestring, 2 )
-    (minute, datestring ) = stringhelper.eatAsInt(datestring, 2 )
-    (second, datestring ) = stringhelper.eatAsInt(datestring, 2 )
-    return datetime.datetime( year, month, day, hour, minute, second )
+    (year, datestring) = stringhelper.eatAsInt(datestring, 4)
+    (month, datestring) = stringhelper.eatAsInt(datestring, 2)
+    (day, datestring) = stringhelper.eatAsInt(datestring, 2)
+    (hour, datestring) = stringhelper.eatAsInt(datestring, 2)
+    (minute, datestring) = stringhelper.eatAsInt(datestring, 2)
+    (second, datestring) = stringhelper.eatAsInt(datestring, 2)
+    return datetime.datetime(year, month, day, hour, minute, second)
 
-def dateTimeToDateString( datedatetime ):
+
+def dateTimeToDateString(datedatetime):
     return datedatetime.strftime("%Y%m%d%H%M%S")
 
-def timedifftototalseconds( timediff ):
+
+def timedifftototalseconds(timediff):
     return timediff.days * 24 * 3600 + timediff.seconds
+
 
 # self test function
 def test():
-    somedate = datetime.datetime(2009,5,3,2,6,17)
+    somedate = datetime.datetime(2009, 5, 3, 2, 6, 17)
     print somedate
-    datestring = dateTimeToDateString( somedate )
+    datestring = dateTimeToDateString(somedate)
     print datestring
     if datestring != "20090503020617":
         print 'FAIL'
         return
-    seconddate = dateStringToDateTime( datestring )
+    seconddate = dateStringToDateTime(datestring)
     print seconddate
     if seconddate != somedate:
         print 'FAIL'

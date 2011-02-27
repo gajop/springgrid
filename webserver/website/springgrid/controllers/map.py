@@ -20,6 +20,7 @@ class MapForm(formencode.Schema):
     mapUrl = URL(check_exists=True)
     mapArchiveChecksum = PlainText(not_empty=True)
 
+
 class MapController(BaseController):
 
     @validate(schema=MapForm(), form='list', post_only=True, on_get=False)
@@ -75,7 +76,6 @@ class MapController(BaseController):
 
         c.message = "Updated ok"
         return render('genericmessage.html')
-
 
     def remove(self, id):
         if not roles.isInRole(roles.mapadmin):

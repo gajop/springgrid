@@ -7,20 +7,25 @@ from pylons.controllers.util import abort, redirect
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.model import botrunnerhelper, loginhelper, confighelper, roles
 from springgrid.model.meta import BotRunner, AIOption
-from springgrid.utils import dates, listhelper
+from springgrid.utils import dates
 
 log = logging.getLogger(__name__)
+
 
 class BotrunnerController(BaseController):
 
     def view(self, id):
-        botrunner = Session.query(BotRunner).filter(BotRunner.botrunner_id == id).first()
-        c.isbotrunnerowner = ('user' in session and botrunner.owneraccount != None and botrunner.owneraccount.username == session['user'])
-        c.showform = ( c.isbotrunnerowner or roles.isInRole(roles.botrunneradmin))
+        botrunner = Session.query(BotRunner).filter(
+                BotRunner.botrunner_id == id).first()
+        c.isbotrunnerowner = ('user' in session and
+                botrunner.owneraccount != None and
+                botrunner.owneraccount.username == session['user'])
+        c.showform = (c.isbotrunnerowner or
+                roles.isInRole(roles.botrunneradmin))
 
-        potentialoptions = listhelper.tuplelisttolist(Session.query(AIOption.option_name))
+        potentialoptions = [i[0] for i in Session.query(AIOption.option_name)]
         for option in botrunner.options:
-            potentialoptions.remove(option.option_name )
+            potentialoptions.remove(option.option_name)
         c.botrunner = botrunner
         return render('viewbotrunner.html')
 
@@ -29,10 +34,10 @@ class BotrunnerController(BaseController):
         botrunnerhelper.purgeExpiredSessions()
         Session.commit()
 
-
         botrunners = Session.query(BotRunner)
 
-# if you know of a reliable way of just adding the following two data to  the business ojbects,
+# if you know of a reliable way of just adding
+#the following two data to  the business ojbects,
 # go ahead:
         botrunnerdata = {}
         sessiondata = {}
@@ -46,14 +51,19 @@ class BotrunnerController(BaseController):
                 sessiondata[botSession] = {}
                 sessiondata[botSession]['pingtimestatus'] = 'down'
                 lastpingtimeddate = None
-                lastpingtime =  botSession.lastpingtime
+                lastpingtime = botSession.lastpingtime
                 if lastpingtime != None:
-                    lastpingtimedate = dates.dateStringToDateTime( lastpingtime )
-                    secondssincelastping = dates.timedifftototalseconds( datetime.datetime.now() - lastpingtimedate )
-                    sessiondata[botSession]['lastpingtimestring'] = str(lastpingtimedate)
-                    if secondssincelastping < confighelper.getValue('expiresessionminutes') * 60:
+                    lastpingtimedate = dates.dateStringToDateTime(lastpingtime)
+                    secondssincelastping = dates.timedifftototalseconds(
+                            datetime.datetime.now() - lastpingtimedate)
+                    sessiondata[botSession]['lastpingtimestring'] =\
+                        str(lastpingtimedate)
+                    if secondssincelastping < \
+                        confighelper.getValue('expiresessionminutes') * 60:
                         sessiondata[botSession]['pingtimestatus'] = 'maybeok'
-                    if secondssincelastping < confighelper.getValue('guimarksessionasmaybedownafterthismanyminutes') * 60:
+                    if secondssincelastping < confighelper.getValue(
+                            'guimarksessionasmaybedownafterthismanyminutes') \
+                            * 60:
                         sessiondata[botSession]['pingtimestatus'] = 'ok'
 
         c.botrunners = botrunners

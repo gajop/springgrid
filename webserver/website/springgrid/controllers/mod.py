@@ -12,12 +12,14 @@ from springgrid.model import roles
 
 log = logging.getLogger(__name__)
 
+
 class ModForm(formencode.Schema):
     allow_extra_fields = True
     filter_extra_fields = True
     modName = String(not_empty=True)
     modUrl = URL(check_exists=True)
     modArchiveChecksum = PlainText(not_empty=True)
+
 
 class ModController(BaseController):
 

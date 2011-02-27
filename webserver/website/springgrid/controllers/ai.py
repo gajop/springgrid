@@ -9,7 +9,6 @@ from pylons.decorators import validate
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.model.meta import AI, AIOption
 from springgrid.model import roles
-from springgrid.utils import listhelper
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +52,7 @@ class AiController(BaseController):
 
         showform = roles.isInRole(roles.aiadmin)
 
-        potentialoptions = listhelper.tuplelisttolist(Session.query(AIOption.option_name))
+        potentialoptions = [i[0] for i in Session.query(AIOption.option_name)]
         for option in ai.allowedoptions:
             potentialoptions.remove(option.option_name )
 

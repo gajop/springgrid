@@ -8,7 +8,7 @@ class Mod(Base):
    mod_archivechecksum = Column(String(255))
    mod_url = Column(String(255))
 
-   mod_sides = relationship("ModSide", cascade="all, delete, delete-orphan")
+   mod_sides = relationship("ModSide")
 
    def __init__(self, mod_name ):
       self.mod_name = mod_name

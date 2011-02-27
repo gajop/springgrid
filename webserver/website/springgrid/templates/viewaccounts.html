@@ -26,37 +26,56 @@ http://www.opensource.org/licenses/gpl-license.php
 
 <h3>SpringGrid - Account List</h3>
 <table border='1' padding='3'>
-<tr class='tablehead'><td>username</td><td>User full name</td><td>Delete</td></tr>
+    <tr class='tablehead'>
+        <td>username</td>
+        <td>User full name</td>
+        <td>Delete</td>
+    </tr>
 
-{% for account in c.accounts %}
-   <tr>
-   <td><a href='{{ url(controller='account', action='view', id=account.account_id) }}'>{{account.username|e}}</td><td>{{account.userfullname|e}}</a></td>
-   {% if not c.roles.isInRole2(account.username, c.roles.accountadmin) %}
-      <td><a href='removeaccount.py?username={{account.username|e}}'>Delete account</a></td>
-   {% else %}
-      <td>(Drop accountadmin role before deleting account)</td>
-   {% endif %}
-   </tr>
-{% endfor %}
+    {% for account in c.accounts %}
+    <tr>
+        <td><a href='{{ url(controller='account', action='view', id=account.account_id) }}'>{{account.username|e}}</td><td>{{account.userfullname|e}}</a></td>
+        {% if not c.roles.isInRole2(account.username, c.roles.accountadmin) %}
+        <td><a href='{{ url(controller='account', action='remove', id=account.account_id) }}'>Delete account</a></td>
+        {% else %}
+        <td>(Drop accountadmin role before deleting account)</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
 
 </table>
 
 {% if c.showForm %}
 
-   <p />
-   <hr />
-   <p />
+<p />
+<hr />
+<p />
 
-   <h4>Create new account:</h4>
-   <form action='addaccount.py' method='post'>
-   <table border='1' padding='3'>
-   <tr><td>Username</td><td><input name='username'</td></tr>
-   <tr><td>User full name</td><td><input name='userfullname'</td></tr>
-   <tr><td>User email address</td><td><input name='useremailaddress'</td></tr>
-   <tr><td>User password</td><td><input type='password' name='userpassword'</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
-   </form>
+<h4>Create new account:</h4>
+<form action='{{ url(controller='account', action='add') }}' method='post'>
+    <table border='1' padding='3'>
+        <tr>
+            <td>Username</td>
+            <td><input name='username'/></td>
+        </tr>
+        <tr>
+            <td>User full name</td>
+            <td><input name='userfullname'/></td>
+        </tr>
+        <tr>
+            <td>User email address</td>
+            <td><input name='useremailaddress'/></td>
+        </tr>
+        <tr>
+            <td>User password</td>
+            <td><input type='password' name='userpassword'/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type='submit' value='Add' /></td>
+        </tr>
+    </table>
+</form>
 {% endif %}
 
 {% endblock %}

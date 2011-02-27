@@ -7,6 +7,7 @@ from springgrid.lib.base import BaseController, render
 
 log = logging.getLogger(__name__)
 
+
 class AboutController(BaseController):
 
     def view(self):

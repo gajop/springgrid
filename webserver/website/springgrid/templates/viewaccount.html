@@ -27,32 +27,35 @@ http://www.opensource.org/licenses/gpl-license.php
 
 <h3>SpringGrid - View account {{c.account.username|e}}</h3>
 <table border='1' padding='3'>
-<tr class='tablehead'><td>Role:</td><td></td></tr>
+    <tr class='tablehead'>
+        <td>Role:</td>
+        <td></td>
+    </tr>
 
-{% for role in c.account.roles %}
-   <tr>
-   <td>{{role.role_name|e}}</td>
-   <td><a href='removerolefromaccount.py?username={{c.account.username}}&rolename={{role.role_name}}'>Remove from role</a></td>
-   </tr>
-{% endfor %}
+    {% for role in c.account.roles %}
+    <tr>
+        <td>{{role.role_name|e}}</td>
+        <td><a href='removerolefromaccount.py?username={{c.account.username}}&rolename={{role.role_name}}'>Remove from role</a></td>
+    </tr>
+    {% endfor %}
 </table>
 
 {% if c.showForm %}
-   <p />
-   <hr />
-   <p />
+<p />
+<hr />
+<p />
 
-   <h4>Add roles to account:</h4>
-   <form action='addroletoaccount.py' method='post'>
-   <table border='1' padding='3'>
-   <tr><td>Role name</td><td>
-   {{formhelper.listtodropdown( 'rolename', potentialroles )}}
-   </td></tr>
+<h4>Add roles to account:</h4>
+<form action='addroletoaccount.py' method='post'>
+    <table border='1' padding='3'>
+        <tr><td>Role name</td><td>
+                {{formhelper.listtodropdown( 'rolename', potentialroles )}}
+        </td></tr>
 
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
-   <input type='hidden' name='username' value='{{c.account.username}}' />
-   </form>
+        <tr><td></td><td><input type='submit' value='Add' /></td></tr>
+    </table>
+    <input type='hidden' name='username' value='{{c.account.username}}' />
+</form>
 {% endif %}
 
 {% endblock %}

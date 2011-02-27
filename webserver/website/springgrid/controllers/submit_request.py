@@ -29,7 +29,7 @@ class SubmitRequestController(BaseController):
 
     def form(self):
         c.ais = Session.query(AI.ai_name, AI.ai_version, AI.ai_id)
-        c.maps = listhelper.tuplelisttolist(Session.query(Map.map_name))
+        c.maps = [i[0] for i in Session.query(Map.map_name)]
         c.mods = Session.query(Mod)
         sidequery = Session.query(ModSide)
         c.sides = {}
@@ -39,7 +39,7 @@ class SubmitRequestController(BaseController):
             c.sides[side.mod_id][1].append((side.mod_side_name, side.mod_side_id))
 
         c.mods = [mod.mod_name for mod in c.mods]
-        c.options = listhelper.tuplelisttolist(Session.query(AIOption.option_name))
+        c.options = [i[0] for i in Session.query(AIOption.option_name)]
 
         c.aiitems = []
         c.aivalues = []

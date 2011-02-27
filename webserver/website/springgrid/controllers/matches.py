@@ -13,10 +13,12 @@ from springgrid.utils import dates
 
 log = logging.getLogger(__name__)
 
+
 class MatchesController(BaseController):
 
     def results(self):
-        c.requests = Session.query(MatchRequest).filter(MatchRequest.matchresult != None)
+        c.requests = Session.query(MatchRequest).filter(
+                MatchRequest.matchresult != None)
         page = 1
         try:
             page = int(request.params['page'])
@@ -31,14 +33,18 @@ class MatchesController(BaseController):
         for req in c.requests:
             replayPath = replaycontroller.getReplayPath(req.matchrequest_id)
             if os.path.isfile(replayPath):
-                c.replayPaths[req] = replaycontroller.getReplayWebRelativePath(req.matchrequest_id)
-            if os.path.isfile(replaycontroller.getInfologPath(req.matchrequest_id)):
-                c.infologPaths[req] = replaycontroller.getInfologWebRelativePath(req.matchrequest_id)
+                c.replayPaths[req] = replaycontroller.getReplayWebRelativePath(
+                        req.matchrequest_id)
+            if os.path.isfile(
+                    replaycontroller.getInfologPath(req.matchrequest_id)):
+                c.infologPaths[req] = replaycontroller.\
+                        getInfologWebRelativePath(req.matchrequest_id)
 
         return render('viewresults.html')
 
     def requests(self):
-        c.requests = Session.query(MatchRequest).filter(MatchRequest.matchresult == None)
+        c.requests = Session.query(MatchRequest).filter(
+                MatchRequest.matchresult == None)
         page = 1
         try:
             page = int(request.params['page'])
@@ -52,6 +58,8 @@ class MatchesController(BaseController):
         c.datetimeassignedbyrequest = {}
         for req in c.requests:
             if req.matchrequestinprogress != None:
-                c.datetimeassignedbyrequest[req] = str(dates.dateStringToDateTime(req.matchrequestinprogress.datetimeassigned))
+                c.datetimeassignedbyrequest[req] = str(
+                        dates.dateStringToDateTime(
+                            req.matchrequestinprogress.datetimeassigned))
 
         return render('viewrequests.html')

@@ -27,9 +27,7 @@ def getMenus():
       ['View request queue',
           h.url(controller='matches', action='requests')],
       ['Add request to queue...',
-          h.url(controller='submit_request', action='form')],
-      ['Start botrunner instance...',
-          h.url(controller='info', action='botrunner')]
+          h.url(controller='submit_request', action='form')]
     ]])
 
     menus.append([ 'Configuration', [
