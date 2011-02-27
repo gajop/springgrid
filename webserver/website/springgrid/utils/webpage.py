@@ -27,17 +27,16 @@ headers = ""
 htmlcontents = ""
 
 def addHeader( header ):
-   global headers
-   headers = headers + header + "\n"
+    global headers
+    headers = headers + header + "\n"
 
 def writeLine( line ):
-   global htmlcontents
-   htmlcontents = htmlcontents + line + "\n"
+    global htmlcontents
+    htmlcontents = htmlcontents + line + "\n"
 
 def outputPage():
-   global headers, htmlcontents
-   print headers
-   print ""
-   print ""
-   print htmlcontents
-
+    global headers, htmlcontents
+    print headers
+    print ""
+    print ""
+    print htmlcontents

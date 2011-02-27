@@ -37,35 +37,34 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-   botrunnername = formhelper.getValue('botrunnername')
-   optionname = formhelper.getValue('optionname')
+    botrunnername = formhelper.getValue('botrunnername')
+    optionname = formhelper.getValue('optionname')
 
-   if not loginhelper.isLoggedOn():
-      jinjahelper.message( "Please logon first." )
-      return
+    if not loginhelper.isLoggedOn():
+        jinjahelper.message( "Please logon first." )
+        return
 
-   if botrunnername == None or optionname == None or botrunnername == '' or optionname == '':
-      jinjahelper.message( "Please fill in the fields and try again" )
-      return
+    if botrunnername == None or optionname == None or botrunnername == '' or optionname == '':
+        jinjahelper.message( "Please fill in the fields and try again" )
+        return
 
-   botrunnerownername = botrunnerhelper.getOwnerUsername( botrunnername ) 
-   if botrunnerownername != loginhelper.getUsername() and not roles.isInRole( roles.botrunneradmin ):
-      jinjahelper.message( "You must be the botrunner owner or a botrunneradmin" )
-      return
+    botrunnerownername = botrunnerhelper.getOwnerUsername( botrunnername )
+    if botrunnerownername != loginhelper.getUsername() and not roles.isInRole( roles.botrunneradmin ):
+        jinjahelper.message( "You must be the botrunner owner or a botrunneradmin" )
+        return
 
-   botrunner = botrunnerhelper.getBotRunner( botrunnername )
-   optiontoremove = None
-   for option in botrunner.options:
-      if option.option_name == optionname:
-         optiontoremove = option
-   if optiontoremove != None:
-      botrunner.options.remove( optiontoremove )
+    botrunner = botrunnerhelper.getBotRunner( botrunnername )
+    optiontoremove = None
+    for option in botrunner.options:
+        if option.option_name == optionname:
+            optiontoremove = option
+    if optiontoremove != None:
+        botrunner.options.remove( optiontoremove )
 
-   sqlalchemysetup.session.flush()
+    sqlalchemysetup.session.flush()
 
-   jinjahelper.message( "Removed ok" )
+    jinjahelper.message( "Removed ok" )
 
 go()
 
 sqlalchemysetup.close()
-

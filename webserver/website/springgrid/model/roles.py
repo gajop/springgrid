@@ -47,62 +47,60 @@ apiclient = 'apiclient'
 
 # adds any missing roles to the table, can be called as many times as you like
 def addstaticdata():
-   rolerows = Session.query(Role).all()
-   for rolename in [ 'accountadmin', 'aiadmin', 'mapadmin', 'modadmin', 'leagueadmin', 'botrunneradmin', 'requestadmin', 'apiclient' ]:
-      rolefound = False
-      for rolerow in rolerows:
-         if rolerow.role_name == rolename:
-            rolefound = True
-      if not rolefound:
-         role = Role(rolename)
-         Session.add(role)
-         Session.flush()
+    rolerows = Session.query(Role).all()
+    for rolename in [ 'accountadmin', 'aiadmin', 'mapadmin', 'modadmin', 'leagueadmin', 'botrunneradmin', 'requestadmin', 'apiclient' ]:
+        rolefound = False
+        for rolerow in rolerows:
+            if rolerow.role_name == rolename:
+                rolefound = True
+        if not rolefound:
+            role = Role(rolename)
+            Session.add(role)
+            Session.flush()
 
 # returns Role object using sqlalchemy
 def getRole(rolename ):
-   addstaticdata()
-   return Session.query(Role).filter(Role.role_name == rolename ).first()
+    addstaticdata()
+    return Session.query(Role).filter(Role.role_name == rolename ).first()
 
 # returns if the logged-in user is in the named role
 def isInRole(rolename):
-   if not 'user' in session:
-      return False
-   username = session['user']
-   return isInRole2(username, rolename)
+    if not 'user' in session:
+        return False
+    username = session['user']
+    return isInRole2(username, rolename)
 
 # This is slightly easier to test, so factor it out:
 def isInRole2(username, rolename):
-   if rolename == None:
-      print "ERROR: no rolename specified"
-      return False
-   if rolename == '':
-      print "ERROR: no rolename specified"
-      return False
+    if rolename == None:
+        print "ERROR: no rolename specified"
+        return False
+    if rolename == '':
+        print "ERROR: no rolename specified"
+        return False
 
-   # validate rolename:
-   addstaticdata()
-   rolerow = Session.query(Role).filter(Role.role_name == rolename ).first()
-   if rolerow == None:
-      print "ERROR: invalid rolename specified"
-      return False
+    # validate rolename:
+    addstaticdata()
+    rolerow = Session.query(Role).filter(Role.role_name == rolename ).first()
+    if rolerow == None:
+        print "ERROR: invalid rolename specified"
+        return False
 
-   account = Session.query(Account).\
-      filter(Account.username == username ).\
-      filter( Account.roles.any( role_name = rolename )).first()
-   return ( account != None )
+    account = Session.query(Account).\
+       filter(Account.username == username ).\
+       filter( Account.roles.any( role_name = rolename )).first()
+    return ( account != None )
 
 # self test function
 def test():
-   # This supposes original static data is in the db
-   if not tester.testBoolean('check if admin is accountadmin', isInRole2( 'admin', 'accountadmin'), True ):
-      return
-   if not tester.testBoolean('check if guest is accountadmin', isInRole2( 'guest', 'accountadmin'), False ):
-      return
-   print "PASS"
+    # This supposes original static data is in the db
+    if not tester.testBoolean('check if admin is accountadmin', isInRole2( 'admin', 'accountadmin'), True ):
+        return
+    if not tester.testBoolean('check if guest is accountadmin', isInRole2( 'guest', 'accountadmin'), False ):
+        return
+    print "PASS"
 
 # running as main doesn't work for me (yet?) because the import
 # doesn't work.  If someone has the solution?
 if __name__ == '__main__':
-   test()
-
-
+    test()

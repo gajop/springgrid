@@ -13,4 +13,3 @@ from core import *
 from utils import *
 
 jinjahelper.rendertemplate('bootstrap_cloudbotrunner.html', websiteurl = cgihelper.getScriptWebDirectory() )
-

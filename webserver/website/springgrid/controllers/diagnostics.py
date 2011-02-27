@@ -39,54 +39,54 @@ pagecontents = ''  # ok, this is a bit hacky ;-)  If you've got any better ideas
 
 # carry out some verification checks on the installation
 def runchecks():
-   global pagecontents
+    global pagecontents
 
-   pagecontents = pagecontents + "<p>Checking replays directory...</p>"
+    pagecontents = pagecontents + "<p>Checking replays directory...</p>"
 
-   # check replays directory is writable
-   if not os.path.exists(scriptdir + "/replays"):
-      try:
-         os.makedirs( scriptdir + "/replays" )
-      except:
-         pagecontents = pagecontents + "Cannot create 'replays' directory in website directory.  Please create the 'replays' directory in the website directory, and ensure it is writable"
-         return False
-   # if we got here, replays directory exists, check writable...
-   testfilepath = scriptdir + "/replays/~test"
-   if os.path.exists( testfilepath ):
-      try:
-         os.remove( testfilepath )
-      except:
-         pagecontents = pagecontents + str(sys.exc_value) + "<br />"
-      if os.path.exists( testfilepath ):  
-         pagecontents = pagecontents + "Cannot delete old testfile from 'replays' directory on website.  Please check that the 'replays' directory in the website directory is writable, and then try again."
-         return False
+    # check replays directory is writable
+    if not os.path.exists(scriptdir + "/replays"):
+        try:
+            os.makedirs( scriptdir + "/replays" )
+        except:
+            pagecontents = pagecontents + "Cannot create 'replays' directory in website directory.  Please create the 'replays' directory in the website directory, and ensure it is writable"
+            return False
+    # if we got here, replays directory exists, check writable...
+    testfilepath = scriptdir + "/replays/~test"
+    if os.path.exists( testfilepath ):
+        try:
+            os.remove( testfilepath )
+        except:
+            pagecontents = pagecontents + str(sys.exc_value) + "<br />"
+        if os.path.exists( testfilepath ):
+            pagecontents = pagecontents + "Cannot delete old testfile from 'replays' directory on website.  Please check that the 'replays' directory in the website directory is writable, and then try again."
+            return False
 
-   try:
-      filehelper.writeFile( testfilepath, "foo" )
-   except:
-      pagecontents = pagecontents + str(sys.exc_value) + "<br /><br />"
+    try:
+        filehelper.writeFile( testfilepath, "foo" )
+    except:
+        pagecontents = pagecontents + str(sys.exc_value) + "<br /><br />"
 
-   if not os.path.exists( testfilepath ):  
-      pagecontents = pagecontents + "Please check that the 'replays' directory in the website directory is writable, and then try again."
-      return False
+    if not os.path.exists( testfilepath ):
+        pagecontents = pagecontents + "Please check that the 'replays' directory in the website directory is writable, and then try again."
+        return False
 
-   os.remove( testfilepath )
+    os.remove( testfilepath )
 
-   pagecontents = pagecontents + "<p> ... replays directory exists and is writable.  PASS.</p>"
+    pagecontents = pagecontents + "<p> ... replays directory exists and is writable.  PASS.</p>"
 
-   return True
+    return True
 
 def go():
-   global pagecontents
+    global pagecontents
 
-   pagecontents = pagecontents + "<h3>Diagnostics</h3>"
+    pagecontents = pagecontents + "<h3>Diagnostics</h3>"
 
-   pagecontents = pagecontents + "<p>This page carries out some basic diagnostics to check the health of your SpringGrid website.</p>"
+    pagecontents = pagecontents + "<p>This page carries out some basic diagnostics to check the health of your SpringGrid website.</p>"
 
-   if runchecks():
-      pagecontents = pagecontents + "<p>All checks PASSED</p>"
-   else:
-      pagecontents = pagecontents + "<p>Issues were found.  Please check these issues and try again.</p>"
+    if runchecks():
+        pagecontents = pagecontents + "<p>All checks PASSED</p>"
+    else:
+        pagecontents = pagecontents + "<p>Issues were found.  Please check these issues and try again.</p>"
 
 sqlalchemysetup.setup()
 
@@ -97,4 +97,3 @@ go()
 jinjahelper.message( pagecontents )
 
 sqlalchemysetup.close()
-

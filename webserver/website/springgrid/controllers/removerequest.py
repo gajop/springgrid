@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright 
+# Copyright
 # Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
 # Gajo Petrovic 2010
@@ -34,36 +34,36 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def checkformvarsnotnonenotempty( vars ):
-   failed = []
-   for var in vars:
-      if formhelper.getValue(var) == None or formhelper.getValue(var) == '':
-         failed.append(var)
-   return [ len(failed) == 0, failed ]
+    failed = []
+    for var in vars:
+        if formhelper.getValue(var) == None or formhelper.getValue(var) == '':
+            failed.append(var)
+    return [ len(failed) == 0, failed ]
 
 def go():
-   #currently, as MatchRequest doesn't seem to hold information on who 
-   #requested the match, we only allow admin to remove matches
-   if not roles.isInRole(roles.accountadmin):
-      jinjahelper.message("You must be logged in as an accountadmin")
-      return
-   [result, missingfields] = checkformvarsnotnonenotempty(['matchrequest_id'])
-   if not result:
-      jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
-      return
-   matchrequest_id = formhelper.getValue('matchrequest_id')
-   match = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id).first()
-   if match.matchrequestinprogress != None:
-      jinjahelper.message("You cannot remove a match in progress")
-      return
-   sqlalchemysetup.session.delete(match)
+    #currently, as MatchRequest doesn't seem to hold information on who
+    #requested the match, we only allow admin to remove matches
+    if not roles.isInRole(roles.accountadmin):
+        jinjahelper.message("You must be logged in as an accountadmin")
+        return
+    [result, missingfields] = checkformvarsnotnonenotempty(['matchrequest_id'])
+    if not result:
+        jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
+        return
+    matchrequest_id = formhelper.getValue('matchrequest_id')
+    match = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id).first()
+    if match.matchrequestinprogress != None:
+        jinjahelper.message("You cannot remove a match in progress")
+        return
+    sqlalchemysetup.session.delete(match)
 
-   sqlalchemysetup.session.commit()
+    sqlalchemysetup.session.commit()
 
-   jinjahelper.message("Removed match with id " + matchrequest_id + ".")
+    jinjahelper.message("Removed match with id " + matchrequest_id + ".")
 
 try:
-  go()
+    go()
 except:
-  jinjahelper.message( "An unexpected error occurred: " + str(sys.exc_info() ) )
+    jinjahelper.message( "An unexpected error occurred: " + str(sys.exc_info() ) )
 
 sqlalchemysetup.close()

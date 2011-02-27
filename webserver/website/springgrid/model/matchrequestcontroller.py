@@ -34,68 +34,67 @@ import confighelper
 # go through matchrequests_inprogress table, and remove any rows
 # where the session is older than a certain time
 def archiveoldrequests():
-   botrunnerhelper.purgeExpiredSessions()
+    botrunnerhelper.purgeExpiredSessions()
 
 # this should walk the queue till it finds something that the engine
 # can handle
 # for now, it just returns the first item in the queue
 # we need to only take things that arent in the inprogress queue of course...
 def getcompatibleitemfromqueue( botrunnername, sessionid ):
-   archiveoldrequests()
+    archiveoldrequests()
 
-   botrunner = botrunnerhelper.getBotRunner( botrunnername )
-   botrunnersession = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
-   # now we've archived the old requests, we just pick a request
-   # in the future, we'll pick a compatible request.  In the future ;-)
-   # also, we need to handle options.  In the future ;-)
-   matchrequests = Session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None ).filter(MatchRequest.matchresult == None ).all()
-   for matchrequest in matchrequests:
-      mapok = False
-      modok = False
-      ai0ok = False
-      ai1ok = False
-      for map in botrunner.supportedmaps:
-         if map.map_name == matchrequest.map.map_name:
-            mapok = True
-      for mod in botrunner.supportedmods:
-         if mod.mod_name == matchrequest.mod.mod_name:
-            modok = True
-      for ai in botrunner.supportedais:
-         if ai.ai_name == matchrequest.ai0.ai_name and ai.ai_version == matchrequest.ai0.ai_version:
-            ai0ok = True 
-         if ai.ai_name == matchrequest.ai1.ai_name and ai.ai_version == matchrequest.ai1.ai_version:
-            ai1ok = True 
-      if mapok and modok and ai0ok and ai1ok:
-         # mark request in progress:
-         matchrequest.matchrequestinprogress = MatchRequestInProgress( botrunner, botrunnersession, dates.dateTimeToDateString( datetime.datetime.now() ) )
+    botrunner = botrunnerhelper.getBotRunner( botrunnername )
+    botrunnersession = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
+    # now we've archived the old requests, we just pick a request
+    # in the future, we'll pick a compatible request.  In the future ;-)
+    # also, we need to handle options.  In the future ;-)
+    matchrequests = Session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None ).filter(MatchRequest.matchresult == None ).all()
+    for matchrequest in matchrequests:
+        mapok = False
+        modok = False
+        ai0ok = False
+        ai1ok = False
+        for map in botrunner.supportedmaps:
+            if map.map_name == matchrequest.map.map_name:
+                mapok = True
+        for mod in botrunner.supportedmods:
+            if mod.mod_name == matchrequest.mod.mod_name:
+                modok = True
+        for ai in botrunner.supportedais:
+            if ai.ai_name == matchrequest.ai0.ai_name and ai.ai_version == matchrequest.ai0.ai_version:
+                ai0ok = True
+            if ai.ai_name == matchrequest.ai1.ai_name and ai.ai_version == matchrequest.ai1.ai_version:
+                ai1ok = True
+        if mapok and modok and ai0ok and ai1ok:
+            # mark request in progress:
+            matchrequest.matchrequestinprogress = MatchRequestInProgress( botrunner, botrunnersession, dates.dateTimeToDateString( datetime.datetime.now() ) )
 
-         return matchrequest
+            return matchrequest
 
-   # didn't find any compatible match
-   return None
+    # didn't find any compatible match
+    return None
 
 def getmatchrequest(matchrequest_id):
-   return Session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id ).first()
+    return Session.query(MatchRequest).filter(MatchRequest.matchrequest_id == matchrequest_id ).first()
 
 # validate that an incoming result is for a match assigned to this server
 # return true if so, otherwise false
 def matchrequestvalidforthisserver( botrunnername, matchrequest_id ):
-   matchrequest = getmatchrequest( matchrequest_id )
-   if matchrequest.matchrequestinprogress == None:
-      return False
-   return matchrequest.matchrequestinprogress.botrunner.botrunner_name == botrunnername
+    matchrequest = getmatchrequest( matchrequest_id )
+    if matchrequest.matchrequestinprogress == None:
+        return False
+    return matchrequest.matchrequestinprogress.botrunner.botrunner_name == botrunnername
 
 def storeresult( botrunnername, matchrequest_id, result ):
-   # delete any existing result, saves doing check first...
-   matchrequest = getmatchrequest( matchrequest_id )
-   if matchrequest == None:
-      return
-   matchrequest.matchresult  = MatchResult( result )
-   Session.commit()
+    # delete any existing result, saves doing check first...
+    matchrequest = getmatchrequest( matchrequest_id )
+    if matchrequest == None:
+        return
+    matchrequest.matchresult  = MatchResult( result )
+    Session.commit()
 
 # returns the new match request, so can add options and so on
 # doesn't commit
 def addmatchrequest( ai0, ai1, mod, map, speed, softtimeout, hardtimeout):
-   newmatchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, mod = mod, map = map, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
-   Session.add(newmatchrequest)
-
+    newmatchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, mod = mod, map = map, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
+    Session.add(newmatchrequest)

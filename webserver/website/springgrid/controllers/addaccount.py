@@ -37,23 +37,22 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 if not roles.isInRole(roles.accountadmin):
-   jinjahelper.message( "You must be logged in as an accountadmin" )
+    jinjahelper.message( "You must be logged in as an accountadmin" )
 else:
-   username = formhelper.getValue('username')
-   userfullname = formhelper.getValue('userfullname')
-   useremailaddress = formhelper.getValue('useremailaddress')
-   userpassword = formhelper.getValue('userpassword')
+    username = formhelper.getValue('username')
+    userfullname = formhelper.getValue('userfullname')
+    useremailaddress = formhelper.getValue('useremailaddress')
+    userpassword = formhelper.getValue('userpassword')
 
-   if username != None and userfullname != None and userpassword != None and username != '' and userfullname != '' and userpassword != '':
-      if useremailaddress == None:
-         useremailaddress = ''
-      account = Account( username, userfullname )
-      account.passwordinfo = PasswordInfo( userpassword )
-      sqlalchemysetup.session.add( account )
-      sqlalchemysetup.session.commit()
-      jinjahelper.message( "Added ok" )
-   else:
-      jinjahelper.message( "Please fill in the fields and try again" )
+    if username != None and userfullname != None and userpassword != None and username != '' and userfullname != '' and userpassword != '':
+        if useremailaddress == None:
+            useremailaddress = ''
+        account = Account( username, userfullname )
+        account.passwordinfo = PasswordInfo( userpassword )
+        sqlalchemysetup.session.add( account )
+        sqlalchemysetup.session.commit()
+        jinjahelper.message( "Added ok" )
+    else:
+        jinjahelper.message( "Please fill in the fields and try again" )
 
 sqlalchemysetup.close()
-

@@ -19,7 +19,7 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-# This could ideally be converted to static methods on Config class, once 
+# This could ideally be converted to static methods on Config class, once
 # I have an internet connectoin and can google for how to do that ;-)
 
 from springgrid.model.meta import Config
@@ -30,69 +30,68 @@ defaults = {
    'gameendstring': "] Team%TEAMNUMBER%",
    'cheatingstring': "] SkirmishAI (with team ID = %TEAMNUMBER%): Cheating enabled",
    'guimarksessionasmaybedownafterthismanyminutes': 6
-} 
+}
 
 def getKeys():
-   keys = []
-   for config in Session.query(Config):
-      keys.append(config.config_key)
-   return keys
+    keys = []
+    for config in Session.query(Config):
+        keys.append(config.config_key)
+    return keys
 
 def getconfigdict():
-   applydefaults()
-   dict = {}
-   for config in Session.query(Config):
-      dict[config.config_key] = config.getValue()
-   return dict
+    applydefaults()
+    dict = {}
+    for config in Session.query(Config):
+        dict[config.config_key] = config.getValue()
+    return dict
 
 def applydefaults():
-   global defaults
-   for key_name in defaults.keys():
-      configrow = Session.query(Config).filter(Config.config_key == key_name).first()
-      if configrow == None:
-         setValue( key_name, defaults[key_name] )    
-   # purge extraneous values
-   for configrow in Session.query(Config):
-      if not defaults.has_key(configrow.config_key):
-         Session.delete(configrow)
-   Session.flush()
+    global defaults
+    for key_name in defaults.keys():
+        configrow = Session.query(Config).filter(Config.config_key == key_name).first()
+        if configrow == None:
+            setValue( key_name, defaults[key_name] )
+    # purge extraneous values
+    for configrow in Session.query(Config):
+        if not defaults.has_key(configrow.config_key):
+            Session.delete(configrow)
+    Session.flush()
 
 # adds default for this value, and populates row in the database
 def populatedefault(key_name):
-   global defaults
-   configrow = Session.query(Config).filter(Config.config_key == key_name).first()
-   if configrow != None:
-      return configrow.getValue()
+    global defaults
+    configrow = Session.query(Config).filter(Config.config_key == key_name).first()
+    if configrow != None:
+        return configrow.getValue()
 
-   if not defaults.has_key(key_name):
-      return None
-   newvalue = defaults[key_name]
+    if not defaults.has_key(key_name):
+        return None
+    newvalue = defaults[key_name]
 
-   setValue( key_name, newvalue )
-   return newvalue
+    setValue( key_name, newvalue )
+    return newvalue
 
 # get an appropriately typed config value, indexed by key_name
 def getValue( key_name ):
-   global defaults
+    global defaults
 
-   if not defaults.has_key(key_name):
-      raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
+    if not defaults.has_key(key_name):
+        raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
 
-   configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
-   if configrow == None:
-      return populatedefault(key_name)
-   return configrow.getValue()
+    configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
+    if configrow == None:
+        return populatedefault(key_name)
+    return configrow.getValue()
 
 def setValue(key_name, key_value):
-   global defaults
+    global defaults
 
-   if not defaults.has_key(key_name):
-      raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
+    if not defaults.has_key(key_name):
+        raise Exception('confighelper.setvalue, no such key_name: ' + key_name )
 
-   configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
-   if configrow == None:
-      config = Config(key_name, key_value)
-      Session.add(config)
-   else:
-      configrow.setValue( key_value)
-
+    configrow = Session.query(Config).filter(Config.config_key == key_name ).first()
+    if configrow == None:
+        config = Config(key_name, key_value)
+        Session.add(config)
+    else:
+        configrow.setValue( key_value)

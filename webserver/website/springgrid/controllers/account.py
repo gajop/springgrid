@@ -27,13 +27,13 @@ class AccountController(BaseController):
 
     def view(self, id):
         account = Session.query(Account).filter(Account.account_id == id).first()
-        
+
         showform = roles.isInRole(roles.accountadmin)
-        
+
         potentialroles = listhelper.tuplelisttolist(Session.query(Role.role_name) )
         for role in account.roles:
             potentialroles.remove(role.role_name)
-        
+
         c.account = account
-        c.showForm = showform    
+        c.showForm = showform
         return render('viewaccount.html')

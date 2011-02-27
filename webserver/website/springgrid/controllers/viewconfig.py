@@ -40,4 +40,3 @@ configdict = confighelper.getconfigdict()
 jinjahelper.rendertemplate('viewconfig.html', config = configdict )
 
 sqlalchemysetup.close()
-

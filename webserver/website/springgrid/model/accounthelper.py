@@ -25,5 +25,4 @@ import sqlalchemysetup
 from tableclasses import *
 
 def getAccount( username ):
-   return sqlalchemysetup.session.query(Account).filter(Account.username == username ).first()
-
+    return sqlalchemysetup.session.query(Account).filter(Account.username == username ).first()

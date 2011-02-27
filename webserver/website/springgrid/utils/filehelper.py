@@ -1,6 +1,6 @@
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 2 of the License, or
@@ -21,34 +21,32 @@
 
 # return contents of filepath as string
 def readFile( filepath ):
-   filehandle = open( filepath, "r" )
-   filecontents = ""
-   line = filehandle.readline()
-   while( line != "" ):
-      filecontents = filecontents + line
-      line = filehandle.readline()
-   filehandle.close()
-   return filecontents
+    filehandle = open( filepath, "r" )
+    filecontents = ""
+    line = filehandle.readline()
+    while( line != "" ):
+        filecontents = filecontents + line
+        line = filehandle.readline()
+    filehandle.close()
+    return filecontents
 
 # write contents string to filepath
 def writeFile( filepath, contents ):
-   filehandle = open( filepath, "w" )
-   filehandle.write( contents )
-   filehandle.close()
+    filehandle = open( filepath, "w" )
+    filehandle.write( contents )
+    filehandle.close()
 
 def test():
-   teststring = u"blah\nfoo\nhello world!T^*6789"
-   filepath = "/tmp/foo.txt"
-   writeFile( filepath, teststring )
-   newstring = readFile( filepath )
-   if newstring != teststring:
-      print "FAIL"
-      return
+    teststring = u"blah\nfoo\nhello world!T^*6789"
+    filepath = "/tmp/foo.txt"
+    writeFile( filepath, teststring )
+    newstring = readFile( filepath )
+    if newstring != teststring:
+        print "FAIL"
+        return
 
-   print "PASS"
+    print "PASS"
 
 
 if __name__ == "__main__":
-   test()
-
-
+    test()

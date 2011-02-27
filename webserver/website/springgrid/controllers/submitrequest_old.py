@@ -47,62 +47,61 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def checkformvarsnotnonenotempty( vars ):
-   failed = []
-   for var in vars:
-      if formhelper.getValue(var) == None or formhelper.getValue(var) == '':
-         failed.append(var)
-   return [ len(failed) == 0, failed ]
+    failed = []
+    for var in vars:
+        if formhelper.getValue(var) == None or formhelper.getValue(var) == '':
+            failed.append(var)
+    return [ len(failed) == 0, failed ]
 
 def go():
-   if not loginhelper.isLoggedOn():
-      jinjahelper.message( "Please login first." )
-      return
+    if not loginhelper.isLoggedOn():
+        jinjahelper.message( "Please login first." )
+        return
 
-   [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'ai0side', 'ai1side', 'mapname', 'modname', 'speed', 'softtimeout', 'hardtimeout'])
-   if not result:
-      jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
-      return
+    [result, missingfields ] = checkformvarsnotnonenotempty(['ai0nameversion', 'ai1nameversion', 'ai0side', 'ai1side', 'mapname', 'modname', 'speed', 'softtimeout', 'hardtimeout'])
+    if not result:
+        jinjahelper.message("Please fill in all the fields.  Missing " + ",".join(missingfields) )
+        return
 
-   ai0nameversion = formhelper.getValue("ai0nameversion")
-   ai0name = ai0nameversion.split("|")[0]
-   ai0version = ai0nameversion.split("|")[1]
-   ai0side = int(formhelper.getValue("ai0side"))
-   ai1nameversion = formhelper.getValue("ai1nameversion")
-   ai1name = ai1nameversion.split("|")[0]
-   ai1version = ai1nameversion.split("|")[1]
-   ai1side = int(formhelper.getValue("ai1side"))
-   mapname = formhelper.getValue("mapname")
-   modname = formhelper.getValue("modname")
-   speed = formhelper.getValue("speed")
-   softtimeout = formhelper.getValue("softtimeout")
-   hardtimeout = formhelper.getValue("hardtimeout")
+    ai0nameversion = formhelper.getValue("ai0nameversion")
+    ai0name = ai0nameversion.split("|")[0]
+    ai0version = ai0nameversion.split("|")[1]
+    ai0side = int(formhelper.getValue("ai0side"))
+    ai1nameversion = formhelper.getValue("ai1nameversion")
+    ai1name = ai1nameversion.split("|")[0]
+    ai1version = ai1nameversion.split("|")[1]
+    ai1side = int(formhelper.getValue("ai1side"))
+    mapname = formhelper.getValue("mapname")
+    modname = formhelper.getValue("modname")
+    speed = formhelper.getValue("speed")
+    softtimeout = formhelper.getValue("softtimeout")
+    hardtimeout = formhelper.getValue("hardtimeout")
 
-   #if matchrequestcontroller.submitrequest( matchrequest ):
-    #  jinjahelper.message( "Submitted"
-      # could be nice to print out queue here, or make another page for that
+    #if matchrequestcontroller.submitrequest( matchrequest ):
+     #  jinjahelper.message( "Submitted"
+        # could be nice to print out queue here, or make another page for that
 
-   map = sqlalchemysetup.session.query(Map).filter(Map.map_name == mapname ).first()
-   mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
-   ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai0name ).filter(AI.ai_version == ai0version ).first()
-   ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai1name ).filter(AI.ai_version == ai1version ).first()
-   ai0side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai0side).first()
-   ai1side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai1side).first()
+    map = sqlalchemysetup.session.query(Map).filter(Map.map_name == mapname ).first()
+    mod = sqlalchemysetup.session.query(Mod).filter(Mod.mod_name == modname ).first()
+    ai0 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai0name ).filter(AI.ai_version == ai0version ).first()
+    ai1 = sqlalchemysetup.session.query(AI).filter(AI.ai_name == ai1name ).filter(AI.ai_version == ai1version ).first()
+    ai0side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai0side).first()
+    ai1side = sqlalchemysetup.session.query(ModSide).filter(ModSide.mod_side_id == ai1side).first()
 
-   matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout, ai0_side=ai0side, ai1_side=ai1side)
+    matchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, map = map, mod = mod, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout, ai0_side=ai0side, ai1_side=ai1side)
 
-   # add options:
-   availableoptions = sqlalchemysetup.session.query(AIOption)
-   # get selected options from form submission:
-   for option in availableoptions:
-      if formhelper.getValue( "option_" + option.option_name ) != None:
-         matchrequest.options.append( option )
-   sqlalchemysetup.session.add( matchrequest )
-   
-   sqlalchemysetup.session.commit()
+    # add options:
+    availableoptions = sqlalchemysetup.session.query(AIOption)
+    # get selected options from form submission:
+    for option in availableoptions:
+        if formhelper.getValue( "option_" + option.option_name ) != None:
+            matchrequest.options.append( option )
+    sqlalchemysetup.session.add( matchrequest )
 
-   jinjahelper.message( "Submitted ok." )
+    sqlalchemysetup.session.commit()
+
+    jinjahelper.message( "Submitted ok." )
 
 go()
 
 sqlalchemysetup.close()
-

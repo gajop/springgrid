@@ -38,30 +38,29 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-   resultsPerPage = 100
-   page = formhelper.getValue('page')
-   if page == None:
-      page = 1
-   else:
-      page = int(page)
-   requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult != None )
-   numPages = int(math.ceil(requests.count() / resultsPerPage))
-   requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
-   replaypathbyrequest = {}
-   infologpathbyrequest =  {}
-   for request in requests:
-      replaypath = replaycontroller.getReplayPath(request.matchrequest_id)
-      if os.path.isfile( replaypath ):
-         replaypathbyrequest[request] = replaycontroller.getReplayWebRelativePath( request.matchrequest_id)
-      if os.path.isfile( replaycontroller.getInfologPath( request.matchrequest_id) ):
-         infologpathbyrequest[request] = replaycontroller.getInfologWebRelativePath( request.matchrequest_id)
+    resultsPerPage = 100
+    page = formhelper.getValue('page')
+    if page == None:
+        page = 1
+    else:
+        page = int(page)
+    requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult != None )
+    numPages = int(math.ceil(requests.count() / resultsPerPage))
+    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+    replaypathbyrequest = {}
+    infologpathbyrequest =  {}
+    for request in requests:
+        replaypath = replaycontroller.getReplayPath(request.matchrequest_id)
+        if os.path.isfile( replaypath ):
+            replaypathbyrequest[request] = replaycontroller.getReplayWebRelativePath( request.matchrequest_id)
+        if os.path.isfile( replaycontroller.getInfologPath( request.matchrequest_id) ):
+            infologpathbyrequest[request] = replaycontroller.getInfologWebRelativePath( request.matchrequest_id)
 
-   jinjahelper.rendertemplate( 'viewresults.html', requests = requests, replaypathbyrequest = replaypathbyrequest, infologpathbyrequest = infologpathbyrequest, numPages = numPages, page = page)
+    jinjahelper.rendertemplate( 'viewresults.html', requests = requests, replaypathbyrequest = replaypathbyrequest, infologpathbyrequest = infologpathbyrequest, numPages = numPages, page = page)
 
 try:
-   go()
+    go()
 except:
-   jinjahelper.message("Something went wrong. " + str(sys.exc_value))
+    jinjahelper.message("Something went wrong. " + str(sys.exc_value))
 
 sqlalchemysetup.close()
-

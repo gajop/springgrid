@@ -35,23 +35,22 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 if not roles.isInRole(roles.accountadmin):
-   jinjahelper.message( "You must be logged in as an accountadmin" )
+    jinjahelper.message( "You must be logged in as an accountadmin" )
 else:
-   username = formhelper.getValue('username')
+    username = formhelper.getValue('username')
 
-   if username != None and username != '':
-      if roles.isInRole2( username, roles.accountadmin ):
-         jinjahelper.message( "Please drop the accountadmin role from " + username + " and try again" )
-      else:
-         account = sqlalchemysetup.session.query( Account ).filter( Account.username == username ).first()
-         if account.passwordinfo != None:
-            sqlalchemysetup.session.delete( account.passwordinfo )
-         for openid in account.openids:
-            sqlalchemysetup.session.delete( openid )
-         sqlalchemysetup.session.delete( account )
-         jinjahelper.message( "Removed ok" )
-   else:
-      jinjahelper.message( "Please fill in the fields and try again" )
+    if username != None and username != '':
+        if roles.isInRole2( username, roles.accountadmin ):
+            jinjahelper.message( "Please drop the accountadmin role from " + username + " and try again" )
+        else:
+            account = sqlalchemysetup.session.query( Account ).filter( Account.username == username ).first()
+            if account.passwordinfo != None:
+                sqlalchemysetup.session.delete( account.passwordinfo )
+            for openid in account.openids:
+                sqlalchemysetup.session.delete( openid )
+            sqlalchemysetup.session.delete( account )
+            jinjahelper.message( "Removed ok" )
+    else:
+        jinjahelper.message( "Please fill in the fields and try again" )
 
 sqlalchemysetup.close()
-

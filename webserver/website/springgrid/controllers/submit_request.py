@@ -37,7 +37,7 @@ class SubmitRequestController(BaseController):
             c.sides[mod.mod_id] = (i, [])
         for side in sidequery:
             c.sides[side.mod_id][1].append((side.mod_side_name, side.mod_side_id))
-        
+
         c.mods = [mod.mod_name for mod in c.mods]
         c.options = listhelper.tuplelisttolist(Session.query(AIOption.option_name))
 
@@ -52,24 +52,24 @@ class SubmitRequestController(BaseController):
         return render('submitrequestform.html')
 
     @validate(schema=SubmitRequestForm(), form='form', post_only=True, on_get=False)
-    def submit(self):        
+    def submit(self):
         #if matchrequestcontroller.submitrequest( matchrequest ):
          #  jinjahelper.message( "Submitted"
-           # could be nice to print out queue here, or make another page for that        
-        
+           # could be nice to print out queue here, or make another page for that
+
         map = Session.query(Map).filter(Map.map_name == self.form_result['mapname']).first()
         mod = Session.query(Mod).filter(Mod.mod_name == self.form_result['modname']).first()
         ai0 = Session.query(AI).filter(AI.ai_id == self.form_result['ai0']).first()
         ai1 = Session.query(AI).filter(AI.ai_id == self.form_result['ai1']).first()
         ai0side = Session.query(ModSide).filter(ModSide.mod_side_id == self.form_result['ai0side']).first()
         ai1side = Session.query(ModSide).filter(ModSide.mod_side_id == self.form_result['ai1side']).first()
-        
+
         matchrequest = MatchRequest(ai0 = ai0, ai1 = ai1, map = map, mod = mod,
-                                    speed = self.form_result['speed'], 
-                                    softtimeout = self.form_result['softtimeout'], 
-                                    hardtimeout = self.form_result['hardtimeout'], 
+                                    speed = self.form_result['speed'],
+                                    softtimeout = self.form_result['softtimeout'],
+                                    hardtimeout = self.form_result['hardtimeout'],
                                     ai0_side=ai0side, ai1_side=ai1side)
-        
+
         # add options:
    #     availableoptions = Session.query(AIOption)
         # get selected options from form submission:
@@ -77,7 +77,7 @@ class SubmitRequestController(BaseController):
     #       if formhelper.getValue( "option_" + option.option_name ) != None:
      #         matchrequest.options.append( option )
         Session.add( matchrequest )
-        
+
         Session.commit()
-        
+
         return "Submitted ok."

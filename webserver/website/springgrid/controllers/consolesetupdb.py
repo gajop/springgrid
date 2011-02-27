@@ -32,38 +32,37 @@ import config
 scriptdir = os.path.dirname( os.path.realpath( __file__ ) )
 
 def create():
-   print "creating all..."
-   sqlalchemysetup.createalltables()
+    print "creating all..."
+    sqlalchemysetup.createalltables()
 
 def drop():
-   print "dropping all..."
-   sqlalchemysetup.dropalltables()
+    print "dropping all..."
+    sqlalchemysetup.dropalltables()
 
 def usage():
-   print sys.argv[0] + " [create|drop|reload]"
+    print sys.argv[0] + " [create|drop|reload]"
 
 def main():
-   if len(sys.argv) < 2:
-      usage()
-      return
+    if len(sys.argv) < 2:
+        usage()
+        return
 
-   action = sys.argv[1]
-   if action == 'create':
-      sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
-      create()
-      sqlalchemysetup.close()
-   elif action == 'drop':
-      sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
-      drop()
-      sqlalchemysetup.close()
-   elif action == 'reload':
-      sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
-      drop()
-      create()
-      sqlalchemysetup.close()
-   else:
-      usage()
+    action = sys.argv[1]
+    if action == 'create':
+        sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
+        create()
+        sqlalchemysetup.close()
+    elif action == 'drop':
+        sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
+        drop()
+        sqlalchemysetup.close()
+    elif action == 'reload':
+        sqlalchemysetup.setupwithcredentials( config.dbengine, config.dbuser, config.dbpassword, config.dbhost, config.dbname )
+        drop()
+        create()
+        sqlalchemysetup.close()
+    else:
+        usage()
 
 if __name__ == '__main__':
-   main()
-
+    main()

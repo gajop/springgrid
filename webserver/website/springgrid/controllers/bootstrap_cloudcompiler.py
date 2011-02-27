@@ -13,4 +13,3 @@ from core import *
 from utils import *
 
 jinjahelper.rendertemplate('bootstrap_cloudcompiler.html', websiteurl = cgihelper.getScriptWebDirectory() )
-

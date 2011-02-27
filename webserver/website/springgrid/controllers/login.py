@@ -18,7 +18,7 @@ class LoginForm(formencode.Schema):
     filter_extra_fields = True
     username = formencode.validators.PlainText(not_empty=True)
     password = formencode.validators.PlainText(not_empty=True)
-    
+
 class OpenIDForm(formencode.Schema):
     allow_extra_fields = True
     filter_extra_fields = True
@@ -31,10 +31,10 @@ class LoginController(BaseController):
 
     @validate(schema=LoginForm(), form='form', post_only=True, on_get=False)
     def submit(self):
-        """Verify username and password"""        
+        """Verify username and password"""
         password = self.form_result['password']
         username = self.form_result['username']
-        
+
         if not loginhelper.validateUsernamePassword(username, password):
             return render('login.html')
 
@@ -47,7 +47,7 @@ class LoginController(BaseController):
             redirect(session['path_before_login'])
         else:
             return render('loggedin.html')
-    
+
     @validate(schema=OpenIDForm(), form='form', post_only=True, on_get=False)
     def openid(self):
         """Verify openid account"""
@@ -59,4 +59,3 @@ class LoginController(BaseController):
             del session['user']
             session.save()
         return render('logout.html')
-

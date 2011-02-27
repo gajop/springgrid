@@ -47,7 +47,7 @@ def logonUserWithAuthenticatedOpenID(openidurl):
         account = Account(openidurl, openidurl)
         account.openids.append(OpenID(openidurl))
         Session.add(account)
-    
+
     session['username'] = openidurl
 
 def changePassword(username, password):
@@ -57,6 +57,4 @@ def changePassword(username, password):
     return True
 
 def logoutUser():
-    pass       
-
-
+    pass

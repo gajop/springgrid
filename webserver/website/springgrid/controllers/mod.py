@@ -26,7 +26,7 @@ class ModController(BaseController):
         if not roles.isInRole(roles.modadmin):
             c.message = "You must be logged in as a modadmin"
             return render('genericmessage.html')
-            
+
         modname = self.form_result["modName"]
         modarchivechecksum = self.form_result["modArchiveChecksum"]
         modurl = self.form_result["modUrl"]
@@ -39,7 +39,7 @@ class ModController(BaseController):
 
         c.message = "Added ok"
         return render('genericmessage.html')
-    
+
     def view(self, id):
         mod = Session.query(Mod).filter(Mod.mod_id == id).first()
         if mod == None:
@@ -47,21 +47,21 @@ class ModController(BaseController):
             return render('genericmessage.html')
 
         showForm = roles.isInRole(roles.modadmin)
-            
+
         c.showForm = showForm
         c.mod = mod
         return render('viewmod.html')
-    
+
     @validate(schema=ModForm(), form='view', post_only=True, on_get=False)
     def update(self, id):
         if not roles.isInRole(roles.modadmin):
             c.message = "You must be logged in as a modadmin"
             return render('genericmessage.html')
-        
+
         modName = self.form_result['modName']
         modArchiveChecksum = self.form_result["modArchiveChecksum"]
         modUrl = self.form_result["modUrl"]
-    
+
         mod = Session.query(Mod).filter(Mod.mod_id == id).first()
         if mod == None:
             c.message = "No such mod"
@@ -71,15 +71,15 @@ class ModController(BaseController):
         mod.mod_url = modUrl
         mod.mod_archivechecksum = modArchiveChecksum
         Session.commit()
-        
+
         c.message = "Updated ok"
         return render('genericmessage.html')
-    
+
     def remove(self, id):
         if not roles.isInRole(roles.modadmin):
             c.message = "You must be logged in as a modadmin"
             return render('genericmessage.html')
-        
+
         mod = Session.query(Mod).filter(Mod.mod_id == id).first()
         if mod == None:
             c.message = "No such mod"
@@ -87,16 +87,14 @@ class ModController(BaseController):
 
         Session.delete(mod)
         Session.commit()
-        
+
         c.message = "Deleted ok"
         return render('genericmessage.html')
 
     def list(self):
         mods = Session.query(Mod)
-        showForm = roles.isInRole(roles.modadmin):
-            
+        showForm = roles.isInRole(roles.modadmin)
+
         c.showForm = showForm
         c.mods = mods
         return render('viewmods.html')
-    
-    

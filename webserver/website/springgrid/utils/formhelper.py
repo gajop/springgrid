@@ -29,48 +29,46 @@ import sys
 # Generator to buffer file chunks
 # This function from http://webpython.codepoint.net/cgi_big_file_upload
 def fbuffer(f, chunk_size=10000):
-   while True:
-      chunk = f.read(chunk_size)
-      if not chunk: break
-      yield chunk
+    while True:
+        chunk = f.read(chunk_size)
+        if not chunk: break
+        yield chunk
 
 form = None
 
 def getform():
-   global form
-   if form == None:
-      form = cgi.FieldStorage()
-   return form
+    global form
+    if form == None:
+        form = cgi.FieldStorage()
+    return form
 
 # you can run from commandline too, in format:
 # python somescript.py fieldname=fieldvalue ...
 def getValue( fieldname ):
-   form = getform()
-   if not form.has_key(fieldname):
-      for arg in sys.argv:
-         if arg.startswith(fieldname):
-            return arg.split('=')[1]
-      return None
-   return form[fieldname].value
+    form = getform()
+    if not form.has_key(fieldname):
+        for arg in sys.argv:
+            if arg.startswith(fieldname):
+                return arg.split('=')[1]
+        return None
+    return form[fieldname].value
 
 # takes a file at fieldname
 # and writes it to disk at outputpath
 # returns true if succeeds
 # or false if no such field item
 def writeIncomingFileToDisk( fieldname, outputpath ):
-   filebase64 = getValue(fieldname)
-   if filebase64 == None:
-      print "no replay field detected in incoming post"
-      return False # file not uploaded
+    filebase64 = getValue(fieldname)
+    if filebase64 == None:
+        print "no replay field detected in incoming post"
+        return False # file not uploaded
 
-   print "base64length: " + str( len( filebase64 ) ) + "<br />"
-   filebinary = base64.decodestring( filebase64 )
-   print "binlength: " + str( len( filebinary ) ) + "<br />"
+    print "base64length: " + str( len( filebase64 ) ) + "<br />"
+    filebinary = base64.decodestring( filebase64 )
+    print "binlength: " + str( len( filebinary ) ) + "<br />"
 
-   # print "output path: " + outputpath
-   outputfilehandle = open(outputpath, 'wb' )
-   outputfilehandle.write(filebinary)
-   outputfilehandle.close()
-   return True
-
-
+    # print "output path: " + outputpath
+    outputfilehandle = open(outputpath, 'wb' )
+    outputfilehandle.write(filebinary)
+    outputfilehandle.close()
+    return True

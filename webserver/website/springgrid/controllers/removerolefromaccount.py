@@ -33,23 +33,22 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 if not roles.isInRole(roles.accountadmin):
-   jinjahelper.message( "You must be logged in as an accountadmin" )
+    jinjahelper.message( "You must be logged in as an accountadmin" )
 else:
-   username = formhelper.getValue('username')
-   rolename = formhelper.getValue('rolename')
+    username = formhelper.getValue('username')
+    rolename = formhelper.getValue('rolename')
 
-   if username != None and rolename != '' and username != None and rolename != '':
-      account = accounthelper.getAccount( username )
-      roletoremove = None
-      for role in account.roles:
-         if role.role_name == rolename:
-            roletoremove = role
-      if roletoremove != None:
-         account.roles.remove( roletoremove )
-         sqlalchemysetup.session.flush()
-         jinjahelper.message( "Removed ok" )
-   else:
-      jinjahelper.message( "Please fill in the fields and try again" )
+    if username != None and rolename != '' and username != None and rolename != '':
+        account = accounthelper.getAccount( username )
+        roletoremove = None
+        for role in account.roles:
+            if role.role_name == rolename:
+                roletoremove = role
+        if roletoremove != None:
+            account.roles.remove( roletoremove )
+            sqlalchemysetup.session.flush()
+            jinjahelper.message( "Removed ok" )
+    else:
+        jinjahelper.message( "Please fill in the fields and try again" )
 
 sqlalchemysetup.close()
-

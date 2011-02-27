@@ -38,48 +38,46 @@ from openid.store import sqlstore
 sqlalchemysetup.setup()
 
 def go():
-   openidurl = formhelper.getValue('openidurl')
+    openidurl = formhelper.getValue('openidurl')
 
-   mystore = sqlstore.MySQLStore( sqlalchemysetup.session.connection().connection.connection, associations_table='openid_associations', nonces_table = 'openid_nonces' )
+    mystore = sqlstore.MySQLStore( sqlalchemysetup.session.connection().connection.connection, associations_table='openid_associations', nonces_table = 'openid_nonces' )
 
-   sessiondata = {}
-   myconsumer = consumer.Consumer( sessiondata, mystore)
-   fullpagewebpath = 'http://' + os.getenv('HTTP_HOST') + os.getenv('REQUEST_URI')
+    sessiondata = {}
+    myconsumer = consumer.Consumer( sessiondata, mystore)
+    fullpagewebpath = 'http://' + os.getenv('HTTP_HOST') + os.getenv('REQUEST_URI')
 
-   if formhelper.getValue('openid.claimed_id') == None:
-      if openidurl == None or openidurl == '':  # user didn't enter an id
-         jinjahelper.rendertemplate('genericmessage.html', message = 'Logon error: Please fill in the openid field, and try again.' )
-         return
+    if formhelper.getValue('openid.claimed_id') == None:
+        if openidurl == None or openidurl == '':  # user didn't enter an id
+            jinjahelper.rendertemplate('genericmessage.html', message = 'Logon error: Please fill in the openid field, and try again.' )
+            return
 
-      # user entered an id, so send a request to openid provider
-      myrequest = myconsumer.begin( openidurl )
+        # user entered an id, so send a request to openid provider
+        myrequest = myconsumer.begin( openidurl )
 
-      # print redirect to openid provider page
-      print "Content-type: text/html"
-      print "Location: " + myrequest.redirectURL(os.path.dirname( fullpagewebpath ),fullpagewebpath )
-      print '\n\n'
-      return
+        # print redirect to openid provider page
+        print "Content-type: text/html"
+        print "Location: " + myrequest.redirectURL(os.path.dirname( fullpagewebpath ),fullpagewebpath )
+        print '\n\n'
+        return
 
-   # in theory, we arrived here from the openid provider page redirect
-   # get query string dict from openid provider redirect:
-   querystringdict = {}
-   for key in formhelper.getform().keys():
-      querystringdict[key] = formhelper.getform().getvalue(key)
+    # in theory, we arrived here from the openid provider page redirect
+    # get query string dict from openid provider redirect:
+    querystringdict = {}
+    for key in formhelper.getform().keys():
+        querystringdict[key] = formhelper.getform().getvalue(key)
 
-   # get openid auth result:
-   result = myconsumer.complete(querystringdict, fullpagewebpath )
-      
-   if result.__class__ != openid.consumer.consumer.SuccessResponse:
-      jinjahelper.message('OpenID failed authentication.  Please check and try again.')
-      return
+    # get openid auth result:
+    result = myconsumer.complete(querystringdict, fullpagewebpath )
 
-   openidurl = result.identity_url.split('/')[2]
-   loginhelper.logonUserWithAuthenticatedOpenID( openidurl )
-   jinjahelper.rendertemplate('login.html', message = 'Logged on ok as ' + openidurl, menus = menu.getmenus(), headers = loginhelper.cookie.output() )
+    if result.__class__ != openid.consumer.consumer.SuccessResponse:
+        jinjahelper.message('OpenID failed authentication.  Please check and try again.')
+        return
+
+    openidurl = result.identity_url.split('/')[2]
+    loginhelper.logonUserWithAuthenticatedOpenID( openidurl )
+    jinjahelper.rendertemplate('login.html', message = 'Logged on ok as ' + openidurl, menus = menu.getmenus(), headers = loginhelper.cookie.output() )
 
 try:
-   go()
+    go()
 finally:
-   sqlalchemysetup.close()
-
-
+    sqlalchemysetup.close()

@@ -36,34 +36,32 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-   if not loginhelper.isLoggedOn():
-      jinjahelper.message( "Please log in first." )
-      return
+    if not loginhelper.isLoggedOn():
+        jinjahelper.message( "Please log in first." )
+        return
 
-   oldpassword = formhelper.getValue('oldpassword')
-   password = formhelper.getValue('password')
-   confirmpassword = formhelper.getValue('confirmpassword')
+    oldpassword = formhelper.getValue('oldpassword')
+    password = formhelper.getValue('password')
+    confirmpassword = formhelper.getValue('confirmpassword')
 
-   if password == None or confirmpassword == None or password == '' or confirmpassword == '' or oldpassword == None or oldpassword == '':
-      jinjahelper.message( "Please fill in the fields and try again" )
-      return
+    if password == None or confirmpassword == None or password == '' or confirmpassword == '' or oldpassword == None or oldpassword == '':
+        jinjahelper.message( "Please fill in the fields and try again" )
+        return
 
-   if password != confirmpassword:
-      jinjahelper.message( "Confirmation password doesn't match new password" )
-      return
-      
-   # check oldpassword
-   if not loginhelper.validateUsernamePassword( loginhelper.getUsername(), oldpassword ):
-      jinjahelper.message( "Please check your old password and try again" )
-      return
+    if password != confirmpassword:
+        jinjahelper.message( "Confirmation password doesn't match new password" )
+        return
 
-   if loginhelper.changePassword( loginhelper.getUsername(), password ):
-      jinjahelper.message( "Password changed ok" )
-   else:
-      jinjahelper.message( "Something went wrong.  Please check your values and try again." )
+    # check oldpassword
+    if not loginhelper.validateUsernamePassword( loginhelper.getUsername(), oldpassword ):
+        jinjahelper.message( "Please check your old password and try again" )
+        return
+
+    if loginhelper.changePassword( loginhelper.getUsername(), password ):
+        jinjahelper.message( "Password changed ok" )
+    else:
+        jinjahelper.message( "Something went wrong.  Please check your values and try again." )
 
 go()
 
 sqlalchemysetup.close()
-
-

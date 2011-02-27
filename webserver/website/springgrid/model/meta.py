@@ -39,136 +39,133 @@ account_roles = Table('role_members', Base.metadata,
 )
 
 class Role(Base):
-   __tablename__ = 'roles'
+    __tablename__ = 'roles'
 
-   def __init__(self, role_name ):
-      self.role_name = role_name
+    def __init__(self, role_name ):
+        self.role_name = role_name
 
-   role_id = Column(Integer,primary_key=True)
-   role_name = Column(String(255), unique = True, nullable = False)
+    role_id = Column(Integer,primary_key=True)
+    role_name = Column(String(255), unique = True, nullable = False)
 
 class OpenID(Base):
-   __tablename__ = 'openids'
+    __tablename__ = 'openids'
 
-   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
-   openid = Column(String(255), primary_key = True)
+    account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
+    openid = Column(String(255), primary_key = True)
 
-   def __init__( self, openid ):
-      self.openid = openid
+    def __init__( self, openid ):
+        self.openid = openid
 
 class PasswordInfo(Base):
-   __tablename__ = 'passwords'
+    __tablename__ = 'passwords'
 
-   account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
-   passwordsalt = Column(String(255), nullable = False)
-   passwordhash = Column(String(255), nullable = False)
+    account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
+    passwordsalt = Column(String(255), nullable = False)
+    passwordhash = Column(String(255), nullable = False)
 
-   def __init__(self, password):
-       self.changePassword(password)      
+    def __init__(self, password):
+        self.changePassword(password)
 
-   def checkPassword(self, password):
-       return bcrypt.hashpw(password, self.passwordsalt) == self.passwordhash
+    def checkPassword(self, password):
+        return bcrypt.hashpw(password, self.passwordsalt) == self.passwordhash
 
-   def changePassword(self, newPassword):
-       self.passwordsalt = bcrypt.gensalt()
-       self.passwordhash = bcrypt.hashpw(newPassword, self.passwordsalt)
+    def changePassword(self, newPassword):
+        self.passwordsalt = bcrypt.gensalt()
+        self.passwordhash = bcrypt.hashpw(newPassword, self.passwordsalt)
 
 class Account(Base):
-   __tablename__ = 'accounts'
+    __tablename__ = 'accounts'
 
-   account_id = Column(Integer,primary_key=True)
-   username = Column(String(255), unique = True, nullable = False)
-   userfullname = Column(String(255))
-   useremailaddress = Column(String(255))
+    account_id = Column(Integer,primary_key=True)
+    username = Column(String(255), unique = True, nullable = False)
+    userfullname = Column(String(255))
+    useremailaddress = Column(String(255))
 
-   roles = relation("Role", secondary = account_roles )
-   passwordinfo = relation('PasswordInfo', uselist = False)
-   openids = relation('OpenID')
+    roles = relation("Role", secondary = account_roles )
+    passwordinfo = relation('PasswordInfo', uselist = False)
+    openids = relation('OpenID')
 
-   def __init__(self, username, userfullname ):
-      self.username = username
-      self.userfullname = userfullname
+    def __init__(self, username, userfullname ):
+        self.username = username
+        self.userfullname = userfullname
 
-   def addRole( self, role ):
-      self.roles.append(role)
+    def addRole( self, role ):
+        self.roles.append(role)
 
 class AIOption(Base):
-   __tablename__ = 'aioptions'
+    __tablename__ = 'aioptions'
 
-   option_id = Column(Integer,primary_key=True)
-   option_name = Column(String(255), unique = True, nullable = False)
+    option_id = Column(Integer,primary_key=True)
+    option_name = Column(String(255), unique = True, nullable = False)
 
-   def __init__(self, option_name):
-      self.option_name = option_name
+    def __init__(self, option_name):
+        self.option_name = option_name
 
 # simple flat config for now
 class Config(Base):
-   __tablename__ = 'config'
+    __tablename__ = 'config'
 
-   config_key = Column(String(255),primary_key = True )
-   config_value = Column(String(255), nullable = False)
-   config_type = Column(String(255), nullable = False)
+    config_key = Column(String(255),primary_key = True )
+    config_value = Column(String(255), nullable = False)
+    config_type = Column(String(255), nullable = False)
 
-   # sets value of config_type appropriately, according to config_value type
-   # to int, float, string or boolean
-   def __init__(self, config_key, config_value ):
-      self.config_key = config_key
-      self.setValue( config_value )
+    # sets value of config_type appropriately, according to config_value type
+    # to int, float, string or boolean
+    def __init__(self, config_key, config_value ):
+        self.config_key = config_key
+        self.setValue( config_value )
 
-   def setValue( self, config_value ):
-      self.config_value = str(config_value)
-      if type(config_value) == int:
-         self.config_type = 'int'
-      elif type(config_value) == float:
-         self.config_type = 'float'
-      elif type(config_value) == str:
-         self.config_type = 'string'
-      elif type(config_value) == bool:
-         self.config_type = 'boolean'
+    def setValue( self, config_value ):
+        self.config_value = str(config_value)
+        if type(config_value) == int:
+            self.config_type = 'int'
+        elif type(config_value) == float:
+            self.config_type = 'float'
+        elif type(config_value) == str:
+            self.config_type = 'string'
+        elif type(config_value) == bool:
+            self.config_type = 'boolean'
 
-   # returns config_value converted into appropriate type, according t o value of config_type
-   def getValue(self):
-      if self.config_type == 'int':
-         return int(self.config_value)
-      if self.config_type == 'float':
-         return float(self.config_value)
-      if self.config_type == 'string':
-         return self.config_value
-      if self.config_type == 'boolean':
-         if self.config_value.lower() == 'true':
-            return True
-         return False
-      
+    # returns config_value converted into appropriate type, according t o value of config_type
+    def getValue(self):
+        if self.config_type == 'int':
+            return int(self.config_value)
+        if self.config_type == 'float':
+            return float(self.config_value)
+        if self.config_type == 'string':
+            return self.config_value
+        if self.config_type == 'boolean':
+            if self.config_value.lower() == 'true':
+                return True
+            return False
+
 def addStaticData():
-   import confighelper # have to import it here, otherwise Config table can't be easily
-                       # imported inside confighelper, because circular import loop
-   confighelper.applydefaults()
+    import confighelper # have to import it here, otherwise Config table can't be easily
+                        # imported inside confighelper, because circular import loop
+    confighelper.applydefaults()
 
-   import roles
-   roles.addstaticdata()
+    import roles
+    roles.addstaticdata()
 
-   import optionshelper
-   optionshelper.addstaticdata()
+    import optionshelper
+    optionshelper.addstaticdata()
 
-   account = Account("admin", "admin")
-   account.passwordinfo = PasswordInfo('admin')
-   Session.add(account)
-   account.addRole(roles.getRole('accountadmin'))
-   account.addRole(roles.getRole('aiadmin'))
-   account.addRole(roles.getRole('mapadmin'))
-   account.addRole(roles.getRole('modadmin'))
-   account.addRole(roles.getRole('leagueadmin'))
-   account.addRole(roles.getRole('botrunneradmin'))
-   account.addRole(roles.getRole('requestadmin'))
-   Session.commit()
+    account = Account("admin", "admin")
+    account.passwordinfo = PasswordInfo('admin')
+    Session.add(account)
+    account.addRole(roles.getRole('accountadmin'))
+    account.addRole(roles.getRole('aiadmin'))
+    account.addRole(roles.getRole('mapadmin'))
+    account.addRole(roles.getRole('modadmin'))
+    account.addRole(roles.getRole('leagueadmin'))
+    account.addRole(roles.getRole('botrunneradmin'))
+    account.addRole(roles.getRole('requestadmin'))
+    Session.commit()
 
 def createall(engine):
-   Base.metadata.create_all(engine)
-   openidhelper.createtables(engine)
+    Base.metadata.create_all(engine)
+    openidhelper.createtables(engine)
 
 def dropall(engine):
-   Base.metadata.drop_all(engine)
-   openidhelper.droptables(engine)
-
-
-
+    Base.metadata.drop_all(engine)
+    openidhelper.droptables(engine)

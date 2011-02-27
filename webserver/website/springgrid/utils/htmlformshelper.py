@@ -20,16 +20,15 @@
 #
 
 def listToDropdown( controlname, itemlist ):
-   liststring = "<select name='" + controlname + "'>"
-   for listitem in itemlist:
-      liststring += "<option value='" + listitem + "'>" + listitem + "</option>"
-   liststring += "</select>"
-   return liststring
+    liststring = "<select name='" + controlname + "'>"
+    for listitem in itemlist:
+        liststring += "<option value='" + listitem + "'>" + listitem + "</option>"
+    liststring += "</select>"
+    return liststring
 
 def itemsandvaluesToDropdown( controlname, itemlist, valuelist ):
-   liststring = "<select name='" + controlname + "'>"
-   for i in xrange( len( itemlist ) ):
-      liststring += "<option value='" + itemlist[i] + "'>" + valuelist[i] + "</option>"
-   liststring += "</select>"
-   return liststring
-
+    liststring = "<select name='" + controlname + "'>"
+    for i in xrange( len( itemlist ) ):
+        liststring += "<option value='" + itemlist[i] + "'>" + valuelist[i] + "</option>"
+    liststring += "</select>"
+    return liststring

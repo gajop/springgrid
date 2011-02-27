@@ -31,49 +31,45 @@ optionnames = [ 'instancelocaldata', 'dummymatch' ]
 
 # adds any missing options to the table, can be called as many times as you like
 def addstaticdata():
-   global optionnames
+    global optionnames
 
-   optionrows = Session.query(AIOption).all()
-   for optionname in optionnames:
-      optionfound = False
-      for optionrow in optionrows:
-         if optionrow.option_name == optionname:
-            optionfound = True
-      if not optionfound:
-         option = AIOption( optionname )
-         Session.add(option)
-         Session.flush()
+    optionrows = Session.query(AIOption).all()
+    for optionname in optionnames:
+        optionfound = False
+        for optionrow in optionrows:
+            if optionrow.option_name == optionname:
+                optionfound = True
+        if not optionfound:
+            option = AIOption( optionname )
+            Session.add(option)
+            Session.flush()
 
 # returns AIOption object using sqlalchemy
 def getOption( optionname ):
-   global optionnames
-   addstaticdata()
-   if optionname not in optionnames:
-      raise Exception("Invalid option name " + optionnaame )
-   return Session.query(AIOption).filter(AIOption.option_name == optionname ).first()
+    global optionnames
+    addstaticdata()
+    if optionname not in optionnames:
+        raise Exception("Invalid option name " + optionnaame )
+    return Session.query(AIOption).filter(AIOption.option_name == optionname ).first()
 
 # in:
 # - options is a list of option objects to search
 # - option is an option object to search for
 # returns true if option found in options
 def containsOption(option, options):
-   if option == None:
-      raise Exception( "ERROR: no option specified" )
+    if option == None:
+        raise Exception( "ERROR: no option specified" )
 
-   for thisoption in options:
-      if thisoption.option_name == option.option_name:
-         return True
-   return False
+    for thisoption in options:
+        if thisoption.option_name == option.option_name:
+            return True
+    return False
 
 # self test function
 def test():
-   pass
+    pass
 
 # running as main doesn't work for me (yet?) because the import
 # doesn't work.  If someone has the solution?
 if __name__ == '__main__':
-   test()
-
-
-
-
+    test()

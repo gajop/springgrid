@@ -37,39 +37,38 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-   botrunnername = formhelper.getValue('botrunnername')
-   optionname = formhelper.getValue('optionname')
+    botrunnername = formhelper.getValue('botrunnername')
+    optionname = formhelper.getValue('optionname')
 
-   if not loginhelper.isLoggedOn():
-      jinjahelper.message( "Please logon first." )
-      return
+    if not loginhelper.isLoggedOn():
+        jinjahelper.message( "Please logon first." )
+        return
 
-   if botrunnername == None or optionname == None or botrunnername == '' or optionname == '':
-      jinjahelper.message( "Please fill in the fields and try again" )
-      return
+    if botrunnername == None or optionname == None or botrunnername == '' or optionname == '':
+        jinjahelper.message( "Please fill in the fields and try again" )
+        return
 
-   botrunnerownername = botrunnerhelper.getOwnerUsername( botrunnername ) 
-   if botrunnerownername != loginhelper.getUsername() and not roles.isInRole(roles.botrunneradmin):
-      jinjahelper.message( "You must be the botrunner owner or in role botrunneradmin" )
-      return
+    botrunnerownername = botrunnerhelper.getOwnerUsername( botrunnername )
+    if botrunnerownername != loginhelper.getUsername() and not roles.isInRole(roles.botrunneradmin):
+        jinjahelper.message( "You must be the botrunner owner or in role botrunneradmin" )
+        return
 
-   botrunner = sqlalchemysetup.session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername ).first()
-   if botrunner == None:
-      jinjahelper.message( "Something went wrong.  Please check your values and try again." )
-      return
+    botrunner = sqlalchemysetup.session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername ).first()
+    if botrunner == None:
+        jinjahelper.message( "Something went wrong.  Please check your values and try again." )
+        return
 
-   option = sqlalchemysetup.session.query(AIOption).filter(AIOption.option_name == optionname ).first()
-   if option == None:
-      jinjahelper.message( "Something went wrong.  Please check your values and try again." )
-      return
+    option = sqlalchemysetup.session.query(AIOption).filter(AIOption.option_name == optionname ).first()
+    if option == None:
+        jinjahelper.message( "Something went wrong.  Please check your values and try again." )
+        return
 
-   botrunner.options.append( option )
+    botrunner.options.append( option )
 
-   sqlalchemysetup.session.commit()
+    sqlalchemysetup.session.commit()
 
-   jinjahelper.message( "Added ok" )
+    jinjahelper.message( "Added ok" )
 
 go()
 
 sqlalchemysetup.close()
-

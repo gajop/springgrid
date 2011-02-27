@@ -12,7 +12,7 @@ from springgrid.utils import dates, listhelper
 log = logging.getLogger(__name__)
 
 class BotrunnerController(BaseController):
-    
+
     def view(self, id):
         botrunner = Session.query(BotRunner).filter(BotRunner.botrunner_id == id).first()
         c.isbotrunnerowner = ('user' in session and botrunner.owneraccount != None and botrunner.owneraccount.username == session['user'])
@@ -20,7 +20,7 @@ class BotrunnerController(BaseController):
 
         potentialoptions = listhelper.tuplelisttolist(Session.query(AIOption.option_name))
         for option in botrunner.options:
-           potentialoptions.remove(option.option_name )
+            potentialoptions.remove(option.option_name )
         c.botrunner = botrunner
         return render('viewbotrunner.html')
 
@@ -55,7 +55,7 @@ class BotrunnerController(BaseController):
                         sessiondata[botSession]['pingtimestatus'] = 'maybeok'
                     if secondssincelastping < confighelper.getValue('guimarksessionasmaybedownafterthismanyminutes') * 60:
                         sessiondata[botSession]['pingtimestatus'] = 'ok'
-        
+
         c.botrunners = botrunners
         c.isIsLoggedIn = False
         if 'user' in session:

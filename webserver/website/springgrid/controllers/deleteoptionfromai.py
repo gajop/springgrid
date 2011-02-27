@@ -37,23 +37,22 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 if not roles.isInRole(roles.aiadmin):
-   jinjahelper.message( "You must be logged in as an aiadmin" )
+    jinjahelper.message( "You must be logged in as an aiadmin" )
 else:
-   ainame = formhelper.getValue("ainame")
-   aiversion = formhelper.getValue("aiversion")
-   aioption = formhelper.getValue("aioption")
+    ainame = formhelper.getValue("ainame")
+    aiversion = formhelper.getValue("aiversion")
+    aioption = formhelper.getValue("aioption")
 
-   if aiversion != None and ainame != None and aioption != None and ainame != "" and aiversion != "" and aioption != "":
-      ai = aihelper.getAI( ainame, aiversion )
-      optiontoremove = None
-      for option in ai.allowedoptions:
-         if option.option_name == aioption:
-            optiontoremove = option
-      ai.allowedoptions.remove( optiontoremove )
-      sqlalchemysetup.session.flush()
-      jinjahelper.message( "Option removed ok" )
-   else:
-      jinjahelper.message( "Please fill in the fields and try again" )
+    if aiversion != None and ainame != None and aioption != None and ainame != "" and aiversion != "" and aioption != "":
+        ai = aihelper.getAI( ainame, aiversion )
+        optiontoremove = None
+        for option in ai.allowedoptions:
+            if option.option_name == aioption:
+                optiontoremove = option
+        ai.allowedoptions.remove( optiontoremove )
+        sqlalchemysetup.session.flush()
+        jinjahelper.message( "Option removed ok" )
+    else:
+        jinjahelper.message( "Please fill in the fields and try again" )
 
 sqlalchemysetup.close()
-

@@ -14,7 +14,7 @@ from springgrid.model import confighelper
 log = logging.getLogger(__name__)
 
 class BotrunnerWebserviceController(BaseXMLRPCController):
-    
+
     def test(self):
         print "test"
         return True
@@ -85,42 +85,42 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
     # for whatever reason, the botrunner no longers supports this AI
     def registerunsupportedai( self, botrunnername, sharedsecret, ainame, aiversion ):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
-           return (False, "Not authenticated")
-        
+            return (False, "Not authenticated")
+
         if not aihelper.setbotrunnernotsupportsthisai( botrunnername, ainame, aiversion ):
-           return (False, "couldn't mark ai as not supported for botrunner")
-        
+            return (False, "couldn't mark ai as not supported for botrunner")
+
         return (True,'')
-    
+
     def getsupportedmods( self, botrunnername, sharedsecret ):
         return modhelper.getsupportedmods(botrunnername)
-    
+
     def getsupportedmaps( self, botrunnername, sharedsecret ):
         return maphelper.getsupportedmaps(botrunnername)
-    
+
     def getsupportedais( self, botrunnername, sharedsecret ):
-     return aihelper.getsupportedais(botrunnername)
-    
+        return aihelper.getsupportedais(botrunnername)
+
     def getsupportedmodsides(self, botrunnername, sharedsecret):
         return modhelper.getsupportedmodsides(botrunner)
-    
+
     #  resultstring is: 'ai0won', 'draw', 'crashed', 'hung', ...
     # returns (True,message) or (False,message)
     def submitresult( self, botrunnername, sharedsecret, matchrequestid, resultstring, uploaddatadict ):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
-     
+
       # check if this matchrequest_id was actually assigned to this engine
       # otherwise ditch the result
         if not matchrequestcontroller.matchrequestvalidforthisserver( botrunnername, matchrequestid ):
             return (False, "invalid matchrequestid" )
-     
+
       # store the result, and remove from queue
-      # if the replay upload fails, well, that's a shame, but it's not the end 
+      # if the replay upload fails, well, that's a shame, but it's not the end
       # of the world...
       # or we could get the botrunner to retry several times, to be decided.
         matchrequestcontroller.storeresult( botrunnername, matchrequestid, resultstring )
-        
+
         if uploaddatadict.has_key('replay'):
           # now to handle uploading the replay...
             replaycontentsraw = uploaddatadict['replay'].data
@@ -130,22 +130,22 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
                 replayfilehandle.close()
                 # really, we should validate that this match was assigned to this server first...
                 # also, ideally, if there is no upload, we should store that info in the database somewheree
-        
+
         if uploaddatadict.has_key('infolog'):
             contentsraw = uploaddatadict['infolog'].data
             if contentsraw != None and contentsraw != '':
                 filehandle = open( replaycontroller.getInfologPath(matchrequestid), "wb" )
                 filehandle.write( contentsraw )
                 filehandle.close()
-        
+
         return (True,'' )
-    
+
     # request info on an ai that can be downloaded that matches a match currently available in the queue
     # the idea is that the botrunner will:
     # - cycle through all hosts looking for a match
     # - if it finds one -> great
     # - otherwise it checks with each host if there is an ai that it would be useful to download
-    # - note that where there are multiple sessions for a botrunner, only one session will be 
+    # - note that where there are multiple sessions for a botrunner, only one session will be
     #   assigned a specific ai to download, ie they can download different ones in paralle
     #   but not the same one.  That's for configurations like aegis' where all AIs are in the same
     #   physical directory across all instances
@@ -156,12 +156,12 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
     def getdownloadrequest( self, botrunnername, sharedsecret, sessionid ):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
-    
+
         botrunner = botrunnerhelper.getBotRunner( botrunnername )
-    
-        # first we'll look for an ai to download (one in the queue that this 
+
+        # first we'll look for an ai to download (one in the queue that this
         # botrunner doesn't have), then a map, then a mod
-    
+
         # update: ignore sessions for now, since even aegis' cluster doesn't use them ;-)
         aisbeingdownloaded = [] # list of ais being downloaded by this botrunner
         # we'll make sure that each botrunner can only download one of each ai name/version pair
@@ -171,7 +171,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
             if session.downloadingai != None:
                 if session.botrunner_session_id != sessionid:  # no point in including download for this specific session, clearly this session aborted it, or it failed, or .. .soemthing
                     aisbeingdownloaded.append( session.downloadingai )
-    
+
         requests = Session.query(MatchRequest).\
            filter(MatchRequest.matchresult == None ).\
            filter(MatchRequest.matchrequestinprogress == None ).\
@@ -195,9 +195,9 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
                     modok = True
             for ai in botrunner.supportedais:
                 if ai.ai_name == request.ai0.ai_name and ai.ai_version == request.ai0.ai_version:
-                    ai0ok = True 
+                    ai0ok = True
                 if ai.ai_name == request.ai1.ai_name and ai.ai_version == request.ai1.ai_version:
-                    ai1ok = True 
+                    ai1ok = True
             if not mapok:
                 if request.map not in mapstodownload and request.map.map_url != None:
                     mapstodownload.append(request.map)
@@ -215,64 +215,64 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
             aitodownload = aistodownload[ random.randint(0, len(aistodownload) - 1 ) ]
             session = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
             session.downloadingai = aitodownload
-            dicttoreturn = {'ai_name': aitodownload.ai_name, 
+            dicttoreturn = {'ai_name': aitodownload.ai_name,
                            'ai_version': aitodownload.ai_version,
                            'ai_downloadurl': aitodownload.ai_downloadurl,
                            'ai_needscompiling': aitodownload.ai_needscompiling }
             Session.commit()
             return [True,[ dicttoreturn ] ]
-    
+
         # next up: try a map
         if len(mapstodownload) != 0:
             maptodownload = mapstodownload[ random.randint(0, len(mapstodownload) - 1 ) ]
-            dicttoreturn = {'map_name': maptodownload.map_name, 
+            dicttoreturn = {'map_name': maptodownload.map_name,
                            'map_url': maptodownload.map_url }
             return [True,[ dicttoreturn ] ]
-    
+
         # next up: try a mod
         if len(modstodownload) != 0:
             modtodownload = modstodownload[ random.randint(0, len(modstodownload) - 1 ) ]
-            dicttoreturn = {'mod_name': modtodownload.mod_name, 
+            dicttoreturn = {'mod_name': modtodownload.mod_name,
                            'mod_url': modtodownload.mod_url }
             return [True,[ dicttoreturn ] ]
-    
+
         # nothing to download...
         return [True,[]]  #cannot return None in python xmlrpclib 2.4
-    
-     # signal that downloading is finished
-     # this should not be called until the ai has been registered, otherwise another session
-     # might start downloading it...
+
+        # signal that downloading is finished
+        # this should not be called until the ai has been registered, otherwise another session
+        # might start downloading it...
     def finisheddownloadingai( self, botrunnername, sharedsecret, sessionid, ai_name, ai_version ):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
-        
+
         # get rid of any downloading ai marker for this session
         session = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
         session.downloadingai = None
         Session.commit()
         return [True, '']
-    
+
     # returns (True, request) (True, None) or (False, errormessage)
     def getrequest( self, botrunnername, sharedsecret, sessionid ):
         if not botrunnerhelper.validatesharedsecret(botrunnername, sharedsecret):
             return (False, "Not authenticated")
-       
-        
+
+
         # get rid of any downloading ai marker for this session
         session = botrunnerhelper.getBotRunnerSession( botrunnername, sessionid )
         session.downloadingai = None
         Session.flush()
-        
+
         requestitem = matchrequestcontroller.getcompatibleitemfromqueue(botrunnername, sessionid)
         if requestitem == None:
             return ( True, [] ) # can't return None in python 2.4
         else:
             Session.commit()
-        
+
         # convert to dict, otherwise can't marshall :-/
         # is there a better way to do this?
         requestitemdict = {}
-        
+
         requestitemdict['matchrequest_id'] = requestitem.matchrequest_id
         requestitemdict['ai0_name'] = requestitem.ai0.ai_name
         requestitemdict['ai0_version'] = requestitem.ai0.ai_version
@@ -286,5 +286,5 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         requestitemdict['softtimeout'] = requestitem.softtimeout
         requestitemdict['hardtimeout'] = requestitem.hardtimeout
         requestitemdict['gameendstring'] = confighelper.getValue('gameendstring')
-        
+
         return (True, [ requestitemdict ])

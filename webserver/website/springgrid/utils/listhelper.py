@@ -21,11 +21,10 @@
 
 # give it for example [('a','b'),('c','d')] and it will return:
 # ['a','c'], taking the first item in each tuple
-# used for example for turning the results of an sqlalchemy query to a single 
+# used for example for turning the results of an sqlalchemy query to a single
 # column into a bog-standard list
 def tuplelisttolist( tuplelist ):
-   resultlist = []
-   for tuple in tuplelist:
-      resultlist.append(tuple[0])
-   return resultlist
-
+    resultlist = []
+    for tuple in tuplelist:
+        resultlist.append(tuple[0])
+    return resultlist

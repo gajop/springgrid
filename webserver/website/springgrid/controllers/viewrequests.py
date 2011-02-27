@@ -38,27 +38,26 @@ botrunnerhelper.purgeExpiredSessions()
 sqlalchemysetup.session.commit()
 
 def go():
-   resultsPerPage = 100
-   page = formhelper.getValue('page')
-   if page == None:
-      page = 1
-   else:
-      page = int(page)
-   requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None )
-   numPages = int(math.ceil(requests.count() / resultsPerPage))
-   requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+    resultsPerPage = 100
+    page = formhelper.getValue('page')
+    if page == None:
+        page = 1
+    else:
+        page = int(page)
+    requests = sqlalchemysetup.session.query(MatchRequest).filter(MatchRequest.matchresult == None )
+    numPages = int(math.ceil(requests.count() / resultsPerPage))
+    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
 
-   datetimeassignedbyrequest = {}
-   for request in requests:
-      if request.matchrequestinprogress != None:
-         datetimeassignedbyrequest[request] = str( dates.dateStringToDateTime( request.matchrequestinprogress.datetimeassigned ) )
+    datetimeassignedbyrequest = {}
+    for request in requests:
+        if request.matchrequestinprogress != None:
+            datetimeassignedbyrequest[request] = str( dates.dateStringToDateTime( request.matchrequestinprogress.datetimeassigned ) )
 
-   jinjahelper.rendertemplate('viewrequests.html', requests = requests, datetimeassignedbyrequest = datetimeassignedbyrequest, numPages = numPages, page = page )
+    jinjahelper.rendertemplate('viewrequests.html', requests = requests, datetimeassignedbyrequest = datetimeassignedbyrequest, numPages = numPages, page = page )
 
 try:
-   go()
+    go()
 except:
-   jinjahelper.message("Something bad happened. " + str(sys.exc_value))
+    jinjahelper.message("Something bad happened. " + str(sys.exc_value))
 
 sqlalchemysetup.close()
-

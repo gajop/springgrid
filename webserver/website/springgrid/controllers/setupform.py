@@ -34,4 +34,3 @@ print "<p>Please open a shell to your webserver machine, change into the website
 print "<p> ... which should guide you through the next steps.</p>"
 print "</body>"
 print "</html>"
-

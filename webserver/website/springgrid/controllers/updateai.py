@@ -33,33 +33,31 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-   if not roles.isInRole(roles.aiadmin):
-      jinjahelper.message( "You must be logged in as an aiadmin" )
-   else:
-      ainame = formhelper.getValue("ainame")
-      aiversion = formhelper.getValue("aiversion")
-      downloadurl = formhelper.getValue("downloadurl")
-      needscompiling = True
-      if formhelper.getValue("needscompiling") == "no":
-         needscompiling = False
+    if not roles.isInRole(roles.aiadmin):
+        jinjahelper.message( "You must be logged in as an aiadmin" )
+    else:
+        ainame = formhelper.getValue("ainame")
+        aiversion = formhelper.getValue("aiversion")
+        downloadurl = formhelper.getValue("downloadurl")
+        needscompiling = True
+        if formhelper.getValue("needscompiling") == "no":
+            needscompiling = False
 
-      if aiversion != None and ainame != None and ainame != "" and aiversion != "":
-         if downloadurl == None:
-            downloadurl = ''
-         ai = aihelper.getAI( ainame, aiversion )
-         if ai == None:
-            jinjahelper.message( "AI not found" )
-            return
+        if aiversion != None and ainame != None and ainame != "" and aiversion != "":
+            if downloadurl == None:
+                downloadurl = ''
+            ai = aihelper.getAI( ainame, aiversion )
+            if ai == None:
+                jinjahelper.message( "AI not found" )
+                return
 
-         ai.ai_downloadurl = downloadurl
-         ai.ai_needscompiling = needscompiling
-         sqlalchemysetup.session.commit()
-         jinjahelper.message( "Updated ok" )
-      else:
-         jinjahelper.message( "Please fill in the fields and try again" )
+            ai.ai_downloadurl = downloadurl
+            ai.ai_needscompiling = needscompiling
+            sqlalchemysetup.session.commit()
+            jinjahelper.message( "Updated ok" )
+        else:
+            jinjahelper.message( "Please fill in the fields and try again" )
 
 go()
 
 sqlalchemysetup.close()
-
-

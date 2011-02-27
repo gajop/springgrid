@@ -25,54 +25,53 @@ import botrunnerhelper
 
 # returns True if exists, or added ok, otherwise False
 def addmapifdoesntexist(mapname, maparchivechecksum):
-   map = Session.query(Map).filter(Map.map_name == mapname ).first()
-   if map == None:
-      try:
-         map = Map( mapname )
-         map.map_archivechecksum = maparchivechecksum
-         Session.add(map)
-         Session.commit()
-      except:
-         return(False, "error adding to db: " + str( sys.exc_value ) )
+    map = Session.query(Map).filter(Map.map_name == mapname ).first()
+    if map == None:
+        try:
+            map = Map( mapname )
+            map.map_archivechecksum = maparchivechecksum
+            Session.add(map)
+            Session.commit()
+        except:
+            return(False, "error adding to db: " + str( sys.exc_value ) )
 
-      return (True,'')
+        return (True,'')
 
-   if map.map_archivechecksum == None:
-      map.map_archivechecksum = maparchivechecksum
-      try:
-         Session.commit()
-         return (True,'')          
-      except:
-         return(False, "error updating db: " + str( sys.exc_value ) )
- 
-   if map.map_archivechecksum != maparchivechecksum:
-      return (False,"map archive checksum doesn't match the one already on the website.")
+    if map.map_archivechecksum == None:
+        map.map_archivechecksum = maparchivechecksum
+        try:
+            Session.commit()
+            return (True,'')
+        except:
+            return(False, "error updating db: " + str( sys.exc_value ) )
 
-   return (True,'')
+    if map.map_archivechecksum != maparchivechecksum:
+        return (False,"map archive checksum doesn't match the one already on the website.")
+
+    return (True,'')
 
 def getMap(mapname):
-   return Session.query(Map).filter(Map.map_name == mapname).first()
+    return Session.query(Map).filter(Map.map_name == mapname).first()
 
 # return list of supported mapnames
 def getsupportedmaps(botrunnername):
-   botrunner = botrunnerhelper.getBotRunner(botrunnername)
-   if botrunner == None:
-      return []
-   if botrunner.supportedmaps == None:
-      return []
-   supportedmapnames = []
-   for map in botrunner.supportedmaps:
-      supportedmapnames.append(map.map_name)
-   return supportedmapnames
+    botrunner = botrunnerhelper.getBotRunner(botrunnername)
+    if botrunner == None:
+        return []
+    if botrunner.supportedmaps == None:
+        return []
+    supportedmapnames = []
+    for map in botrunner.supportedmaps:
+        supportedmapnames.append(map.map_name)
+    return supportedmapnames
 
 def setbotrunnersupportsthismap(botrunnername, mapname):
-   # Now, register the map as supported map
-   botrunner = botrunnerhelper.getBotRunner(botrunnername)
-   for map in botrunner.supportedmaps:
-      if map.map_name == mapname:
-       return (True,'')
-   map = getMap(mapname)
-   botrunner.supportedmaps.append(map)
-   Session.commit()
-   return (True,'')
-
+    # Now, register the map as supported map
+    botrunner = botrunnerhelper.getBotRunner(botrunnername)
+    for map in botrunner.supportedmaps:
+        if map.map_name == mapname:
+            return (True,'')
+    map = getMap(mapname)
+    botrunner.supportedmaps.append(map)
+    Session.commit()
+    return (True,'')

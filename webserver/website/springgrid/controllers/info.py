@@ -21,7 +21,7 @@ class InfoController(BaseController):
     def config(self):
         c.config = confighelper.getconfigdict()
         return render('viewconfig.html')
-    
+
     def diagnostics(self):
         # check replays directory is writable
         c.canWrite = False
@@ -30,8 +30,8 @@ class InfoController(BaseController):
             try:
                 os.makedirs("replays" )
             except:
-                c.dirExists = False              
-            
+                c.dirExists = False
+
         if c.dirExists:
             #testfilepath = scriptdir + "/replays/~test"
             if os.access('replays/', os.W_OK):

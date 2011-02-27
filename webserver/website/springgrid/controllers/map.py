@@ -21,7 +21,7 @@ class MapForm(formencode.Schema):
     mapArchiveChecksum = PlainText(not_empty=True)
 
 class MapController(BaseController):
-    
+
     @validate(schema=MapForm(), form='list', post_only=True, on_get=False)
     def add(self):
         if not roles.isInRole(roles.mapadmin):
@@ -48,11 +48,11 @@ class MapController(BaseController):
             return render('genericmessage.html')
 
         showform = roles.isInRole(roles.mapadmin)
-           
+
         c.map = map
         c.showForm = showform
         return render('viewmap.html')
-    
+
     @validate(schema=MapForm(), form='view', post_only=True, on_get=False)
     def update(self, id):
         if not roles.isInRole(roles.mapadmin):
@@ -62,7 +62,7 @@ class MapController(BaseController):
         mapName = self.form_result['mapName']
         mapArchiveChecksum = self.form_result["mapArchiveChecksum"]
         mapUrl = self.form_result["mapUrl"]
-    
+
         map = Session.query(Map).filter(Map.map_id == id).first()
         if map == None:
             c.message = "No such map"
@@ -72,16 +72,16 @@ class MapController(BaseController):
         map.map_url = mapUrl
         map.map_archivechecksum = mapArchiveChecksum
         Session.commit()
-        
+
         c.message = "Updated ok"
         return render('genericmessage.html')
-    
-    
+
+
     def remove(self, id):
         if not roles.isInRole(roles.mapadmin):
             c.message = "You must be logged in as a mapadmin"
             return render('genericmessage.html')
-        
+
         map = Session.query(Map).filter(Map.map_id == id).first()
         if map == None:
             c.message = "No such map"
@@ -89,15 +89,14 @@ class MapController(BaseController):
 
         Session.delete(map)
         Session.commit()
-        
+
         c.message = "Deleted ok"
         return render('genericmessage.html')
 
     def list(self):
         maps = Session.query(Map)
         showForm = roles.isInRole(roles.mapadmin)
-            
+
         c.showForm = showForm
         c.maps = maps
         return render('viewmaps.html')
-    

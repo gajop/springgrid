@@ -30,70 +30,69 @@ from springgrid.utils import dates
 botrunnername = ""
 
 def botrunnerauthorized():
-   global botrunnername 
+    global botrunnername
 
-   botrunnername = formhelper.getValue("botrunnername")
-   sharedsecret = formhelper.getValue("sharedsecret")
-   return validatesharedsecret( botrunnername, sharedsecret )
+    botrunnername = formhelper.getValue("botrunnername")
+    sharedsecret = formhelper.getValue("sharedsecret")
+    return validatesharedsecret( botrunnername, sharedsecret )
 
 def getBotRunner(botrunnername ):
-   return Session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername).first()
+    return Session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername).first()
 
 def getBotRunnerSession(botrunnername, botrunner_session_id ):
-   botrunner = getBotRunner( botrunnername )
-   if botrunner == None:
-      return None
-   for session in botrunner.sessions:
-      if session.botrunner_session_id == botrunner_session_id:
-         return session
-   return None
+    botrunner = getBotRunner( botrunnername )
+    if botrunner == None:
+        return None
+    for session in botrunner.sessions:
+        if session.botrunner_session_id == botrunner_session_id:
+            return session
+    return None
 
 def expireBotRunnerSession( botrunner, session ):
-   # first, remove any matchrequests in progress attached to this session
-   requestsinprogress = Session.query(MatchRequest).filter(MatchRequest.matchresult == None).filter(MatchRequest.matchrequestinprogress != None)
-   for request in requestsinprogress:
-      if request.matchrequestinprogress.botrunner == botrunner and request.matchrequestinprogress.botrunnersession == session:
-         Session.delete( request.matchrequestinprogress )
-   Session.delete( session )
+    # first, remove any matchrequests in progress attached to this session
+    requestsinprogress = Session.query(MatchRequest).filter(MatchRequest.matchresult == None).filter(MatchRequest.matchrequestinprogress != None)
+    for request in requestsinprogress:
+        if request.matchrequestinprogress.botrunner == botrunner and request.matchrequestinprogress.botrunnersession == session:
+            Session.delete( request.matchrequestinprogress )
+    Session.delete( session )
 
-   # then, delete session
-   Session.delete( session )
+    # then, delete session
+    Session.delete( session )
 
 def purgeExpiredSessions():
-   botrunners = Session.query(BotRunner)
-   for botrunner in botrunners:
-      for session in botrunner.sessions:
-         lastpingtime =  session.lastpingtime
-         if lastpingtime != None:
-            lastpingtimedate = dates.dateStringToDateTime( lastpingtime )
-            secondssincelastping = dates.timedifftototalseconds( datetime.datetime.now() - lastpingtimedate )
-            if secondssincelastping > confighelper.getValue('expiresessionminutes') * 60:
-               expireBotRunnerSession( botrunner, session )
+    botrunners = Session.query(BotRunner)
+    for botrunner in botrunners:
+        for session in botrunner.sessions:
+            lastpingtime =  session.lastpingtime
+            if lastpingtime != None:
+                lastpingtimedate = dates.dateStringToDateTime( lastpingtime )
+                secondssincelastping = dates.timedifftototalseconds( datetime.datetime.now() - lastpingtimedate )
+                if secondssincelastping > confighelper.getValue('expiresessionminutes') * 60:
+                    expireBotRunnerSession( botrunner, session )
 
 def validatesharedsecret(lbotrunnername, sharedsecret):
-   global botrunnername
+    global botrunnername
 
-   botrunner = getBotRunner( lbotrunnername )
+    botrunner = getBotRunner( lbotrunnername )
 
-   if botrunner == None: 
-      # Never seen this botrunner before, just add it
-      botrunner = BotRunner( lbotrunnername, sharedsecret )
-      Session.add(botrunner)
-      Session.commit()
+    if botrunner == None:
+        # Never seen this botrunner before, just add it
+        botrunner = BotRunner( lbotrunnername, sharedsecret )
+        Session.add(botrunner)
+        Session.commit()
 
-      # if this fails, return true anyway
-      return True
-   else:
-      if botrunner.botrunner_sharedsecret == sharedsecret:
-         botrunnername = lbotrunnername
-         return True
-      return False
+        # if this fails, return true anyway
+        return True
+    else:
+        if botrunner.botrunner_sharedsecret == sharedsecret:
+            botrunnername = lbotrunnername
+            return True
+        return False
 
 def getOwnerUsername(botrunnername):
-   botrunner = getBotRunner( botrunnername )
-   if botrunner == None:
-      return None
-   if botrunner.owneraccount == None:
-      return None
-   return botrunner.owneraccount.username
-
+    botrunner = getBotRunner( botrunnername )
+    if botrunner == None:
+        return None
+    if botrunner.owneraccount == None:
+        return None
+    return botrunner.owneraccount.username

@@ -1,6 +1,6 @@
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 2 of the License, or
@@ -28,18 +28,17 @@ scriptdir = os.path.dirname( os.path.realpath( __file__ ) )
 
 # hacked in for now, we can refactor to different module name or something later
 def getInfologPath( matchrequestid ):
-   if not os.path.isdir(scriptdir + "/../replays"):
-      os.mkdir( scriptdir + "/../replays" )
-   return scriptdir + "/../replays/infolog_" + str( matchrequestid ) + ".tar.bz2"
+    if not os.path.isdir(scriptdir + "/../replays"):
+        os.mkdir( scriptdir + "/../replays" )
+    return scriptdir + "/../replays/infolog_" + str( matchrequestid ) + ".tar.bz2"
 
 def getInfologWebRelativePath( matchrequestid ):
-   return "replays/infolog_" + str( matchrequestid ) + ".tar.bz2"
+    return "replays/infolog_" + str( matchrequestid ) + ".tar.bz2"
 
 def getReplayPath( matchrequestid ):
-   if not os.path.isdir(scriptdir + "/../replays"):
-      os.mkdir( scriptdir + "/../replays" )
-   return scriptdir + "/../replays/replay_" + str( matchrequestid ) + ".tar.bz2"
+    if not os.path.isdir(scriptdir + "/../replays"):
+        os.mkdir( scriptdir + "/../replays" )
+    return scriptdir + "/../replays/replay_" + str( matchrequestid ) + ".tar.bz2"
 
 def getReplayWebRelativePath( matchrequestid ):
-   return "replays/replay_" + str( matchrequestid ) + ".tar.bz2"
-
+    return "replays/replay_" + str( matchrequestid ) + ".tar.bz2"

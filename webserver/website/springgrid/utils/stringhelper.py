@@ -26,46 +26,44 @@ import random
 
 # eats first n chars of string, and returns as int
 def eatAsInt( targetstring, n ):
-   intstring = targetstring[0:n]
-   #print intstring
-   remainingstring = targetstring[n:]
-   #print remainingstring
-   return ( int(intstring), remainingstring )
+    intstring = targetstring[0:n]
+    #print intstring
+    remainingstring = targetstring[n:]
+    #print remainingstring
+    return ( int(intstring), remainingstring )
 
 def getRandomAlphaNumericString(length):
-   randomstring = ''
-   alphanumericchars = string.letters + string.digits
-   while len(randomstring) < length:
-      randomstring = randomstring + alphanumericchars[random.randrange(0,len(alphanumericchars))]
-   return randomstring
+    randomstring = ''
+    alphanumericchars = string.letters + string.digits
+    while len(randomstring) < length:
+        randomstring = randomstring + alphanumericchars[random.randrange(0,len(alphanumericchars))]
+    return randomstring
 
 def getRandomPrintableString(length):
-   randomstring = ''
-   while len(randomstring) < length:
-      randomstring = randomstring + string.printable[random.randrange(0,len(string.printable))]
-   return randomstring
+    randomstring = ''
+    while len(randomstring) < length:
+        randomstring = randomstring + string.printable[random.randrange(0,len(string.printable))]
+    return randomstring
 
 def getRandomString(length):
-   if length == 0:
-      return ''
-   return string.letters[random.randrange(0,52)] + getRandomString( length - 1 )
+    if length == 0:
+        return ''
+    return string.letters[random.randrange(0,52)] + getRandomString( length - 1 )
 
 # self test function
 def test():
-   startstring = "200904"
-   (intvalue, startstring) = eatAsInt( startstring, 4 )
-   print intvalue
-   if intvalue != 2009:
-      print "FAIL"
-      return
-   (intvalue, startstring) = eatAsInt( startstring, 2 )
-   print intvalue
-   if intvalue != 4:
-      print "FAIL"
-      return
-   print 'PASS'
+    startstring = "200904"
+    (intvalue, startstring) = eatAsInt( startstring, 4 )
+    print intvalue
+    if intvalue != 2009:
+        print "FAIL"
+        return
+    (intvalue, startstring) = eatAsInt( startstring, 2 )
+    print intvalue
+    if intvalue != 4:
+        print "FAIL"
+        return
+    print 'PASS'
 
 if __name__ == '__main__':
-   test()
-
-
+    test()
