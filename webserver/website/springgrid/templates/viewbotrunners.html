@@ -25,7 +25,15 @@ http://www.opensource.org/licenses/gpl-license.php
 {% block content %}
 <h3>SpringGrid - Bot Runner List</h3>
 <table border='1' padding='3'>
-<tr class='tablehead'><td>Bot Runner Name</td><td>Bot Runner Owner Name:</td><td>Shared secret (only visible for your own botrunners)</td><td>Options</td><td>Instance sessionid</td><td>Instance last ping</td><td>Instance last status</td></tr>
+    <tr class='tablehead'>
+        <td>Bot Runner Name</td>
+        <td>Bot Runner Owner Name:</td>
+        <td>Shared secret (only visible for your own botrunners)</td>
+        <td>Options</td>
+        <td>Instance sessionid</td>
+        <td>Instance last ping</td>
+        <td>Instance last status</td>
+    </tr>
 
 {% for botrunner in c.botrunners %}
 
@@ -53,7 +61,7 @@ http://www.opensource.org/licenses/gpl-license.php
 
 </table>
 
-{% if isloggedin %}
+{% if 'user' in session %}
 
    <p />
    <hr />
@@ -61,12 +69,21 @@ http://www.opensource.org/licenses/gpl-license.php
 
    <h4>Register new bot runner:</h4>
    You will automatically be marked as 'owner' of this botrunner<p />
-   <form action='addbotrunner.py' method='post'>
-   <table border='1' padding='3'>
-   <tr><td>Bot runner name</td><td><input name='botrunnername'</td></tr>
-   <tr><td>Bot runner shared secret</td><td><input name='sharedsecret'</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
+   <form action='{{ h.url(controller='botrunner', action='add') }}' method='post'>
+       <table border='1' padding='3'>
+           <tr>
+               <td>Bot runner name</td>
+               <td><input name='botrunnerName'/></td>
+           </tr>
+           <tr>
+               <td>Bot runner shared secret</td>
+               <td><input name='sharedSecret'/></td>
+           </tr>
+           <tr>
+               <td></td>
+               <td><input type='submit' value='Add'/>
+           </td></tr>
+       </table>
    </form>
 {% endif %}
 

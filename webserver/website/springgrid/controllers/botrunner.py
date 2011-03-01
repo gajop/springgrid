@@ -1,8 +1,11 @@
 import logging
 import datetime
+import formencode
+from formencode.validators import PlainText, Int, URL, String
 
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
+from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.model import botrunnerhelper, loginhelper, confighelper, roles
@@ -12,7 +15,26 @@ from springgrid.utils import dates
 log = logging.getLogger(__name__)
 
 
+class BotrunnerForm(formencode.Schema):
+    allow_extra_fields = True
+    filter_extra_fields = True
+    botrunnerName = String(not_empty=True)
+    sharedSecret = PlainText(not_empty=True)
+
+
 class BotrunnerController(BaseController):
+
+    @validate(schema=BotrunnerForm(), form='list', post_only=True, on_get=False)
+    def add(self):
+        botrunnerName = self.form_result["botrunnerName"]
+        sharedSecret = self.form_result["sharedSecret"]
+
+        botrunner = BotRunner(botrunnerName, sharedSecret)
+        Session.add(botrunner)
+        Session.commit()
+
+        c.message = "Added ok"
+        return render('genericmessage.html')
 
     def view(self, id):
         botrunner = Session.query(BotRunner).filter(
