@@ -3,7 +3,7 @@
 # Copyright Hugh Perkins 2009
 # hughperkins@gmail.com http://manageddreams.com
 #
-# This program is free software; you can redistribute it and/or modify it
+# This program is free software; you can redistribute it and/or aiify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
@@ -21,10 +21,8 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from __future__ import division
 import cgitb; cgitb.enable()
-import math
-import sys
+import cgi
 
 from utils import *
 from core import *
@@ -34,30 +32,19 @@ sqlalchemysetup.setup()
 
 loginhelper.processCookie()
 
-def go():
-    leaguenames = listhelper.tuplelisttolist( sqlalchemysetup.session.query( League.league_name ) )
-    if len(leaguenames) == 0:
-        jinjahelper.message("Please create a league first.")
-        return
-
+if loginhelper.gusername == '':
+    jinjahelper.message( "You must login first" )
+else:
     leaguename = formhelper.getValue('leaguename')
-    if leaguename == None:
-        leaguename = leaguenames[0]
 
-    league = leaguehelper.getLeague(leaguename)
-    resultsPerPage = 100
-    page = formhelper.getValue('page')
-    if page == None:
-        page = 1
+    if leaguename != None and leaguename != '':
+        league = leaguehelper.getLeague(leaguename)
+        for leagueoption in league.options:
+            sqlalchemysetup.session.delete( leagueoption )
+        sqlalchemysetup.session.delete( league )
+        sqlalchemysetup.session.commit()
+        jinjahelper.message( "Deleted ok" )
     else:
-        page = int(page)
+        jinjahelper.message( "Please fill in the fields and try again" )
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
-
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
-
-go()
 sqlalchemysetup.close()

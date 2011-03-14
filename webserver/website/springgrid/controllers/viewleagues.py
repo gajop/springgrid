@@ -21,10 +21,7 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from __future__ import division
 import cgitb; cgitb.enable()
-import math
-import sys
 
 from utils import *
 from core import *
@@ -34,30 +31,30 @@ sqlalchemysetup.setup()
 
 loginhelper.processCookie()
 
-def go():
-    leaguenames = listhelper.tuplelisttolist( sqlalchemysetup.session.query( League.league_name ) )
-    if len(leaguenames) == 0:
-        jinjahelper.message("Please create a league first.")
-        return
+leagues = sqlalchemysetup.session.query(League)
 
-    leaguename = formhelper.getValue('leaguename')
-    if leaguename == None:
-        leaguename = leaguenames[0]
+showform = loginhelper.gusername != ''
 
-    league = leaguehelper.getLeague(leaguename)
-    resultsPerPage = 100
-    page = formhelper.getValue('page')
-    if page == None:
-        page = 1
-    else:
-        page = int(page)
+maps = gridclienthelper.getproxy().getmaps()
+mods = gridclienthelper.getproxy().getmods()
+sides = gridclienthelper.getproxy().getmodsides()
+ais = gridclienthelper.getproxy().getais()
+modsides = {}
+for i, mod in enumerate(mods):
+    modsides[mod] = (i, [])
+for side in sides:
+    modsides[side["mod_name"]][1].append((side["mod_side_name"], side["mod_side_id"]))
+sides = modsides
+speeds = [20] #default
+speeds.extend(range(1, 10))
+speeds.extend(range(10, 101, 5))
+timeouts = speeds
+tmpais = {}
+for ai in ais:
+    tmpais[ai["ai_id"]] = ai["ai_name"] + " " + ai["ai_version"]
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+sidemodes = { "allsame" : "All same", "xvsy" : "X vs Y" }
 
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
+jinjahelper.rendertemplate('viewleagues.html', leagues = leagues, showform = showform, maps = maps, mods = mods, speeds = speeds, timeouts = timeouts, sidemodes = sidemodes, sides = sides, ais = tmpais)
 
-go()
 sqlalchemysetup.close()

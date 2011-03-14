@@ -28,7 +28,7 @@ class ChangePasswordController(BaseController):
 
     @validate(schema=ChangePasswordForm(), form='form', post_only=True, on_get=False)
     def submit(self):
-        if 'user' not in session: 
+        if 'user' not in session:
             c.message = "Please log in first."
             return render('genericmessage.html')
 

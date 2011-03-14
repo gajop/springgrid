@@ -21,10 +21,11 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from __future__ import division
+# primarily for debugging, shows the count of the matches in the queue , or finished
+# for each pair of ais
+
 import cgitb; cgitb.enable()
-import math
-import sys
+import cgi
 
 from utils import *
 from core import *
@@ -35,29 +36,30 @@ sqlalchemysetup.setup()
 loginhelper.processCookie()
 
 def go():
-    leaguenames = listhelper.tuplelisttolist( sqlalchemysetup.session.query( League.league_name ) )
-    if len(leaguenames) == 0:
-        jinjahelper.message("Please create a league first.")
-        return
-
     leaguename = formhelper.getValue('leaguename')
     if leaguename == None:
-        leaguename = leaguenames[0]
+        jinjahelper.message("Please select a league and try again")
+        return
+
+    if not loginhelper.isLoggedOn():   # this is pretty feeble, should make this a role...
+        jinjahelper.message("Please log on first.")
+        return
 
     league = leaguehelper.getLeague(leaguename)
-    resultsPerPage = 100
-    page = formhelper.getValue('page')
-    if page == None:
-        page = 1
-    else:
-        page = int(page)
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+    matches = sqlalchemysetup.session.query(LeagueMatch).filter(LeagueMatch.league_id == league.league_id)
+    matchids = [match.match_id for match in matches]
+    [success, matchrequestqueue] = gridclienthelper.getproxy().getmatchrequestqueuev1()
+    [success, matchresults] = gridclienthelper.getproxy().getmatchresultsv1()
+    matchrequestqueue = [i for i in matchrequestqueue if i['matchrequest_id'] in matchids]
+    matchresults = [i in matches for i in matchresults if i['matchrequest_id'] in matchids]
 
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
+    ais = leaguehelper.getleagueais( league )
+
+    matchscheduler.schedulematchesforleague( league, matchrequestqueue, matchresults )
+
+    jinjahelper.message("Matches scheduled")
 
 go()
+
 sqlalchemysetup.close()

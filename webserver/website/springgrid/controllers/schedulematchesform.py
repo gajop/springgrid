@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-# Copyright Hugh Perkins 2009
-# hughperkins@gmail.com http://manageddreams.com
+# Copyright Gajo Petrovic 2010
+# gajop@uns.ac.rs
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -21,10 +21,9 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from __future__ import division
+
 import cgitb; cgitb.enable()
-import math
-import sys
+import os
 
 from utils import *
 from core import *
@@ -45,19 +44,31 @@ def go():
         leaguename = leaguenames[0]
 
     league = leaguehelper.getLeague(leaguename)
-    resultsPerPage = 100
-    page = formhelper.getValue('page')
-    if page == None:
-        page = 1
-    else:
-        page = int(page)
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+    gridais = gridclienthelper.getproxy().getais()
 
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
+    for gridai in gridais:
+        aihelper.addaiifdoesntexist( gridai['ai_name'], gridai['ai_version'], gridai['ai_id'] )
+    sqlalchemysetup.session.flush()
+
+    [success, mapok ] = gridclienthelper.getproxy().mapexists( league.map_name )
+    [success, modok ] = gridclienthelper.getproxy().modexists( league.mod_name )
+
+    showform = loginhelper.isLoggedOn()
+
+    numberscheduled = sqlalchemysetup.session.query(LeagueMatch).filter(LeagueMatch.league_id == league.league_id).count()
+    nummatchesperaipair = league.nummatchesperaipair
+    numais = len(leaguehelper.getleagueais(league))
+    totalmatches = numais * (numais - 1) / 2
+    if league.playagainstself:
+        totalmatches += numais
+    totalmatches *= nummatchesperaipair
+    if league.sidemodes == "xvsy":
+        totalmatches *= 2
+
+
+    jinjahelper.rendertemplate( 'schedulematches.html', leaguenames = leaguenames, league = league,  mapok = mapok, modok = modok, showform = showform, totalmatches = totalmatches, numberscheduled = numberscheduled )
 
 go()
+
 sqlalchemysetup.close()

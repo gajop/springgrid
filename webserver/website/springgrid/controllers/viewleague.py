@@ -21,10 +21,9 @@
 # http://www.opensource.org/licenses/gpl-license.php
 #
 
-from __future__ import division
 import cgitb; cgitb.enable()
-import math
-import sys
+
+from sqlalchemy.orm import join
 
 from utils import *
 from core import *
@@ -34,30 +33,20 @@ sqlalchemysetup.setup()
 
 loginhelper.processCookie()
 
-def go():
-    leaguenames = listhelper.tuplelisttolist( sqlalchemysetup.session.query( League.league_name ) )
-    if len(leaguenames) == 0:
-        jinjahelper.message("Please create a league first.")
-        return
+leaguename = formhelper.getValue('leaguename')
 
-    leaguename = formhelper.getValue('leaguename')
-    if leaguename == None:
-        leaguename = leaguenames[0]
+league = leaguehelper.getLeague( leaguename )
+compatibleoptions = []
+for option in league.options:
+    compatibleoptions.append( option.option_name )
 
-    league = leaguehelper.getLeague(leaguename)
-    resultsPerPage = 100
-    page = formhelper.getValue('page')
-    if page == None:
-        page = 1
-    else:
-        page = int(page)
+showform = roles.isInRole(roles.leagueadmin)
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+potentialoptions = listhelper.tuplelisttolist(
+   sqlalchemysetup.session.query(AIOption.option_name ) )
+for assignedoption in compatibleoptions:
+    potentialoptions.remove(assignedoption)
 
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
+jinjahelper.rendertemplate('viewleague.html', leaguename = leaguename, compatibleoptions = compatibleoptions, showform = showform, potentialoptions = potentialoptions)
 
-go()
 sqlalchemysetup.close()

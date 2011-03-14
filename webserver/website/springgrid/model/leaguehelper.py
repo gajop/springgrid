@@ -22,6 +22,7 @@
 #
 
 import sqlalchemysetup
+import gridclienthelper
 from tableclasses import *
 
 def getLeague( league_name ):
@@ -29,3 +30,29 @@ def getLeague( league_name ):
 
 def getLeagueGroup( leaguegroup_name ):
     return sqlalchemysetup.session.query(LeagueGroup).filter( LeagueGroup.leaguegroup_name == leaguegroup_name ).first()
+
+# return only ais that comply with league conditions
+def getleagueais( league ):
+    sqlsession = sqlalchemysetup.session
+    ais = sqlsession.query(AI).filter(AI.ai_id.in_(sqlsession.query(LeagueAI.ai_id).filter(LeagueAI.league_id == league.league_id))).all()
+    ailist = []
+
+    for ai in ais:
+        aihasalloptions = True
+        for leagueoption in league.options:
+            aihasthisoption = False
+            for aioption in ai.allowedoptions:
+                if aioption.option.option_name == leagueoption.option.option_name:
+                    aihasthisoption = True
+            if not aihasthisoption:
+                aihasalloptions = False
+        if aihasalloptions:
+            ailist.append(ai)
+
+    return ailist
+
+def getleaguematches(league):
+    matchidsquery = sqlalchemysetup.session.query(LeagueMatch).filter(LeagueMatch.league_id == league.league_id)
+    matchids = [matchqueryitem.match_id for matchqueryitem in matchidsquery]
+    [success, matches] = gridclienthelper.getproxy().getmatchesv1(matchids)
+    return matches

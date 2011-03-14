@@ -15,7 +15,7 @@ def load_environment(global_conf, app_conf):
     object
     """
     config = PylonsConfig()
-    
+
     # Pylons paths
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     paths = dict(root=root,
@@ -29,11 +29,11 @@ def load_environment(global_conf, app_conf):
     config['routes.map'] = make_map(config)
     config['pylons.app_globals'] = app_globals.Globals(config)
     config['pylons.h'] = springgrid.lib.helpers
-    
+
     # Setup cache object as early as possible
     import pylons
     pylons.cache._push_object(config['pylons.app_globals'].cache)
-    
+
 
     # Create the Jinja2 Environment
     jinja2_env = Environment(loader=FileSystemLoader(paths['templates']))
@@ -46,5 +46,5 @@ def load_environment(global_conf, app_conf):
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)
     config['pylons.strict_c'] = True
-    
+
     return config

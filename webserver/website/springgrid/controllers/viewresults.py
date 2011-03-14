@@ -20,15 +20,18 @@
 # You can find the licence also on the web at:
 # http://www.opensource.org/licenses/gpl-license.php
 #
-
 from __future__ import division
+
 import cgitb; cgitb.enable()
+import os
 import math
 import sys
 
 from utils import *
 from core import *
 from core.tableclasses import *
+
+import core.replaycontroller as replaycontroller
 
 sqlalchemysetup.setup()
 
@@ -43,8 +46,8 @@ def go():
     leaguename = formhelper.getValue('leaguename')
     if leaguename == None:
         leaguename = leaguenames[0]
-
     league = leaguehelper.getLeague(leaguename)
+
     resultsPerPage = 100
     page = formhelper.getValue('page')
     if page == None:
@@ -52,12 +55,16 @@ def go():
     else:
         page = int(page)
 
-    requests = leaguehelper.getleaguematches(league)
-    requests = filter(lambda x: x['matchresult'][0] == False, requests)
-    numPages = math.ceil(len(requests) / resultsPerPage)
-    requests = requests[(page - 1) * resultsPerPage:page * resultsPerPage]
+    results = leaguehelper.getleaguematches(league)
+    results = filter(lambda x: x['matchresult'][0] == True, results)
+    for x in results:
+        x['matchresult'] = x['matchresult'][1]
+        x['botrunner_name'] = x['botrunner_name'][1]
+    numPages = math.ceil(len(results) / resultsPerPage)
+    results = results[(page - 1) * resultsPerPage:page * resultsPerPage]
 
-    jinjahelper.rendertemplate('viewrequests.html', requests = requests, leaguenames = leaguenames, league = league, page = page, numPages = numPages )
+    jinjahelper.rendertemplate( 'viewresults.html', results = results, leaguenames = leaguenames, league = league, springgridurl = confighelper.getValue('springgridwebsite' ), page = page, numPages = numPages )
 
 go()
+
 sqlalchemysetup.close()

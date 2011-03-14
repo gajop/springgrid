@@ -27,7 +27,6 @@ from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, and_, schem
 from sqlalchemy.orm import backref, relation
 
 from entity import *
-#__all__ = ['Base', 'Session']
 
 # SQLAlchemy session manager. Updated by model.init_model()
 Session = scoped_session(sessionmaker())
@@ -91,15 +90,6 @@ class Account(Base):
 
     def addRole( self, role ):
         self.roles.append(role)
-
-class AIOption(Base):
-    __tablename__ = 'aioptions'
-
-    option_id = Column(Integer,primary_key=True)
-    option_name = Column(String(255), unique = True, nullable = False)
-
-    def __init__(self, option_name):
-        self.option_name = option_name
 
 # simple flat config for now
 class Config(Base):
