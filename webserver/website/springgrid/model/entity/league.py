@@ -15,8 +15,8 @@ class League(Base):
     league_id = Column(Integer, primary_key=True)
     league_name = Column(String(255), unique=True, nullable=False)
     league_creatorid = Column(Integer, ForeignKey('accounts.account_id'))
-    map_name = Column(String(255), nullable=False)
-    mod_name = Column(String(255), nullable=False)
+    map_id = Column(String(255), nullable=False)
+    mod_id = Column(String(255), nullable=False)
     nummatchesperaipair = Column(Integer, nullable=False)
     speed = Column(Integer, nullable=False)
     softtimeout = Column(Integer, nullable=False)
@@ -30,13 +30,13 @@ class League(Base):
     options = relationship("AIOption", secondary=league_options)
     league_ais = relationship("LeagueAI")
 
-    def __init__(self, league_name, creator, mod_name, map_name,
+    def __init__(self, league_name, creator, mod_id, map_id,
             nummatchesperaipair, speed, softtimeout, hardtimeout, sides,
             sidemodes, playagainstself):
         self.league_name = league_name
         self.creator = creator
-        self.mod_name = mod_name
-        self.map_name = map_name
+        self.mod_id = mod_id
+        self.map_id = map_id
         self.nummatchesperaipair = nummatchesperaipair
         self.speed = speed
         self.softtimeout = softtimeout

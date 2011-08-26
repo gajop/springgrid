@@ -22,6 +22,18 @@ You can find the licence also on the web at:
 http://www.opensource.org/licenses/gpl-license.php
 #}
 
+{% block headtag %}
+<script> 
+    $(function() {
+        $( "#check" ).button();
+        $( "#format" ).buttonset();
+    });
+</script> 
+<style> 
+    #format { margin-top: 2em; }
+</style> 
+{% endblock %}
+
 {% import 'formhelper.html' as formhelper %}
 {% block bodytag %} onload="onSideModeChange();" {% endblock %}
 {% block title %}AILadder - View Leagues{% endblock title %}
@@ -39,115 +51,115 @@ http://www.opensource.org/licenses/gpl-license.php
             addSideCombinations();
         }
     }
-    function addSides() {
-        var modnameSelect = document.getElementById("modname");
-        var index = modnameSelect.selectedIndex;
-        var sideSelect = document.getElementById("sides");
-        while (sideSelect.length != 0) {
-            sideSelect.remove(0);
-        }
-        
-        var items = new Array();
-        {% for k, v in c.sides.itervalues() %}
-            items[{{k}}] = [
-            {% for side in v %}
-            ["{{side[0]}}", {{side[1]}}],
-            {% endfor %}
-            ];
+function addSides() {
+    var modnameSelect = document.getElementById("modname");
+    var index = modnameSelect.selectedIndex;
+    var sideSelect = document.getElementById("sides");
+    while (sideSelect.length != 0) {
+        sideSelect.remove(0);
+    }
+
+    var items = new Array();
+    {% for k, v in c.sides.itervalues() %}
+    items[{{k}}] = [
+    {% for side in v %}
+    ["{{side[0]}}", {{side[1]}}],
         {% endfor %}
-        var selectedItems = items[index];
-        for (i in selectedItems) {
-            var newOpt = document.createElement("option");
-            newOpt.text = selectedItems[i][0];
-            newOpt.value = selectedItems[i][1];
-            try {
-                sideSelect.add(newOpt, null);
-            } catch (ex) {
-                sideSelect.add(newOpt);
-            }
+    ];
+    {% endfor %}
+    var selectedItems = items[index];
+    for (i in selectedItems) {
+        var newOpt = document.createElement("option");
+        newOpt.text = selectedItems[i][0];
+        newOpt.value = selectedItems[i][1];
+        try {
+            sideSelect.add(newOpt, null);
+        } catch (ex) {
+            sideSelect.add(newOpt);
         }
     }
-    function addSideCombinations() {
-        var modnameSelect = document.getElementById("modname");
-        var index = modnameSelect.selectedIndex;
-        var sideSelect = document.getElementById("sides");
-        while (sideSelect.length != 0) {
-            sideSelect.remove(0);
-        }
-        
-        var items = new Array();
-        {% for k, v in c.sides.itervalues() %}
-            items[{{k}}] = [
-            {% for firstSide in v %}
-                {% for secondSide in v %}
-                    {% if firstSide != secondSide %}
-                        ["{{firstSide[0]}} vs {{secondSide[0]}}", "{{firstSide[1]}}vs{{secondSide[1]}}"],
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-            ];
-        {% endfor %}
-        var selectedItems = items[index];
-        for (i in selectedItems) {
-            var newOpt = document.createElement("option");
-            newOpt.text = selectedItems[i][0];
-            newOpt.value = selectedItems[i][1];
-            try {
-                sideSelect.add(newOpt, null);
-            } catch (ex) {
-                sideSelect.add(newOpt);
-            }
-        }
+}
+function addSideCombinations() {
+    var modnameSelect = document.getElementById("modname");
+    var index = modnameSelect.selectedIndex;
+    var sideSelect = document.getElementById("sides");
+    while (sideSelect.length != 0) {
+        sideSelect.remove(0);
     }
-    function swapAI(first, second) {
-        var lastIndex = 0;
-        var selectedOptions = [];
-        while (first.selectedIndex != -1) {
-            var option = first.options[first.selectedIndex];
-            selectedOptions.push(option);
-            lastIndex = first.selectedIndex;
-            first.remove(first.selectedIndex);
-            try {
-                second.add(option, null);
-            } catch (ex) {
-                second.add(option);
-            }
-        }
-        for (i in selectedOptions) {
-            selectedOptions[i].selected = false;
-        }
-        if (first.length < lastIndex + 1) {
-            lastIndex = first.length - 1;
-        }
-        if (lastIndex >= 0) {
-            first.options[lastIndex].selected = true;
+
+    var items = new Array();
+    {% for k, v in c.sides.itervalues() %}
+    items[{{k}}] = [
+    {% for firstSide in v %}
+    {% for secondSide in v %}
+    {% if firstSide != secondSide %}
+    ["{{firstSide[0]}} vs {{secondSide[0]}}", "{{firstSide[1]}}vs{{secondSide[1]}}"],
+        {% endif %}
+    {% endfor %}
+    {% endfor %}
+    ];
+    {% endfor %}
+    var selectedItems = items[index];
+    for (i in selectedItems) {
+        var newOpt = document.createElement("option");
+        newOpt.text = selectedItems[i][0];
+        newOpt.value = selectedItems[i][1];
+        try {
+            sideSelect.add(newOpt, null);
+        } catch (ex) {
+            sideSelect.add(newOpt);
         }
     }
-    function addAI() {
-        var unselectedAI = document.getElementById("unselectedais");
-        var selectedAI = document.getElementById("selectedais");
-        swapAI(unselectedAI, selectedAI);
-    }
-    function removeAI() {
-        var selectedAI = document.getElementById("selectedais");
-        var unselectedAI = document.getElementById("unselectedais");
-        swapAI(selectedAI, unselectedAI);
-    }
-    function checkForm() {
-        var selectedAI = document.getElementById("selectedais");
-        for (option in selectedAI.options) {
-            selectedAI.options[option].selected = true;
+}
+function swapAI(first, second) {
+    var lastIndex = 0;
+    var selectedOptions = [];
+    while (first.selectedIndex != -1) {
+        var option = first.options[first.selectedIndex];
+        selectedOptions.push(option);
+        lastIndex = first.selectedIndex;
+        first.remove(first.selectedIndex);
+        try {
+            second.add(option, null);
+        } catch (ex) {
+            second.add(option);
         }
-        return true; //lazy
     }
-    function clearSelectedAISelection() { //better name pls
-        var selectedAI = document.getElementById("selectedais");
-        selectedAI.selectedIndex = -1;
+    for (i in selectedOptions) {
+        selectedOptions[i].selected = false;
     }
-    function clearUnselectedAISelection() { //better name pls
-        var unselectedAI = document.getElementById("unselectedais");
-        unselectedAI.selectedIndex = -1;
+    if (first.length < lastIndex + 1) {
+        lastIndex = first.length - 1;
     }
+    if (lastIndex >= 0) {
+        first.options[lastIndex].selected = true;
+    }
+}
+function addAI() {
+    var unselectedAI = document.getElementById("unselectedais");
+    var selectedAI = document.getElementById("selectedais");
+    swapAI(unselectedAI, selectedAI);
+}
+function removeAI() {
+    var selectedAI = document.getElementById("selectedais");
+    var unselectedAI = document.getElementById("unselectedais");
+    swapAI(selectedAI, unselectedAI);
+}
+function checkForm() {
+    var selectedAI = document.getElementById("selectedais");
+    for (option in selectedAI.options) {
+        selectedAI.options[option].selected = true;
+    }
+    return true; //lazy
+}
+function clearSelectedAISelection() { //better name pls
+    var selectedAI = document.getElementById("selectedais");
+    selectedAI.selectedIndex = -1;
+}
+function clearUnselectedAISelection() { //better name pls
+    var unselectedAI = document.getElementById("unselectedais");
+    unselectedAI.selectedIndex = -1;
+}
 </script>
 
 <p>A league is a specific game configuration used for testing AIs against each other</p>
@@ -164,7 +176,7 @@ http://www.opensource.org/licenses/gpl-license.php
 
     {% for league in c.leagues %}
     <tr>
-        <td><a href='viewleague.py?leaguename={{league.league_name|e}}'>{{league.league_name|e}}</a></td>
+        <td><a href='{{ url(controller='league', action='view', id=league.league_id) }}'>{{league.league_name|e}}</a></td>
         <td>{{league.mod_name|e}}</td>
         <td>{{league.map_name|e}}</td>
         <td>{{league.nummatchesperaipair}}</td>
@@ -177,77 +189,73 @@ http://www.opensource.org/licenses/gpl-license.php
         {% if c.showForm %}
         <td>
             <a href="deleteleague.py?leaguename={{league.league_name|e}}">Delete league</a>
-            <td>
-                {% endif %}
+        </td>
+        {% endif %}
 
-            </tr>
-            {% endfor %}
-        </table>
+    </tr>
+    {% endfor %}
+</table>
 
 {% if c.showForm %}
 
-   <p />
-   <hr />
-   <p />
+<p />
+<hr />
+<p />
 
-   <h2>Create new league:</h2>
-   <form action='addleague.py' method='post' onsubmit="return checkForm();">
-   <table padding='3'>
-   <tr><td>League name</td><td><input name='leaguename'</td></tr>
-   <tr><td>Mod name</td><td>
-        <select name="modname" id="modname" onchange="onSideModeChange();">
-        {% for mod in c.mods %}
-        <option value="{{mod|e}}">{{mod|e}}</option>
-        {% endfor %}</td></tr>
-   <tr><td>Map name</td><td>{{formhelper.listtodropdown( 'mapname', maps )}}</td></tr>
-   <tr><td>Matches per AI and side selection</td><td>{{formhelper.listtodropdown( 'nummatchesperairpair', range(1,21) )}}</td></tr>
-   <tr><td>Play against self</td><td><input type="checkbox" name="playagainstself"/></td></tr>
-   <tr><td>Speed</td><td>{{formhelper.listtodropdown('speed', speeds)}}</td></tr>
-   <tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout', timeouts)}}</td></tr>
-   <tr><td>Hard timeout minutes</td><td>{{formhelper.listtodropdown('hardtimeout', timeouts)}}</td></tr>
-   <tr><td>League side selection type</td><td>
-           <select id="sidemodes" name="sidemodes" onchange="onSideModeChange();">
-               {% for k, v in sidemodes.iteritems() %}
-               <option value="{{k|e}}">{{v|e}}</option>
-               {% endfor %}</td></tr>
-   <tr><td>Side selection type description</td><td>
-   <textarea rows="5" cols="60" id="description" readonly="true"> 
-   </textarea>
-   </td></tr>
-   <tr><td>League sides</td><td>
-           <select id="sides" name="sides" />
-   </td></tr>
-   <tr><td>AIs</td><td>
-   <table>
-       <tr><td>
-       Unused: 
-       </td><td>
-       Used:
-       </td></tr>
-       <tr><td>
-       <select id="unselectedais" name="unselectedais" multiple="multiple" size="8" onclick="clearSelectedAISelection();">
-           {% for k, v in ais.iteritems() %}
-           <option value="{{k|e}}">{{v|e}}</option>
-           {% endfor %}
-       </select>
-   </td><td>
-       <select id="selectedais" name="selectedais" multiple="multiple" size="8" onclick="clearUnselectedAISelection();"></select>
-   </td></tr>
-   <tr><td>
-       <input type="button" value="&gt;&gt;&gt;" onclick="addAI();"/>
-       </td><td>
-       <input type="button" value="&lt;&lt;&lt;" onclick="removeAI();"/>
-       </td></tr>
-   </table>
-   </td></tr>
+<h2>Create new league:</h2>
+<form action='{{ h.url(controller='league', action='add') }}' method='post' onsubmit="return checkForm();">
+    <table padding='3'>
+        <tr><td>League name</td><td><input name='leagueName'/></td></tr>
+        <tr><td>Mod name</td><td>
+                <select name="modId" id="modname" onchange="onSideModeChange();">
+                    {% for k, v in c.mods.iteritems() %}
+                    <option value="{{k|e}}">{{v|e}}</option>
+                    {% endfor %}</td></tr>
+            <tr><td>Map name</td><td>
+                    <select name="mapId" id="mapname">
+                        {% for k, v in c.maps.iteritems() %}
+                        <option value="{{k|e}}">{{v|e}}</option>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr><td>Matches per AI and side selection</td><td>{{formhelper.listtodropdown( 'nummatchesperaipair', range(1,21) )}}</td></tr>
+                <tr><td>Play against self</td><td><input type="checkbox" name="playagainstself"/></td></tr>
+                <tr><td>Speed</td><td>{{formhelper.listtodropdown('speed', c.speeds)}}</td></tr>
+                <tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout', c.timeouts)}}</td></tr>
+                <tr><td>Hard timeout minutes</td><td>{{formhelper.listtodropdown('hardtimeout', c.timeouts)}}</td></tr>
+                <tr><td>League side selection type</td><td>
+                        <select id="sidemodes" name="sidemodes" onchange="onSideModeChange();">
+                            {% for k, v in c.sidemodes.iteritems() %}
+                            <option value="{{k|e}}">{{v|e}}</option>
+                            {% endfor %}</td></tr>
+                    <tr><td>Side selection type description</td><td>
+                            <textarea rows="5" cols="60" id="description" readonly="true"> 
+                            </textarea>
+                    </td></tr>
+                    <tr><td>League sides</td><td>
+                            <select id="sides" name="sides" />
+                        </td></tr>
+                        <tr>
+                            <td>AIs</td>
+                            <td><div id="format">
+                                <ul>
+                                    {% for k, v in c.ais.iteritems() %}
+                                    <li>
+                                    <input type="checkbox" id="ai_checkbox_{{k|e}}" name="ai_checkbox_{{k|e}}"/>
+                                    <label for="ai_checkbox_{{k|e}}">{{v|e}}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>          
+                            </div>
+                            </td>
+                        </tr>
 
-
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
-   </form>
-   <p>Note: Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached. Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs.</p>
-{% endif %}
+                        <tr><td></td><td><input type='submit' value='Add' /></td></tr>
+                    </table>
+                </form>
+                <p>Note: Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached. Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs.</p>
+                {% endif %}
 
 
-{% endblock %}
+                {% endblock %}
 
