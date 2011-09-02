@@ -27,9 +27,9 @@ http://www.opensource.org/licenses/gpl-license.php
 <h3>SpringGrid - Mod List</h3>
 <table border='1' padding='3'>
     <tr class='tablehead'>
-        <td>Mod name</td>
-        <td>Mod archive checksum (Note: this is NOT the modhash seen in the start script)</td>
-        <td>Mod download url</td>
+        <td>Name</td>
+        <td>Archive Checksum (Note: this is NOT the modhash seen in the start script)</td>
+        <td>Download URL</td>
         {% if showform %}
         <td>&nbsp;</td>
         {% endif %}
@@ -60,11 +60,11 @@ http://www.opensource.org/licenses/gpl-license.php
    <form action='{{ url(controller='mod', action='add') }}' method='post'>
    <table border='1' padding='3'>
 	   <tr>
-	       <td>Mod name (this should be what would be in the startscript)</td>
+	       <td>Name (this should be what would be in the startscript)</td>
 	       <td><input name='modName'/></td>
 	   </tr>
 	   <tr>
-	       <td>Mod download url</td>
+	       <td>Download URL</td>
 	       <td><input name='modUrl'/></td>
 	   </tr>
 	   <tr>

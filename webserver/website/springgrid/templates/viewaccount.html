@@ -28,8 +28,8 @@ http://www.opensource.org/licenses/gpl-license.php
 <h3>SpringGrid - View account {{c.account.username|e}}</h3>
 <table border='1' padding='3'>
     <tr class='tablehead'>
-        <td>Role:</td>
-        <td></td>
+        <td>Role</td>
+        <td>&nbsp;</td>
     </tr>
 
     {% for role in c.account.roles %}
@@ -45,7 +45,7 @@ http://www.opensource.org/licenses/gpl-license.php
 <hr />
 <p />
 
-<h4>Add roles to account:</h4>
+<h4>Add roles to account</h4>
 <form action='addroletoaccount.py' method='post'>
     <table border='1' padding='3'>
         <tr><td>Role name</td><td>

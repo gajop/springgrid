@@ -4,24 +4,28 @@
 
 <h3>SpringGrid - Match results</h3>
 {{ c.requests.pager('Page $page: $link_previous $link_next ~4~') }}
-<table>
-    <tr class='tablehead'>
-    <td>matchrequestid</td>
-    <td>ai0name</td>
-    <td>ai0version</td>
-    <td>ai0side</td>
-    <td>ai1name</td>
-    <td>ai1version</td>
-    <td>ai1side</td>
-    <td>mapname</td>
-    <td>modname</td>
-    <td>options</td>
-    <td>botrunnername</td>
-    <td>assignment date/time</td>
-    <td>result</td>
-    <td>infolog</td>
-    <td>replay</td>
-</tr>
+<table border='1' padding='3'>
+    <tr class='tablehead' align="center">
+        <td rowspan="2">Match ID</td>
+        <td colspan="3">First AI</td>
+        <td colspan="3">Second AI</td>
+        <td rowspan="2">Map</td>
+        <td rowspan="2">Mod</td>
+        <td rowspan="2">Options</td>
+        <td rowspan="2">Botrunner</td>
+        <td rowspan="2">Time Assigned</td>
+        <td rowspan="2">Result</td>
+        <td rowspan="2">Info Log</td>
+        <td rowspan="2">Replay</td>
+    </tr>
+    <tr class='tablehead' align="center">
+        <td>Name</td>
+        <td>Version</td>
+        <td>Side</td>
+        <td>Name</td>
+        <td>Version</td>
+        <td>Side</td>
+    </tr>
 {% for request in c.requests %}
     <tr>
     <td>{{request.matchrequest_id}}</td>
@@ -46,14 +50,14 @@
     {% if c.infologPaths[request] is defined %}
       <a href='{{c.infologPaths[request]|e}}'>infolog</a>
     {% else %}
-    No infolog available
+        No infolog available
     {% endif %}
     </td>
     <td>
     {% if c.replayPaths[request] is defined %}
       <a href='{{c.replayPaths[request]|e}}'>replay</a>
     {% else %}
-    No replay available
+        No replay available
     {% endif %}
     </td>
     </tr>

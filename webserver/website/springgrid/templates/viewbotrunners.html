@@ -25,14 +25,17 @@ http://www.opensource.org/licenses/gpl-license.php
 {% block content %}
 <h3>SpringGrid - Bot Runner List</h3>
 <table border='1' padding='3'>
-    <tr class='tablehead'>
-        <td>Bot Runner Name</td>
-        <td>Bot Runner Owner Name:</td>
-        <td>Shared secret (only visible for your own botrunners)</td>
-        <td>Options</td>
-        <td>Instance sessionid</td>
-        <td>Instance last ping</td>
-        <td>Instance last status</td>
+    <tr class='tablehead' align="center">
+        <td rowspan="2">Name</td>
+        <td rowspan="2">Owner Name</td>
+        <td rowspan="2">Shared secret (only visible for your own botrunners)</td>
+        <td rowspan="2">Options</td>
+        <td colspan="3">Instance</td>
+    </tr>
+    <tr class='tablehead' align="center">
+        <td>Session ID</td>
+        <td>Last Ping</td>
+        <td>Last Status</td>
     </tr>
 
 {% for botrunner in c.botrunners %}
@@ -58,8 +61,10 @@ http://www.opensource.org/licenses/gpl-license.php
 	{% endfor %}
 
 {% endfor %}
-
+    
 </table>
+
+
 
 {% if 'user' in session %}
 

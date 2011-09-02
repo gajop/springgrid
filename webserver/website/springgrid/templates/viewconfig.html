@@ -26,10 +26,16 @@ http://www.opensource.org/licenses/gpl-license.php
 <h3>SpringGrid - View Config</h3>
 
 <table border="1" cellpadding="3">
-<tr class='tablehead'><td>key</td><td>value</td></tr>
-{% for configkey in c.config.keys() %}
-<tr><td>{{configkey}}</td><td>{{config[configkey]}}</td></tr>
-{% endfor %}
+    <tr class='tablehead'>
+        <td>Key</td>
+        <td>Value</td>
+    </tr>
+    {% for configkey in c.config.keys() %}
+    <tr>
+        <td>{% if configkey %} {{configkey}} {% else %} &nbsp; {% endif %}</td>
+        <td>{% if config[configkey] %} {{config[configkey]}} {% else %} &nbsp; {% endif %}</td>
+    </tr>
+    {% endfor %}
 </table>
 
 {% endblock content %}
