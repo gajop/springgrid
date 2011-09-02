@@ -26,23 +26,28 @@ http://www.opensource.org/licenses/gpl-license.php
 {% block content %}
 <h3>SpringGrid - Match requests</h3>
 {{ c.requests.pager('Page $page: $link_previous $link_next ~4~') }}
-<table border='1' padding='3'>
-    <tr class='tablehead'>
-    <td>matchrequestid</td>
-    <td>ai0name</td>
-    <td>ai0version</td>
-    <td>ai0side</td>
-    <td>ai1name</td>
-    <td>ai1version</td>
-    <td>ai1side</td>
-    <td>mapname</td>
-    <td>modname</td>
-    <td>options</td>
-    <td>botrunnername</td>
-    <td>botrunnerinstanceid</td>
-    <td>datetimeassigned</td>
-    <td>removerequest</td>
-</tr>
+<table border='1' padding='3'>	
+    <tr class='tablehead' align="center">
+        <td rowspan="2">Match ID</td>
+        <td colspan="3">First AI</td>
+        <td colspan="3">Second AI</td>
+        <td rowspan="2">Map</td>
+        <td rowspan="2">Mod</td>
+        <td rowspan="2">Options</td>
+        <td colspan="2">Botrunner</td>
+        <td rowspan="2">Time Assigned</td>
+        <td rowspan="2">Remove</td>
+    </tr>
+    <tr class='tablehead' align="center">
+        <td>Name</td>
+        <td>Version</td>
+        <td>Side</td>
+        <td>Name</td>
+        <td>Version</td>
+        <td>Side</td>
+        <td>Name</td>
+        <td>ID</td>
+    </tr>
 
 {% for request in c.requests %}
    {% if request.matchrequestinprogress != none %}
