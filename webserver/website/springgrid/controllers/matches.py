@@ -1,5 +1,8 @@
 import logging
 import os
+import webob
+
+from webob import Response 
 
 from pylons import request, response, session, tmpl_context as c, url
 from pylons import request
@@ -63,3 +66,26 @@ class MatchesController(BaseController):
                             req.matchrequestinprogress.datetimeassigned))
 
         return render('viewrequests.html')
+        
+    def replays(self, id):
+        
+        try:
+            abspath = os.path.abspath("./springgrid/replays/" + id)
+            downloadFile = open(abspath, 'r').read()
+            response.content_type = 'application/x-bzip-compressed-tar'
+            return downloadFile
+        except IOError:
+            raise
+        """    
+        def stream_img():
+            chunk = imgf.read(1024)
+            while chunk:
+                yield chunk
+                chunk = imgf.read(1024)
+            imgf.close()
+            
+        return stream_img()
+        """
+        
+        
+       
