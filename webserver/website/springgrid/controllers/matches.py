@@ -75,17 +75,5 @@ class MatchesController(BaseController):
             response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:
-            raise
-        """    
-        def stream_img():
-            chunk = imgf.read(1024)
-            while chunk:
-                yield chunk
-                chunk = imgf.read(1024)
-            imgf.close()
-            
-        return stream_img()
-        """
-        
-        
+            raise      
        
