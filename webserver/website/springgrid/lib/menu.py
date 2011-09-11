@@ -34,14 +34,10 @@ def getMenus():
 
     menus.append(['League', [
       ['View Leagues',
-          h.url(controller='league', action='list')],
-      ['Add League',
-          h.url(controller='league', action='form')]
+          h.url(controller='league', action='list')]
     ]])
 
     menus.append(['Configuration', [
-      ['Setup notes',
-          h.url(controller='info', action='setupnotes')],
       ['View available bot runners',
           h.url(controller='botrunner', action='list')],
       ['View available maps',

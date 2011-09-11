@@ -15,11 +15,6 @@ class InfoController(BaseController):
     def botrunner(self):
         return render('startbotrunner.html')
 
-    def setupnotes(self):
-        x = open("howtouse.txt")
-        c.message = "<pre>" + x.read() + "</pre>"
-        return render('genericmessage.html')
-
     def config(self):
         c.config = confighelper.getconfigdict()
         return render('viewconfig.html')
