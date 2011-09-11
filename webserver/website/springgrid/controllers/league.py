@@ -26,7 +26,18 @@ class LeagueForm(formencode.Schema):
     sides = Int(not_empty=True)
     sidemodes = String(not_empty=True)
     playagainstself = StringBool(if_missing=False)
-#    selectedais = All(Int())
+
+class AIStats:
+    def __init__(self, name, version):
+        self.name = name
+        self.version = version
+        self.wins = 0
+        self.losses = 0
+        self.draws = 0
+        self.timeouts = 0
+        self.crashes = 0
+        self.score = 0
+        self.games = 0
 
 class LeagueController(BaseController):
 
@@ -151,3 +162,75 @@ class LeagueController(BaseController):
         c.speeds.extend(range(10, 101, 5))
         c.timeouts = c.speeds
         return render('viewleagues.html')
+
+    def results(self):
+        #check if any leagues exist
+        if len(Session.query(League).all()) == 0:
+            c.message = "Please create a league first."            
+            return render('genericmessage.html')
+       
+        #get the league by id, or choose the first one
+        league = None
+        if (request.params.has_key('league_id')):
+            id = self.request.params['league_id']
+            league = Session.query(League).filter(League.league_id == id).first()
+        if league == None:
+            league = Session.query(League).first()
+
+        #get the league ais that are part of the chosen league
+        ais = Session.query(AI).join(LeagueAI).filter(LeagueAI.league_id ==\
+                league.league_id)
+
+        #get matches that have been played in the league so far 
+        #TODO: things below hasn't been corrected
+        matchrequestqueue = [] #leaguehelper.getleaguematches(league)
+        matchresults = filter(lambda x: x['matchresult'][0] == True, matchrequestqueue) #only those that have results
+        for x in matchresults:
+            x['matchresult'] = x['matchresult'][1]
+            x['botrunner_name'] = x['botrunner_name'][1]
+
+        aistats = {}
+        for ai in ais:
+            aistats[(ai.ai_name, ai.ai_version)] = AIStats(ai.ai_name, ai.ai_version)
+
+        for matchresult in matchresults:
+            first = True
+            for ai in matchresult['ais']:
+                aistat = aistats[ai['ai_name'], ai['ai_version']]
+                aistat.games += 1
+                if matchresult['matchresult'] == 'draw':
+                    aistat.draws += 1
+                    aistat.score += 1
+                elif matchresult['matchresult'] == 'crashed':
+                    aistat.crashes += 1
+                    aistat.score += 1
+                elif matchresult['matchresult'] == 'gametimeout':
+                    aistat.timeouts += 1
+                    aistat.score += 1
+                elif matchresult['matchresult'] == 'ai0won':
+                    if first:
+                        aistat.wins += 1
+                        aistat.score += 3
+                    else:
+                        aistat.losses += 1
+                elif matchresult['matchresult'] == 'ai1won':
+                    if first:
+                        aistat.losses += 1
+                    else:
+                        aistat.wins += 1
+                        aistat.score += 3
+                first = False
+        aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
+
+
+        indextoai = matchscheduler.getindextoai(league)
+        aipairqueuedmatchcount = matchscheduler.getaipairmatchcount( matchrequestqueue,league, ais, indextoai )
+        aipairfinishedcount = matchscheduler.getaipairmatchcount( matchresults,league, ais, indextoai )
+
+        showform = loginhelper.isLoggedOn()
+        c.aistats = aistats
+        return render('viewleagueresults.html') 
+#TODO: things below should be changed to the c.something = something syntax, as done above; check templates/viewleagueresults.html
+
+        jinjahelper.rendertemplate(aipairqueuedmatchcount = aipairqueuedmatchcount, aipairfinishedcount = aipairfinishedcount, indextoai = indextoai, ais = ais, leaguenames = leaguenames, league = league, numais = len(ais), nummatchesperaipair = league.nummatchesperaipair, showform = showform, aistats=aistats )
+

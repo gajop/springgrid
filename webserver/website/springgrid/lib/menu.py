@@ -22,7 +22,9 @@ def getMenus():
                      ]])
     menus.append(['Results', [
       ['View match results',
-          h.url(controller='matches', action='results')]
+          h.url(controller='matches', action='results')],
+      ['View leagues',
+          h.url(controller='league', action='results')]
     ]])
 
     menus.append(['Runner', [
