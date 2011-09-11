@@ -99,35 +99,23 @@ class LeagueController(BaseController):
         c.message = "Updated ok"
         return render('genericmessage.html')
 
-    def remove(self):
+    def remove(self, id):
         if not roles.isInRole(roles.leagueadmin):
             c.message = "You must be logged in as a leagueadmin"
             return render('genericmessage.html')
-        
-        leagueName = request.params["leaguename"]
-        
-        league = Session.query(League).filter(League.league_name == leagueName).first()
-        
+
+        league = Session.query(League).filter(League.league_id == id).first()
         if league == None:
             c.message = "No such league"
             return render('genericmessage.html')
         
-        league = Session.query(League).filter(League.league_name == leagueName).delete()
-        
-        if league == None:
-            c.message = "No such league"
-            return render('genericmessage.html')
-        
-        #didnt work without line 115
-        #some error about id being null
-        #gajop to view
-        #Session.delete(league)
-        
+        Session.query(LeagueAI).filter(LeagueAI.league_id == id).delete()
+        Session.delete(league)
         Session.commit()
 
         c.message = "Deleted ok"
         return render('genericmessage.html')
-        
+
     def list(self):
         leagues = Session.query(League)
         showForm = roles.isInRole(roles.leagueadmin)

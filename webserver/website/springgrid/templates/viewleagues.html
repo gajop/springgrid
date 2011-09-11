@@ -188,7 +188,7 @@ function clearUnselectedAISelection() { //better name pls
         </td>
         {% if c.showForm %}
         <td>
-            <a href="deleteleague.py?leaguename={{league.league_name|e}}">Delete league</a>
+            <a href="{{ h.url(controller='league', action='remove', id=league.league_id) }}">Delete league</a>
         </td>
         {% endif %}
 
