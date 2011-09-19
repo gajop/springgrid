@@ -16,6 +16,8 @@ setup(
         "Pylons>=1.0",
         "SQLAlchemy>=0.5",
         "Jinja2",
+        "py-bcrypt",
+        "python-openid",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
