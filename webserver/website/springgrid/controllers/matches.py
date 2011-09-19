@@ -68,10 +68,8 @@ class MatchesController(BaseController):
         return render('viewrequests.html')
         
     def replays(self, id):
-        
         try:
-            abspath = os.path.abspath("./springgrid/replays/" + id)
-            downloadFile = open(abspath, 'r').read()
+            downloadFile = open("./replays/" + id, 'r').read()
             response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:

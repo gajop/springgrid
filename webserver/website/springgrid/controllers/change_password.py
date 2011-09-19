@@ -42,7 +42,7 @@ class ChangePasswordController(BaseController):
             c.message = "Please check your old password and try again"
             return render('genericmessage.html')
 
-        if loginhelper.changePassword(loginhelper.getUsername(), password):
+        if loginhelper.changePassword(session['user'], password):
             c.message = "Password changed ok"
             return render('genericmessage.html')
         else:

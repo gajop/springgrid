@@ -53,10 +53,6 @@ class SubmitRequestController(BaseController):
 
     @validate(schema=SubmitRequestForm(), form='form', post_only=True, on_get=False)
     def submit(self):
-        #if matchrequestcontroller.submitrequest( matchrequest ):
-         #  jinjahelper.message( "Submitted"
-           # could be nice to print out queue here, or make another page for that
-
         map = Session.query(Map).filter(Map.map_name == self.form_result['mapname']).first()
         mod = Session.query(Mod).filter(Mod.mod_name == self.form_result['modname']).first()
         ai0 = Session.query(AI).filter(AI.ai_id == self.form_result['ai0']).first()

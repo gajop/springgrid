@@ -1,27 +1,15 @@
-what is being worked on at the moment:
-- waiting for someone to run a botrunner or two ;-) then will probably work on match
-  scheduling
+NEW (gajop):
+- add match templates (everything that makes a match except for the concrete match ID)
+- separate AIs from their version, each AI should have (0, n) versions
+- add automated match queries based on git changes
 
 todo:
 - add 'delete request' to request queue
-- add ability to create new options
-- add 'botrunner_isoperational' flag for botrunners
-  - ... or ... allow leagues to specify which botrunner result are acceptable
-  - ... or to blacklist which are not
-- add botrunner howto to website
-- add subscription to each league for each ai
-- add scheduler, to queue up matchrequests for each league
-- add results calculator
-- enforce no-cheating option in botrunner
-- some way of passing options through to ai (via script.txt?)
-- upload logfile after game, per-ai, or at least the infolog.txt
-- be able to configure arm vs core vs ... vs random
-
-low:
-
-ideas:
-- use webservice for website submit stuff?
-- urlize stuff?
+- add subscription to each league for each ai (?)
+- add scheduler, to queue up matchrequests for each league (?)
+- add results calculator (?)
+- enforce no-cheating option in botrunner (?)
+- some way of passing options through to ai (via script.txt?) (?)
 
 list of options to handle:
 - can an ai cheat?
@@ -43,71 +31,6 @@ list of options to handle:
 
 not sure if actually necessary (so: to test/investigate):
 - add gameendstring to per-mod config
-
-done:
-- migrated association tables to use sqlalchemy notation
-- purge old botrunner sessions somewhere, maybe in viewbotrunners?
-- botrunner gets list of current maps, mods and ais from website, and only registers
-  ones that don't exist already
-- migrate to jinja2
-- move some config values to a table
-- add botrunner sessions
-- add commandline arguments parsing
-- add multicall for capability registration
-- migrate to sqlalchemy
-- remove _drop.sql files, rename _create.sql files to drop _create prefix
-- add possibility to describe which maps and mods a botrunner supports on website, and take
-  into account when botrunner makes requests to the website
-- show botrunners that connected within last 5 minutes so in green in botrunners table (maybe with status?)
-- add 'last ping time' to botrunner table, or to another table, maybe also 'current status'
-- assume each botrunner is on a unique machine; purge previous requests when a new
-  gamerequest comes in from a botrunner
-- get start positions from unitsync
-- implement game timeout in botrunner
-- ai name and version combined together in submitrequest form now
-- botrunner tells websites about what mods it has now
-- botrunner tells websites about what maps it has now
-- detect spring-headlessstubs
-- get spring directory detected automatically using unitsync et al
-- botrunner's subscribe automatically now, no need to pre-register the botrunner
-- renamed calcengine to botrunner
-- moved sh scripts to py script
-- moved css to separate file
-- added options to botrunners in db and website
-- improved logon/logoff visual behavior
-- moved header stuff from each page into menu
-- improved cookie security
-- store passwords as salted hashes
-- add cheating / no-cheating option
-- add change password form
-- roles
-- fix dates on old python
-- migrated modules to subdirectories
-- add leagues / matchconfigs
-- add leaguegroups
-- group menu by league, setup, runner
-
-
-work area:
-
-imagine ai options:
-- cheatingequalslose
-- cheatingallowed
-
-then in engine, if this is set, anyone who cheats loses, and the other
-side wins
-
-then in supported optiosn for one ai, which can play with both cheating on and off:
-- cheatingequalslose set
-- cheatingequalslose unset
-
-.. but how to signal that it can also play when this option is not set?
-
-.. and what happens if a new option is added?
-
-.. by default, an ai is assumed to be able to handle all unset options?
-
-.. oh, could just create two options?:
 
 Addendum:
 - specific AI, HughAI, now has startscript option "maphack=yes/no"
