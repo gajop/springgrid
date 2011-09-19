@@ -59,3 +59,8 @@ build
 
 # exclude vim files
 *.vim
+
+# exclude website temporary files
+webserver/website/data/sessions
+webserver/website/development.db
+webserver/website/springgrid/replays
