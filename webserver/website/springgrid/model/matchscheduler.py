@@ -35,11 +35,11 @@ import aihelper
 import matchrequestcontroller_gridclient
 
 # does for one league
-def schedulematchesforleague( league, matchrequestqueue, matchresults ):
-    ais = leaguehelper.getleagueais( league )
+def schedulematchesforleague(league, matchrequestqueue, matchresults):
+    ais = leaguehelper.getleagueais(league)
     indextoai = getindextoai(league)
-    aiqueuedpairmatchcount = getaipairmatchcount(matchrequestqueue, league, ais, indextoai )
-    aifinishedpairmatchcount = getaipairmatchcount(matchresults, league, ais, indextoai )
+    aiqueuedpairmatchcount = getaipairmatchcount(matchrequestqueue, league, ais, indextoai)
+    aifinishedpairmatchcount = getaipairmatchcount(matchresults, league, ais, indextoai)
     aipairs = []
     playagainstself = league.playagainstself
     sides = [int(i) for i in league.sides.split("vs")]

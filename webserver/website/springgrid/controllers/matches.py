@@ -15,7 +15,7 @@ from springgrid.model import replaycontroller
 from springgrid.utils import dates
 
 log = logging.getLogger(__name__)
-
+scriptdir = os.path.dirname(os.path.realpath( __file__ ))
 
 class MatchesController(BaseController):
 
@@ -61,15 +61,14 @@ class MatchesController(BaseController):
         c.datetimeassignedbyrequest = {}
         for req in c.requests:
             if req.matchrequestinprogress != None:
-                c.datetimeassignedbyrequest[req] = str(
-                        dates.dateStringToDateTime(
-                            req.matchrequestinprogress.datetimeassigned))
+                c.datetimeassignedbyrequest[req] = \
+                        req.matchrequestinprogress.datetimeassigned
 
         return render('viewrequests.html')
         
     def replays(self, id):
         try:
-            downloadFile = open("./replays/" + id, 'r').read()
+            downloadFile = open(scriptdir + "/../replays/" + id, 'r').read()
             response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:

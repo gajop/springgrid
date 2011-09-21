@@ -11,7 +11,7 @@ class MatchRequestInProgress(Base):
             nullable=False)
     botrunner_session_id = Column(String(255),
             nullable=False)
-    datetimeassigned = Column(String(255),
+    datetimeassigned = Column(DateTime,
             nullable=False)
 
     __table_args__ = (schema.ForeignKeyConstraint(

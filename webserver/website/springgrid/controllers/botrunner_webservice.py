@@ -16,12 +16,7 @@ log = logging.getLogger(__name__)
 
 
 class BotrunnerWebserviceController(BaseXMLRPCController):
-
-    def test(self):
-        print "test"
-        return True
-
-   # return (True,'') if goes ok, otherwise (False,message)
+    # return (True,'') if goes ok, otherwise (False,message)
     def ping(self, botrunnername, sharedsecret, sessionid, status):
         if not botrunnerhelper.validatesharedsecret(
                 botrunnername, sharedsecret):
