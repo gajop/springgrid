@@ -2,4 +2,4 @@
 # import utils.foo as foo
 
 # This lets us do 'from utils import *':
-__all__ = ['dates','htmlformshelper','stringhelper','openidhelper']
+__all__ = ['dates','htmlformshelper','openidhelper']

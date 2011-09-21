@@ -12,7 +12,6 @@ from springgrid.lib.base import BaseController, render, Session
 from springgrid.lib.helpers import *
 from springgrid.model.meta import MatchRequest
 from springgrid.model import replaycontroller
-from springgrid.utils import dates
 
 log = logging.getLogger(__name__)
 scriptdir = os.path.dirname(os.path.realpath( __file__ ))

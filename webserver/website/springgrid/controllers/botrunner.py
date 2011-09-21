@@ -72,14 +72,11 @@ class BotrunnerController(BaseController):
             for botSession in botrunner.sessions:
                 sessiondata[botSession] = {}
                 sessiondata[botSession]['pingtimestatus'] = 'down'
-                lastpingtimeddate = None
-                lastpingtime = botSession.lastpingtime
-                if lastpingtime != None:
-                    lastpingtimedate = dates.dateStringToDateTime(lastpingtime)
+                if botSession.lastpingtime != None:
                     secondssincelastping = dates.timedifftototalseconds(
-                            datetime.datetime.now() - lastpingtimedate)
+                            datetime.datetime.now() - botSession.lastpingtime)
                     sessiondata[botSession]['lastpingtimestring'] =\
-                        str(lastpingtimedate)
+                        str(botSession.lastpingtime)
                     if secondssincelastping < \
                         confighelper.getValue('expiresessionminutes') * 60:
                         sessiondata[botSession]['pingtimestatus'] = 'maybeok'

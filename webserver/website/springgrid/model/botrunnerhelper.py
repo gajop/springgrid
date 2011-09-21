@@ -63,12 +63,10 @@ def purgeExpiredSessions():
     botrunners = Session.query(BotRunner)
     for botrunner in botrunners:
         for session in botrunner.sessions:
-            lastpingtime =  session.lastpingtime
-            if lastpingtime != None:
-                lastpingtimedate = dates.dateStringToDateTime( lastpingtime )
-                secondssincelastping = dates.timedifftototalseconds( datetime.datetime.now() - lastpingtimedate )
+            if session.lastpingtime != None:
+                secondssincelastping = dates.timedifftototalseconds(datetime.datetime.now() - session.lastpingtime)
                 if secondssincelastping > confighelper.getValue('expiresessionminutes') * 60:
-                    expireBotRunnerSession( botrunner, session )
+                    expireBotRunnerSession(botrunner, session)
 
 def validatesharedsecret(lbotrunnername, sharedsecret):
     global botrunnername

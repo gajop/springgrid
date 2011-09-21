@@ -8,7 +8,6 @@ import xmlrpclib
 from springgrid.model import botrunnerhelper, maphelper, modhelper
 from springgrid.model import aihelper, matchrequestcontroller, replaycontroller
 from springgrid.model.meta import BotRunnerSession, MatchRequest
-from springgrid.utils import dates
 from springgrid.lib.base_xmlrpc import BaseXMLRPCController, Session
 from springgrid.model import confighelper
 
@@ -34,8 +33,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         if targetsession == None:
             targetsession = BotRunnerSession(sessionid)
             botrunner.sessions.append(targetsession)
-        targetsession.lastpingtime = dates.dateTimeToDateString(
-                datetime.datetime.now())
+        targetsession.lastpingtime = datetime.datetime.now()
         targetsession.lastpingstatus = status
         Session.commit()
         return (True, '')
