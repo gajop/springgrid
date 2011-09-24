@@ -24,6 +24,7 @@ def make_map(config):
     map.connect('/login', controller='login', action='form')
     map.connect('/request', controller='submit_request', action='form')
     map.connect('/botrunner_webservice', controller='botrunner_webservice')
+    map.connect('/api_webservice', controller='api_webservice')
     map.connect('/{controller}/{action}')
     map.connect('/{controller}/{action}/{id}')
 

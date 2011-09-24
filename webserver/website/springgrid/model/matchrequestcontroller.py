@@ -27,7 +27,6 @@ from sqlalchemy.orm import join
 
 from springgrid.lib.base import Session
 from meta import MatchRequest, MatchRequestInProgress, MatchResult
-from springgrid.utils import dates
 import botrunnerhelper
 import confighelper
 
@@ -40,7 +39,7 @@ def archiveoldrequests():
 # can handle
 # for now, it just returns the first item in the queue
 # we need to only take things that arent in the inprogress queue of course...
-def getcompatibleitemfromqueue( botrunnername, sessionid ):
+def getcompatibleitemfromqueue(botrunnername, sessionid):
     archiveoldrequests()
 
     botrunner = botrunnerhelper.getBotRunner( botrunnername )
@@ -48,7 +47,7 @@ def getcompatibleitemfromqueue( botrunnername, sessionid ):
     # now we've archived the old requests, we just pick a request
     # in the future, we'll pick a compatible request.  In the future ;-)
     # also, we need to handle options.  In the future ;-)
-    matchrequests = Session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None ).filter(MatchRequest.matchresult == None ).all()
+    matchrequests = Session.query(MatchRequest).filter(MatchRequest.matchrequestinprogress == None).filter(MatchRequest.matchresult == None).all()
     for matchrequest in matchrequests:
         mapok = False
         modok = False
@@ -67,7 +66,7 @@ def getcompatibleitemfromqueue( botrunnername, sessionid ):
                 ai1ok = True
         if mapok and modok and ai0ok and ai1ok:
             # mark request in progress:
-            matchrequest.matchrequestinprogress = MatchRequestInProgress( botrunner, botrunnersession, dates.dateTimeToDateString( datetime.datetime.now() ) )
+            matchrequest.matchrequestinprogress = MatchRequestInProgress(botrunner, botrunnersession, datetime.datetime.now())
 
             return matchrequest
 
@@ -79,8 +78,8 @@ def getmatchrequest(matchrequest_id):
 
 # validate that an incoming result is for a match assigned to this server
 # return true if so, otherwise false
-def matchrequestvalidforthisserver( botrunnername, matchrequest_id ):
-    matchrequest = getmatchrequest( matchrequest_id )
+def matchrequestvalidforthisserver(botrunnername, matchrequest_id):
+    matchrequest = getmatchrequest(matchrequest_id)
     if matchrequest.matchrequestinprogress == None:
         return False
     return matchrequest.matchrequestinprogress.botrunner.botrunner_name == botrunnername
@@ -95,6 +94,6 @@ def storeresult( botrunnername, matchrequest_id, result ):
 
 # returns the new match request, so can add options and so on
 # doesn't commit
-def addmatchrequest( ai0, ai1, mod, map, speed, softtimeout, hardtimeout):
-    newmatchrequest = MatchRequest( ai0 = ai0, ai1 = ai1, mod = mod, map = map, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout )
+def addmatchrequest(ai0, ai1, mod, map, speed, softtimeout, hardtimeout):
+    newmatchrequest = MatchRequest(ai0 = ai0, ai1 = ai1, mod = mod, map = map, speed = speed, softtimeout = softtimeout, hardtimeout = hardtimeout)
     Session.add(newmatchrequest)

@@ -32,7 +32,6 @@ class InfoController(BaseController):
         if dirExists:
             if os.access('replays/', os.W_OK):
                 canWrite = True
-                print os.access('replays/', os.W_OK)
 
         c.canWrite = canWrite
         c.dirExists = dirExists

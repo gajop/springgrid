@@ -8,7 +8,7 @@ class BotRunnerSession(Base):
             primary_key=True)
     botrunner_session_id = Column(String(255), primary_key=True)
     lastpingstatus = Column(String(255), nullable=False)
-    lastpingtime = Column(String(255), nullable=False)
+    lastpingtime = Column(DateTime, nullable=False)
     downloadingai_id = Column(Integer, ForeignKey('ais.ai_id'),
             nullable=True)
 
