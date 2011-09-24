@@ -16,6 +16,7 @@ class MatchRequest(Base):
 
     matchrequest_id = Column(Integer, primary_key=True)
     map_id = Column(Integer, ForeignKey('maps.map_id'), nullable=False)
+    league_id = Column(Integer, ForeignKey('leagues.league_id'), nullable=False)
     mod_id = Column(Integer, ForeignKey('mods.mod_id'), nullable=False)
     ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable=False)
     ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'),
@@ -35,7 +36,7 @@ class MatchRequest(Base):
             ModSide.mod_side_id)
     ai1_side = relationship("ModSide", primaryjoin=ai1_side_id ==
             ModSide.mod_side_id)
-
+    league = relationship("League")
     matchrequestinprogress = relationship("MatchRequestInProgress",
             uselist=False)
     matchresult = relationship("MatchResult", uselist=False)

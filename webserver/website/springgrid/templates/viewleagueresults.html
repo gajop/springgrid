@@ -6,18 +6,14 @@ Leage results
 {% endblock title %}
 {% block content %}
 
-Pick a league: <form method="get" action="viewleagueresults.py">{{formhelper.listtodropdownwithselected('leaguename', leaguenames,league.league_name)}}
-<input type="submit" value="Reload" />
-</form>
-
-<h2>Attributes of league '{{league.league_name|e}}'</h2>
+<h2>Attributes of league '{{c.league.league_name|e}}'</h2>
 
 <table cellpadding="3">
-<tr><td class='tablehead'>Map</td><td {% if not mapok %}class="fail"{% endif %}>{{league.map_name|e}}</td></tr>
-<tr><td class='tablehead'>Mod</td><td {% if not modok %}class="fail"{% endif %}>{{league.mod_name|e}}</td></tr>
+<tr><td class='tablehead'>Map</td><td>{{c.map_name|e}}</td></tr>
+<tr><td class='tablehead'>Mod</td><td>{{c.mod_name|e}}</td></tr>
 <tr><td class='tablehead'>Options</td><td>
-{% for option in league.options %}
-{{option|e}} 
+{% for option in c.league.options %}
+    {{option|e}} 
 {% endfor %}
 &nbsp;</td></tr>
 </table>
@@ -35,7 +31,7 @@ Pick a league: <form method="get" action="viewleagueresults.py">{{formhelper.lis
     <td class='tablehead'>Total Games:</td>
     <td class='tablehead'>Score:</td>
 </tr>
-    {% for aistat in aistats %}
+    {% for aistat in c.aistats %}
     <tr>
         <td class='tablehead'>{{aistat.name|e}} {{aistat.version|e}}</td>
         <td>{{aistat.wins}}</td>

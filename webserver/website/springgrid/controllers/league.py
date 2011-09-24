@@ -8,7 +8,7 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
-from springgrid.model.meta import League, LeagueAI, Mod, ModSide, AI, Map, Account
+from springgrid.model.meta import League, LeagueAI, Mod, ModSide, AI, Map, Account, MatchRequest
 from springgrid.model import roles
 
 log = logging.getLogger(__name__)
@@ -177,17 +177,27 @@ class LeagueController(BaseController):
         if league == None:
             league = Session.query(League).first()
 
+        #get map name
+        c.map_name = Session.query(Map).filter(Map.map_id == league.map_id).first().map_name
+        c.mod_name = Session.query(Mod).filter(Mod.mod_id == league.mod_id).first().mod_name
+
         #get the league ais that are part of the chosen league
         ais = Session.query(AI).join(LeagueAI).filter(LeagueAI.league_id ==\
                 league.league_id)
 
         #get matches that have been played in the league so far 
-        #TODO: things below hasn't been corrected
-        matchrequestqueue = [] #leaguehelper.getleaguematches(league)
-        matchresults = filter(lambda x: x['matchresult'][0] == True, matchrequestqueue) #only those that have results
-        for x in matchresults:
+        matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
+                league.league_id) 
+        matchresults = []
+        for req in matchrequests:
+            if req.matchresult != None:
+                matchresults.append(req.matchresult)
+        
+           #[] #leaguehelper.getleaguematches(league)
+        #matchresults = filter(lambda x: x['matchresult'][0] == True, matchrequestqueue) #only those that have results
+        """for x in matchresults:
             x['matchresult'] = x['matchresult'][1]
-            x['botrunner_name'] = x['botrunner_name'][1]
+            x['botrunner_name'] = x['botrunner_name'][1]"""
 
         aistats = {}
         for ai in ais:
@@ -222,15 +232,19 @@ class LeagueController(BaseController):
                 first = False
         aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
 
-
-        indextoai = matchscheduler.getindextoai(league)
+        #TODO: see what is this for
+        """indextoai = matchscheduler.getindextoai(league)
         aipairqueuedmatchcount = matchscheduler.getaipairmatchcount( matchrequestqueue,league, ais, indextoai )
         aipairfinishedcount = matchscheduler.getaipairmatchcount( matchresults,league, ais, indextoai )
-
-        showform = loginhelper.isLoggedOn()
+        showform = loginhelper.isLoggedOn()"""
+        
         c.aistats = aistats
+        c.league = league
+        print("proslo")
+        print(c.map_name)
+        print(c.mod_name)
         return render('viewleagueresults.html') 
-#TODO: things below should be changed to the c.something = something syntax, as done above; check templates/viewleagueresults.html
-
-        jinjahelper.rendertemplate(aipairqueuedmatchcount = aipairqueuedmatchcount, aipairfinishedcount = aipairfinishedcount, indextoai = indextoai, ais = ais, leaguenames = leaguenames, league = league, numais = len(ais), nummatchesperaipair = league.nummatchesperaipair, showform = showform, aistats=aistats )
+        #TODO: things below should be changed to the c.something = something syntax, as done above; check templates/viewleagueresults.html
+        #TODO: see if this can be deleted
+        #jinjahelper.rendertemplate(aipairqueuedmatchcount = aipairqueuedmatchcount, aipairfinishedcount = aipairfinishedcount, indextoai = indextoai, ais = ais, leaguenames = leaguenames, league = league, numais = len(ais), nummatchesperaipair = league.nummatchesperaipair, showform = showform, aistats=aistats )
 
