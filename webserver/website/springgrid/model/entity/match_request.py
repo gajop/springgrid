@@ -16,7 +16,7 @@ class MatchRequest(Base):
 
     matchrequest_id = Column(Integer, primary_key=True)
     map_id = Column(Integer, ForeignKey('maps.map_id'), nullable=False)
-    league_id = Column(Integer, ForeignKey('leagues.league_id'), nullable=False)
+    league_id = Column(Integer, ForeignKey('leagues.league_id'), nullable=True)
     mod_id = Column(Integer, ForeignKey('mods.mod_id'), nullable=False)
     ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable=False)
     ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'),
@@ -43,7 +43,7 @@ class MatchRequest(Base):
     options = relationship("AIOption", secondary=matchrequest_options)
 
     def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout,
-            ai0_side, ai1_side):
+            ai0_side, ai1_side, league_id = None):
         self.ai0 = ai0
         self.ai1 = ai1
         self.map = map
@@ -53,3 +53,5 @@ class MatchRequest(Base):
         self.hardtimeout = hardtimeout
         self.ai0_side = ai0_side
         self.ai1_side = ai1_side
+        self.league_id = league_id
+        

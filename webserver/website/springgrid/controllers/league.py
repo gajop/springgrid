@@ -9,7 +9,7 @@ from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.model.meta import League, LeagueAI, Mod, ModSide, AI, Map, Account, MatchRequest
-from springgrid.model import roles
+from springgrid.model import roles, matchscheduler
 
 log = logging.getLogger(__name__)
 
@@ -71,6 +71,13 @@ class LeagueController(BaseController):
         Session.add(league)
         Session.add_all(leagueais)
         Session.commit()
+        
+        #TODO: add matchscheduling
+        matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
+                league.league_id)         
+        matchresults = [req.matchresult for req in matchrequests if req.matchresult != None] 
+        
+        matchscheduler.schedulematchesforleague(league, matchrequests, matchresults)
 
         c.message = "Added ok"
         return render('genericmessage.html')
@@ -188,10 +195,7 @@ class LeagueController(BaseController):
         #get matches that have been played in the league so far 
         matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
                 league.league_id) 
-        matchresults = []
-        for req in matchrequests:
-            if req.matchresult != None:
-                matchresults.append(req.matchresult)
+        matchresults = [req.matchresult for req in matchrequests if req.matchresult != None] 
         
            #[] #leaguehelper.getleaguematches(league)
         #matchresults = filter(lambda x: x['matchresult'][0] == True, matchrequestqueue) #only those that have results
@@ -231,20 +235,11 @@ class LeagueController(BaseController):
                         aistat.score += 3
                 first = False
         aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
-
-        #TODO: see what is this for
-        """indextoai = matchscheduler.getindextoai(league)
-        aipairqueuedmatchcount = matchscheduler.getaipairmatchcount( matchrequestqueue,league, ais, indextoai )
-        aipairfinishedcount = matchscheduler.getaipairmatchcount( matchresults,league, ais, indextoai )
-        showform = loginhelper.isLoggedOn()"""
         
         c.aistats = aistats
         c.league = league
-        print("proslo")
-        print(c.map_name)
-        print(c.mod_name)
+        
+        #TODO add that match table elements
         return render('viewleagueresults.html') 
-        #TODO: things below should be changed to the c.something = something syntax, as done above; check templates/viewleagueresults.html
-        #TODO: see if this can be deleted
-        #jinjahelper.rendertemplate(aipairqueuedmatchcount = aipairqueuedmatchcount, aipairfinishedcount = aipairfinishedcount, indextoai = indextoai, ais = ais, leaguenames = leaguenames, league = league, numais = len(ais), nummatchesperaipair = league.nummatchesperaipair, showform = showform, aistats=aistats )
+        
 

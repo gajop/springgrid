@@ -28,21 +28,31 @@
 #   matches
 # - otherwise schedule new ones
 
-from tableclasses import *
-import sqlalchemysetup
-import leaguehelper
-import aihelper
-import matchrequestcontroller_gridclient
+#from tableclasses import *
+#import sqlalchemysetup
+#import leaguehelper
+#import aihelper
+#import matchrequestcontroller_gridclient
+
+from springgrid.lib.base import Session
+from springgrid.model.meta import League, LeagueAI, AI, MatchRequest, Map, Mod, ModSide
 
 # does for one league
 def schedulematchesforleague(league, matchrequestqueue, matchresults):
-    ais = leaguehelper.getleagueais(league)
-    indextoai = getindextoai(league)
+    ais = Session.query(AI).join(LeagueAI).filter(LeagueAI.league_id ==\
+                league.league_id).all()
+                
+    map_name = Session.query(Map).filter(Map.map_id == league.map_id).first()
+    mod_name = Session.query(Mod).filter(Mod.mod_id == league.mod_id).first()
+               
+    indextoai = getindextoai(ais)
     aiqueuedpairmatchcount = getaipairmatchcount(matchrequestqueue, league, ais, indextoai)
     aifinishedpairmatchcount = getaipairmatchcount(matchresults, league, ais, indextoai)
     aipairs = []
     playagainstself = league.playagainstself
     sides = [int(i) for i in league.sides.split("vs")]
+    
+    matchrequests = []    
     for outeraiindex in xrange(len(ais)):
         for inneraiindex in xrange(len(ais)):
             if not playagainstself and outeraiindex == inneraiindex:
@@ -50,55 +60,44 @@ def schedulematchesforleague(league, matchrequestqueue, matchresults):
             totalrequestcount = aiqueuedpairmatchcount[outeraiindex][inneraiindex] + aifinishedpairmatchcount[outeraiindex][inneraiindex]
             if totalrequestcount < league.nummatchesperaipair * len(sides):
                 if len(sides) == 2:
-                    first = sides[0]
-                    second = sides[1]
+                    first = Session.query(ModSide).filter(ModSide.mod_side_id == sides[0]).first()
+                    second = Session.query(ModSide).filter(ModSide.mod_side_id == sides[1]).first()
+                    
                     for i in xrange( league.nummatchesperaipair - totalrequestcount ):
-                        aipairs.append([{"ai_name":indextoai[outeraiindex].ai_name, "ai_version":indextoai[outeraiindex].ai_version, "ai_side":first}, {"ai_name":indextoai[inneraiindex].ai_name, "ai_version":indextoai[inneraiindex].ai_version, "ai_side":second}])
+                        matchrequest = MatchRequest( indextoai[outeraiindex], indextoai[inneraiindex], map_name, mod_name,\
+                            league.speed, league.softtimeout, league.hardtimeout,\
+                            first, second, league.league_id)
+                        matchrequests.append(matchrequest)                        
                     for i in xrange( league.nummatchesperaipair - totalrequestcount ):
-                        aipairs.append([{"ai_name":indextoai[outeraiindex].ai_name, "ai_version":indextoai[outeraiindex].ai_version, "ai_side":second}, {"ai_name":indextoai[inneraiindex].ai_name, "ai_version":indextoai[inneraiindex].ai_version, "ai_side":first}])
+                        
+                    
+                        matchrequest = MatchRequest( indextoai[outeraiindex], indextoai[inneraiindex], map_name, mod_name,\
+                            league.speed, league.softtimeout, league.hardtimeout,\
+                            second, first, league.league_id)
+                        matchrequests.append(matchrequest)  
                 else:
-                    side = sides[0]
+                    side = Session.query(ModSide).filter(ModSide.mod_side_id == sides[0]).first()
                     for i in xrange( league.nummatchesperaipair - totalrequestcount ):
-                        aipairs.append([{"ai_name":indextoai[outeraiindex].ai_name, "ai_version":indextoai[outeraiindex].ai_version, "ai_side":side}, {"ai_name":indextoai[inneraiindex].ai_name, "ai_version":indextoai[inneraiindex].ai_version, "ai_side":side}])
-                    #scheduleleaguematch( league, indextoai[outeraiindex], indextoai[inneraiindex] )
+                        matchrequest = MatchRequest( indextoai[outeraiindex], indextoai[inneraiindex], map_name, mod_name,\
+                            league.speed, league.softtimeout, league.hardtimeout,\
+                            side, side, league.league_id)
+                        matchrequests.append(matchrequest) 
                 aiqueuedpairmatchcount[outeraiindex][inneraiindex] = league.nummatchesperaipair - aifinishedpairmatchcount[outeraiindex][inneraiindex]
                 aiqueuedpairmatchcount[inneraiindex][outeraiindex] = league.nummatchesperaipair - aifinishedpairmatchcount[outeraiindex][inneraiindex]
-    scheduleleaguematches(league, aipairs)
-
-def scheduleleaguematch( league, ai0, ai1 ):
-    matchrequest_id = matchrequestcontroller_gridclient.addmatchrequest( ai0 = ai0, ai1 = ai1, map_name = league.map_name, mod_name = league.mod_name, speed = league.speed, softtimeout = league.softtimeout, hardtimeout = league.hardtimeout )
-    leagueMatch = LeagueMatch(matchrequest_id, league.league_id)
-    sqlalchemysetup.session.add(leagueMatch)
-    sqlalchemysetup.session.commit()
-
-def scheduleleaguematches(league, aipairs):
-    matches = []
-    for aipair in aipairs:
-        match = {}
-        match["map_name"] = league.map_name
-        match["mod_name"] = league.mod_name
-        match["ais"] = aipair
-        match["softtimeout"] = league.softtimeout
-        match["hardtimeout"] = league.hardtimeout
-        match["speed"] = league.speed
-        match["options"] = []
-        matches.append(match)
-    matchrequest_ids = matchrequestcontroller_gridclient.addmatchrequests(matches)
-    leaguematches = [LeagueMatch(matchrequest_id, league.league_id) for matchrequest_id in matchrequest_ids]
-    sqlalchemysetup.session.add_all(leaguematches)
-    sqlalchemysetup.session.commit()
+    
+    #save all matches to the database
+    Session.add_all(matchrequests)
+    Session.commit()
 
 
 # returns [ dict from ai to zero-based aiindex, dict from index to ai ]
 # only returns ais that match the league, ie have at least the same options as league
-def getindextoai(league ):
+def getindextoai(ais):
     # assume this query is cached in memory, so fine to redo
     #aitoindex = {}  # dict from ai to aiindex
     indextoai = {} # dict from index to ai
-    ais = leaguehelper.getleagueais( league )
     for ai in ais:
         indextoai[ len(indextoai) ] = ai
-    #return [ aitoindex, indextoai ]
     return indextoai
 
 # return 2d list ([][]), indexed by indexes returned by getaiindexes
