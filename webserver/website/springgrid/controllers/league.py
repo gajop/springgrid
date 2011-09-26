@@ -23,7 +23,7 @@ class LeagueForm(formencode.Schema):
     softtimeout = Int(not_empty=True)
     hardtimeout = Int(not_empty=True)
     nummatchesperaipair = Int(not_empty=True)
-    sides = Int(not_empty=True)
+    sides = String(not_empty=True)
     sidemodes = String(not_empty=True)
     playagainstself = StringBool(if_missing=False)
 
@@ -56,6 +56,8 @@ class LeagueController(BaseController):
         nummatchesperaipair = self.form_result["nummatchesperaipair"]
         sides = self.form_result["sides"]
         sidemodes = self.form_result["sidemodes"]
+        if sidemodes == "allsame":
+            sides = int(sides)
         playagainstself = self.form_result["playagainstself"]
         account = Session.query(Account).filter(Account.username == session['user']).first()
         ais = []

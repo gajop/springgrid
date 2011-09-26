@@ -61,11 +61,11 @@ function addSides() {
 
     var items = new Array();
     {% for k, v in c.sides.itervalues() %}
-    items[{{k}}] = [
-    {% for side in v %}
-    ["{{side[0]}}", {{side[1]}}],
+        items[{{k}}] = [
+        {% for side in v %}
+            ["{{side[0]}}", {{side[1]}}],
         {% endfor %}
-    ];
+        ];
     {% endfor %}
     var selectedItems = items[index];
     for (i in selectedItems) {
@@ -89,15 +89,15 @@ function addSideCombinations() {
 
     var items = new Array();
     {% for k, v in c.sides.itervalues() %}
-    items[{{k}}] = [
-    {% for firstSide in v %}
-    {% for secondSide in v %}
-    {% if firstSide != secondSide %}
-    ["{{firstSide[0]}} vs {{secondSide[0]}}", "{{firstSide[1]}}vs{{secondSide[1]}}"],
-        {% endif %}
-    {% endfor %}
-    {% endfor %}
-    ];
+        items[{{k}}] = [
+        {% for firstSide in v %}
+            {% for secondSide in v %}
+                {% if firstSide != secondSide %}
+                ["{{firstSide[0]}} vs {{secondSide[0]}}", "{{firstSide[1]}}vs{{secondSide[1]}}"],
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        ];
     {% endfor %}
     var selectedItems = items[index];
     for (i in selectedItems) {
