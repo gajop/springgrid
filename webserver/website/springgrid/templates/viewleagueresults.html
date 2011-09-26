@@ -2,9 +2,17 @@
 
 {% import 'formhelper.html' as formhelper %}
 {% block title %}
-Leage results
+League results
 {% endblock title %}
 {% block content %}
+Pick a league: <form method="get" action="{{ h.url(controller='league', action='results') }}">
+    <select name="league_id">
+        {% for league in c.leagues %}
+        <option value="{{league.league_id}}">{{league.league_id}}</option> 
+        {% endfor %}
+    </select>
+<input type="submit" value="Reload" />
+</form>
 
 <h2>Attributes of league '{{c.league.league_name|e}}'</h2>
 
@@ -46,4 +54,3 @@ Leage results
 </table>
 
 {% endblock content %}
-

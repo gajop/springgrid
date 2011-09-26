@@ -181,7 +181,7 @@ class LeagueController(BaseController):
         #get the league by id, or choose the first one
         league = None
         if (request.params.has_key('league_id')):
-            id = self.request.params['league_id']
+            id = request.params['league_id']
             league = Session.query(League).filter(League.league_id == id).first()
         if league == None:
             league = Session.query(League).first()
@@ -211,25 +211,28 @@ class LeagueController(BaseController):
 
         for matchresult in matchresults:
             first = True
-            for ai in matchresult['ais']:
-                aistat = aistats[ai['ai_name'], ai['ai_version']]
+            match = Session.query(MatchRequest).filter(
+                    MatchRequest.matchrequest_id == 
+                    matchresult.matchrequest_id).first()
+            for ai in [match.ai0, match.ai1]:
+                aistat = aistats[ai.ai_name, ai.ai_version]
                 aistat.games += 1
-                if matchresult['matchresult'] == 'draw':
+                if matchresult.matchresult == 'draw':
                     aistat.draws += 1
                     aistat.score += 1
-                elif matchresult['matchresult'] == 'crashed':
+                elif matchresult.matchresult == 'crashed':
                     aistat.crashes += 1
                     aistat.score += 1
-                elif matchresult['matchresult'] == 'gametimeout':
+                elif matchresult.matchresult == 'gametimeout':
                     aistat.timeouts += 1
                     aistat.score += 1
-                elif matchresult['matchresult'] == 'ai0won':
+                elif matchresult.matchresult == 'ai0won':
                     if first:
                         aistat.wins += 1
                         aistat.score += 3
                     else:
                         aistat.losses += 1
-                elif matchresult['matchresult'] == 'ai1won':
+                elif matchresult.matchresult == 'ai1won':
                     if first:
                         aistat.losses += 1
                     else:
@@ -240,7 +243,7 @@ class LeagueController(BaseController):
         
         c.aistats = aistats
         c.league = league
-        
+        c.leagues = Session.query(League).all()
         #TODO add that match table elements
         return render('viewleagueresults.html') 
         
