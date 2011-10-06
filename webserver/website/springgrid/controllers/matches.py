@@ -11,7 +11,7 @@ from pylons.controllers.util import abort, redirect
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.lib.helpers import *
 from springgrid.model.meta import MatchRequest
-from springgrid.model import replaycontroller
+from springgrid.model import roles, replaycontroller
 
 log = logging.getLogger(__name__)
 scriptdir = os.path.dirname(os.path.realpath( __file__ ))
@@ -71,5 +71,22 @@ class MatchesController(BaseController):
             response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:
-            raise      
+            raise  
+            
+    def remove(self, id):
+        if not roles.isInRole(roles.leagueadmin):
+            c.message = "You must be logged in as a leagueadmin"
+            return render('genericmessage.html')
+        
+        request = Session.query(MatchRequest).filter(MatchRequest.matchrequest_id == id).first()
+        
+        if request == None:
+            c.message = "No such request"
+            return render('genericmessage.html')   
+        
+        Session.delete(request)
+        Session.commit()
+        
+        c.message = "Deleted ok"
+        return render('genericmessage.html')    
        

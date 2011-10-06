@@ -79,8 +79,7 @@ http://www.opensource.org/licenses/gpl-license.php
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>
-          <form action='removerequest.py' method='post'>
-              <input type='hidden' value='{{request.matchrequest_id}}' name='matchrequest_id'/>
+          <form action='{{ h.url(controller='matches', action='remove', id=request.matchrequest_id) }}' method='post'>
               <input type='submit' value='Remove'/>
           </form>
       </td>
