@@ -1,6 +1,5 @@
-NEW (currenT):
-- separate AIs from their version, each AI should have (0, n) versions
-- port 'delete request' for the queued matches to pylons (dexterthedevil 29.09.2011. : DONE 06.10.2011.)
+NEW (current):
+- separate AIs from their version, each AI should have (0, n) versions (gajop 13.10.2011)
 - add match templates (everything that makes a match except for the concrete match ID)
 - change the UI for "add league" - AIs should be selected using jquery multiselect instead of checkboxes (dexterthedevil 29.09.2011.)
 - adding matches and mods manually needs to be changed; having the user specify hash is prone to errors
