@@ -8,7 +8,6 @@
     <tr class='tablehead'>
         <td>AI Name</td>
         <td>AI Version</td>
-        <td>Compatible Options</td>
         <td>Download url</td>
         <td>Needs compiling?</td>
     </tr>
@@ -17,11 +16,6 @@
     <tr>
         <td><a href='{{ url(controller='ai', action='view', id=ai.ai_id) }}'>{{ai.ai_base.ai_base_name|e}}</a></td>
         <td>{{ai.ai_version|e}}</td>
-
-        <td>{% for option in ai.allowedoptions %}
-                {{option.option_name|e}}&nbsp;
-            {% endfor %} &nbsp;</td>
-
         {% if ai.ai_downloadurl != none %}
         <td><a href='{{ai.ai_downloadurl|e}}'>{{ai.ai_downloadurl|e}}</a>      </td>
         <td>{{ai.ai_needscompiling}}</td>

@@ -21,6 +21,13 @@ class MatchesController(BaseController):
     def results(self):
         c.requests = Session.query(MatchRequest).filter(
                 MatchRequest.matchresult != None)
+
+        try:
+            league_id = int(request.params['league'])
+            c.requests = c.requests.filter(MatchRequest.league_id == league_id)
+        except:
+            pass
+
         page = 1
         try:
             page = int(request.params['page'])
@@ -30,6 +37,7 @@ class MatchesController(BaseController):
             c.requests,
             page=page,
             items_per_page=20)
+
         c.replayPaths = {}
         c.infologPaths = {}
         for req in c.requests:
@@ -47,6 +55,13 @@ class MatchesController(BaseController):
     def requests(self):
         c.requests = Session.query(MatchRequest).filter(
                 MatchRequest.matchresult == None)
+
+        try:
+            league_id = int(request.params['league'])
+            c.requests = c.requests.filter(MatchRequest.league_id == league_id)
+        except:
+            pass
+
         page = 1
         try:
             page = int(request.params['page'])

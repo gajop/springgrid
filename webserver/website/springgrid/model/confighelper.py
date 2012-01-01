@@ -27,7 +27,7 @@ from springgrid.lib.base import Session
 
 defaults = {
    'expiresessionminutes': 20,
-   'gameendstring': "] Team%TEAMNUMBER%",
+   'gameendstring': "Team %TEAMNUMBER% (lead by ",
    'cheatingstring': "] SkirmishAI (with team ID = %TEAMNUMBER%): Cheating enabled",
    'guimarksessionasmaybedownafterthismanyminutes': 6
 }

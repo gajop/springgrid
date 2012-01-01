@@ -5,7 +5,7 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
-from springgrid.model.meta import AI, AIBase, Map, Mod, ModSide, AIOption, MatchRequest
+from springgrid.model.meta import AI, AIBase, Map, Mod, ModSide, MatchRequest
 from springgrid.utils import *
 import formencode
 from formencode.validators import Int, String
@@ -39,8 +39,6 @@ class SubmitRequestController(BaseController):
             c.sides[side.mod_id][1].append((side.mod_side_name, side.mod_side_id))
 
         c.mods = [mod.mod_name for mod in c.mods]
-        c.options = [i[0] for i in Session.query(AIOption.option_name)]
-
         c.aiitems = []
         c.aivalues = []
         for ai in c.ais:
@@ -67,13 +65,7 @@ class SubmitRequestController(BaseController):
                                     hardtimeout = self.form_result['hardtimeout'],
                                     ai0_side=ai0side, ai1_side=ai1side)
 
-        # add options:
-   #     availableoptions = Session.query(AIOption)
-        # get selected options from form submission:
-     #   for option in availableoptions:
-    #       if formhelper.getValue( "option_" + option.option_name ) != None:
-     #         matchrequest.options.append( option )
-        Session.add( matchrequest )
+        Session.add(matchrequest)
 
         Session.commit()
 

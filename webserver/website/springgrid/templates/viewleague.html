@@ -23,39 +23,50 @@ http://www.opensource.org/licenses/gpl-license.php
 #}
 
 {% import 'formhelper.html' as formhelper %}
-{% block title %}AILadder - View League '{{leaguename|e}}'{% endblock title %}
+{% block title %}View League '{{leaguename|e}}'{% endblock title %}
 {% block content %}
 
-<p>This page can configure the options that will be used for this league.</p>
-<p>Try to make sure not to add two incompatible options ;-)</p>
+<h2>League {{c.league.league_name|e}}</h2>
 
-<table padding='3'>
-<tr class='tablehead'><td>Assigned options</td><td></td></tr>
-
-{% for option in compatibleoptions %}
-   <tr>
-   <td>{{option}}</td>
-   <td><a href='deleteoptionfromleague.py?leaguename={{leaguename|e}}&aioption={{option|e}}'>Remove option</a></td>
-   </tr>
+<table cellpadding="3">
+<tr><td class='tablehead'>Map</td><td>{{c.map_name|e}}</td></tr>
+<tr><td class='tablehead'>Mod</td><td>{{c.mod_name|e}}</td></tr>
+{% for option in c.league.options %}
+    {{option|e}} 
 {% endfor %}
+&nbsp;</td></tr>
 </table>
 
-{%if showform %}
-   <p />
-   <hr />
-   <p />
+<h2>AI league results</h2>
 
-   <h2>Assign new options:</h2>
-
-   <form action='addoptiontoleague.py' method='post'>
-   <table padding='3'>
-   <tr><td>Option to add:</td><td>{{formhelper.listtodropdown( 'aioption', potentialoptions )}}</td></tr>
-   <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-   </table>
-   <input type='hidden' name='leaguename' value='{{leaguename|e}}' />
-   </form>
-
-{% endif %}
+<table cellpadding="3">
+<tr>
+    <td class='tablehead'>AIs</td>
+    <td class='tablehead'>Wins:</td>
+    <td class='tablehead'>Losses:</td>
+    <td class='tablehead'>Draws:</td>
+    <td class='tablehead'>Timeouts:</td>
+    <td class='tablehead'>Crashes:</td>
+    <td class='tablehead'>Scheduled:</td>
+    <td class='tablehead'>Total Games:</td>
+    <td class='tablehead'>Score:</td>
+</tr>
+    {% for aistat in c.aistats %}
+    <tr>
+        <td class='tablehead'>{{aistat.name|e}} {{aistat.version|e}}</td>
+        <td>{{aistat.wins}}</td>
+        <td>{{aistat.losses}}</td>
+        <td {% if aistat.draws > 0 %} class="warning" {% endif %}>{{aistat.draws}}</td>
+        <td {% if aistat.timeouts > 0 %} class="warning" {% endif %}>{{aistat.timeouts}}</td>
+        <td {% if aistat.crashes > 0 %} class="fail" {% endif %}>{{aistat.crashes}}</td>
+        <td>{{aistat.scheduled}}</td>
+        <td>{{aistat.games}}</td>
+        <td>{{aistat.score}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ h.url(controller='matches', action='results')}}?league={{c.league.league_id}}">View Results</a>
+<a href="{{ h.url(controller='matches', action='requests')}}?league={{c.league.league_id}}">View Requests</a>
 
 {% endblock %}
 

@@ -29,7 +29,6 @@ http://www.opensource.org/licenses/gpl-license.php
         <td rowspan="2">Name</td>
         <td rowspan="2">Owner Name</td>
         <td rowspan="2">Shared secret (only visible for your own botrunners)</td>
-        <td rowspan="2">Options</td>
         <td colspan="3">Instance</td>
     </tr>
     <tr class='tablehead' align="center">
@@ -45,7 +44,6 @@ http://www.opensource.org/licenses/gpl-license.php
 	<td rowspan="{{c.botrunnerData[botrunner].rowspan}}" valign="top">{{botrunner.owneraccount.userfullname|e}}&nbsp;</td>
 	<td rowspan="{{c.botrunnerData[botrunner].rowspan}}" valign="top">{% if botrunner.owneraccount.username == username %}
 	{{botrunner.botrunner_sharedsecret|e}}{% endif %}&nbsp;</td>
-	<td rowspan="{{c.botrunnerData[botrunner].rowspan}}" valign="top">{% for option in botrunner.options %}{{option.option_name|e}}{% endfor %}&nbsp;</td>
 	
 	{% for instance in botrunner.sessions %}
 		{% if not loop.first %}<tr>{% endif %}

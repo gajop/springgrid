@@ -26,46 +26,6 @@
 </form>
 {% endif %}
 
-<h4>Configure AI options</h4>
-
-<p>Configure the options compatible with one ai</p>
-<p>For example, if it can run when cheating is allowed, then add the option 'cheatingallowed', or, if it can run when cheating is banned, then add the option 'cheatingequalslose'.</p>
-
-<table border='1' padding='3'>
-    <tr>
-        <td>Compatible options</td>
-        <td></td>
-    </tr>
-
-{% for option in c.ai.allowedoptions %}
-   <tr>
-   <td>{{option.option_name|e}}</td>
-   <td><a href='deleteoptionfromai.py?ainame={{c.ai.ai_name|e}}&aiversion={{c.ai.ai_version|e}}&aioption={{option.option_name|e}}'>Remove option</a></td>
-   </tr>
-{% endfor %}
-</table>
-
-{% if c.showForm %}
-   <p />
-   <hr />
-   <p />
-
-   <h4>Add new compatible options:</h4>
-
-   <form action='addoptiontoai.py' method='post'>
-   <table border='1' padding='3'>
-       <tr>
-           <td>Option to add:</td>
-           <td>{{formhelper.listtodropdown( 'aioption', potentialoptions )}}</td>
-       </tr>
-       <tr>
-           <td></td>
-           <td><input type='submit' value='Add' /></td>
-       </tr>
-       </table>
-   </form>
-{% endif %}
-
 <table>
     <tr>
         <td>AI Version</td>

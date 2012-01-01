@@ -61,14 +61,6 @@
       <option value='{{mod}}'>{{mod}}</option>
    {% endfor %}
    </select></td></tr>
-
-<tr><td>Options:</td>
-<td>
-   {% for option in c.options %}
-      <input type='checkbox' name='option_{{option}}' >{{option}}</input><br />
-   {% endfor %}
-</td>
-</tr>
 <tr><td>Speed:</td><td>{{formhelper.listtodropdown("speed", c.speeds)}}</td></tr>
 <tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout',
         c.timeouts)}}</td></tr>

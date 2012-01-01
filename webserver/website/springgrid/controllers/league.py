@@ -8,6 +8,8 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
+from pylons import url
+from pylons.controllers.util import redirect
 from springgrid.model.meta import League, LeagueAI, Mod, ModSide, AI, Map, Account, MatchRequest
 from springgrid.model import roles, matchscheduler
 
@@ -38,6 +40,7 @@ class AIStats:
         self.crashes = 0
         self.score = 0
         self.games = 0
+        self.scheduled = 0
 
 class LeagueController(BaseController):
 
@@ -76,22 +79,10 @@ class LeagueController(BaseController):
         matchresults = [req for req in matchrequests if req.matchresult != None] 
         
         matchscheduler.addLeagueMatches(league, matchrequests, matchresults)
+        Session.flush()
         Session.commit()
-
-        c.message = "Added ok"
-        return render('genericmessage.html')
-
-    def view(self, id):
-        league = Session.query(League).filter(League.league_id == id).first()
-        if league == None:
-            c.message = "No such league"
-            return render('genericmessage.html')
-
-        showform = roles.isInRole(roles.leagueadmin)
-
-        c.league = league
-        c.showForm = showform
-        return render('viewleague.html')
+        
+        redirect(url(controller='league', action='view', id=league.league_id))
 
     @validate(schema=LeagueForm(), form='view', post_only=True, on_get=False)
     def update(self, id):
@@ -169,19 +160,14 @@ class LeagueController(BaseController):
         c.timeouts = c.speeds
         return render('viewleagues.html')
 
-    def results(self):
+    def view(self, id):
         #check if any leagues exist
         if len(Session.query(League).all()) == 0:
             c.message = "Please create a league first."            
             return render('genericmessage.html')
        
         #get the league by id, or choose the first one
-        league = None
-        if (request.params.has_key('league_id')):
-            id = request.params['league_id']
-            league = Session.query(League).filter(League.league_id == id).first()
-        if league == None:
-            league = Session.query(League).first()
+        league = Session.query(League).filter(League.league_id == id).first()
 
         #get map name
         c.map_name = Session.query(Map).filter(Map.map_id == league.map_id).first().map_name
@@ -192,56 +178,49 @@ class LeagueController(BaseController):
                 league.league_id)
 
         #get matches that have been played in the league so far 
-        matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
+        matchRequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
                 league.league_id) 
-        matchresults = [req.matchresult for req in matchrequests if req.matchresult != None] 
-        
-           #[] #leaguehelper.getleaguematches(league)
-        #matchresults = filter(lambda x: x['matchresult'][0] == True, matchrequestqueue) #only those that have results
-        """for x in matchresults:
-            x['matchresult'] = x['matchresult'][1]
-            x['botrunner_name'] = x['botrunner_name'][1]"""
 
         aistats = {}
         for ai in ais:
             aistats[(ai.ai_base.ai_base_name, ai.ai_version)] = AIStats(ai.ai_base.ai_base_name, ai.ai_version)
 
-        for matchresult in matchresults:
+        for match in matchRequests:
             first = True
-            match = Session.query(MatchRequest).filter(
-                    MatchRequest.matchrequest_id == 
-                    matchresult.matchrequest_id).first()
             for ai in [match.ai0, match.ai1]:
                 aistat = aistats[ai.ai_base.ai_base_name, ai.ai_version]
                 aistat.games += 1
-                if matchresult.matchresult == 'draw':
-                    aistat.draws += 1
-                    aistat.score += 1
-                elif matchresult.matchresult == 'crashed':
-                    aistat.crashes += 1
-                    aistat.score += 1
-                elif matchresult.matchresult == 'gametimeout':
-                    aistat.timeouts += 1
-                    aistat.score += 1
-                elif matchresult.matchresult == 'ai0won':
-                    if first:
-                        aistat.wins += 1
-                        aistat.score += 3
-                    else:
-                        aistat.losses += 1
-                elif matchresult.matchresult == 'ai1won':
-                    if first:
-                        aistat.losses += 1
-                    else:
-                        aistat.wins += 1
-                        aistat.score += 3
+                matchresult = match.matchresult
+                if matchresult is None:
+                    aistat.scheduled += 1
+                else:
+                    if matchresult.matchresult == 'draw':
+                        aistat.draws += 1
+                        aistat.score += 1
+                    elif matchresult.matchresult == 'crashed':
+                        aistat.crashes += 1
+                        aistat.score += 1
+                    elif matchresult.matchresult == 'gametimeout':
+                        aistat.timeouts += 1
+                        aistat.score += 1
+                    elif matchresult.matchresult == 'ai0won':
+                        if first:
+                            aistat.wins += 1
+                            aistat.score += 3
+                        else:
+                            aistat.losses += 1
+                    elif matchresult.matchresult == 'ai1won':
+                        if first:
+                            aistat.losses += 1
+                        else:
+                            aistat.wins += 1
+                            aistat.score += 3
                 first = False
         aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
         
         c.aistats = aistats
         c.league = league
         c.leagues = Session.query(League).all()
-        #TODO add that match table elements
-        return render('viewleagueresults.html') 
+        return render('viewleague.html') 
         
 

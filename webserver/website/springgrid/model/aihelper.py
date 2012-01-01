@@ -85,7 +85,7 @@ def setbotrunnersupportsthisai(botrunnername, ainame, aiversion):
 def setbotrunnernotsupportsthisai(botrunnername, ainame, aiversion):
     botrunner = botrunnerhelper.getBotRunner( botrunnername )
     for ai in botrunner.supportedais:
-        if ai.ai_name == ainame and ai.ai_version == aiversion:
+        if ai.ai_base.ai_base_name == ainame and ai.ai_version == aiversion:
             botrunner.supportedais.remove( ai )
     Session.commit()
     return (True,'')

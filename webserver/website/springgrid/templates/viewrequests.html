@@ -33,7 +33,7 @@ http://www.opensource.org/licenses/gpl-license.php
         <td colspan="3">Second AI</td>
         <td rowspan="2">Map</td>
         <td rowspan="2">Mod</td>
-        <td rowspan="2">Options</td>
+        <td rowspan="2">League</td>
         <td colspan="2">Botrunner</td>
         <td rowspan="2">Time Assigned</td>
         <td rowspan="2">Remove</td>
@@ -64,11 +64,12 @@ http://www.opensource.org/licenses/gpl-license.php
             <td>{{request.ai1_side.mod_side_name|e}}</td>
             <td>{{request.map.map_name|e}}</td>
             <td>{{request.mod.mod_name|e}}</td>
-            <td>
-                {% for option in request.options %}
-                {{option.option_name|e}}&nbsp;
-                {% endfor %}
-                &nbsp;</td>
+            <td>{% if request.league_id != None %}
+                <a href="{{ h.url(controller='league', action='view', id=request.league_id) }}">{{request.league.league_name}}</a>
+                {% else %}
+                No league
+                {% endif %}
+            </td>
             {% if request.matchrequestinprogress != None: %}
             <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
             <td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>

@@ -20,33 +20,12 @@
 
 </table>
 
-<h3>Assigned options</h3>
-
-<table>
-
-
-{% if isbotrunnerowner %}
-   <tr class='tablehead'><td>Option name</td><td></td></tr>
-{% else %}
-   <tr class='tablehead'><td>Option name</td></tr>
-{% endif %}
-
-{% for option in c.botrunner.options %}
-   <tr><td>{{option.option_name|e}}</td>
-   {% if showform %}
-      <td><a href='deleteoptionfrombotrunner.py?botrunnername={{botrunner.botrunner_name|e}}&optionname={{option.option_name|e}}'>Delete option</a></td>
-   {% endif %}
-   </tr>
-{% endfor %}
-
-</table>
-
 <h3>Supported AIs</h3>
 
 <table>
 <tr class='tablehead'><td>AI Name</td><td>AI Version</td></tr>
 {% for ai in c.botrunner.supportedais %}
-   <tr class='success'><td>{{ai.ai_name|e}}</td><td>{{ai.ai_version|e}}</td></tr>
+   <tr class='success'><td>{{ai.ai_base.ai_base_name|e}}</td><td>{{ai.ai_version|e}}</td></tr>
 {% endfor %}
 </table>
 

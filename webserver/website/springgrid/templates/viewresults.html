@@ -11,7 +11,7 @@
         <td colspan="3">Second AI</td>
         <td rowspan="2">Map</td>
         <td rowspan="2">Mod</td>
-        <td rowspan="2">Options</td>
+        <td rowspan="2">League</td>
         <td rowspan="2">Botrunner</td>
         <td rowspan="2">Time Assigned</td>
         <td rowspan="2">Result</td>
@@ -37,15 +37,17 @@
         <td>{{request.ai1_side.mod_side_name|e}}</td>
         <td>{{request.map.map_name|e}}</td>
         <td>{{request.mod.mod_name|e}}</td>
-        <td>
-            {% for option in request.options %}
-            {{option.option_name|e}}&nbsp;
-            {% endfor %}
-            &nbsp;
+        <td>{% if request.league_id != None %}
+            <a href="{{ h.url(controller='league', action='view', id=request.league_id) }}">{{request.league.league_name}}</a>
+            {% else %}
+            No league
+            {% endif %}
         </td>
         <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
         <td>{{request.matchrequestinprogress.datetimeassigned}}</td>
-        <td>{{request.matchresult.matchresult|e}}</td>
+        <td {% if request.matchresult.matchresult == 'crashed' %} class="fail" 
+            {% elif request.matchresult.matchresult == 'draw' %} class="warning" {% endif %}
+            >{{request.matchresult.matchresult|e}}</td>
         <td>
             {% if c.infologPaths[request] is defined %}
             <a href='{{c.infologPaths[request]|e}}'>infolog</a>

@@ -9,7 +9,7 @@ from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
 from springgrid.model import botrunnerhelper, loginhelper, confighelper, roles
-from springgrid.model.meta import BotRunner, AIOption
+from springgrid.model.meta import BotRunner
 from springgrid.utils import dates
 
 log = logging.getLogger(__name__)
@@ -45,9 +45,6 @@ class BotrunnerController(BaseController):
         c.showform = (c.isbotrunnerowner or
                 roles.isInRole(roles.botrunneradmin))
 
-        potentialoptions = [i[0] for i in Session.query(AIOption.option_name)]
-        for option in botrunner.options:
-            potentialoptions.remove(option.option_name)
         c.botrunner = botrunner
         return render('viewbotrunner.html')
 
