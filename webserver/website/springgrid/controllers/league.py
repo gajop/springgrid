@@ -56,8 +56,6 @@ class LeagueController(BaseController):
         nummatchesperaipair = self.form_result["nummatchesperaipair"]
         sides = self.form_result["sides"]
         sidemodes = self.form_result["sidemodes"]
-        if sidemodes == "allsame":
-            sides = int(sides)
         playagainstself = self.form_result["playagainstself"]
         account = Session.query(Account).filter(Account.username == session['user']).first()
         ais = []
@@ -71,15 +69,14 @@ class LeagueController(BaseController):
                 sides, sidemodes, playagainstself)
         leagueais = [LeagueAI(ai, league) for ai in ais]
         Session.add(league)
-        Session.add_all(leagueais)
-        Session.commit()
+        Session.add_all(leagueais)        
         
-        #TODO: add matchscheduling
         matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
                 league.league_id)         
-        matchresults = [req.matchresult for req in matchrequests if req.matchresult != None] 
+        matchresults = [req for req in matchrequests if req.matchresult != None] 
         
-        matchscheduler.schedulematchesforleague(league, matchrequests, matchresults)
+        matchscheduler.addLeagueMatches(league, matchrequests, matchresults)
+        Session.commit()
 
         c.message = "Added ok"
         return render('genericmessage.html')

@@ -2,15 +2,6 @@ from base import *
 from ai import AI
 from mod_side import ModSide
 
-matchrequest_options = Table('matchrequest_option', Base.metadata,
-   Column('matchrequest_id', Integer,
-       ForeignKey('matchrequestqueue.matchrequest_id'), nullable=False),
-   Column('option_id', Integer, ForeignKey('aioption.option_id'),
-       nullable=False),
-   UniqueConstraint('matchrequest_id', 'option_id')
-)
-
-
 class MatchRequest(Base):
     __tablename__ = 'matchrequestqueue'
 
@@ -40,7 +31,6 @@ class MatchRequest(Base):
     matchrequestinprogress = relationship("MatchRequestInProgress",
             uselist=False)
     matchresult = relationship("MatchResult", uselist=False)
-    options = relationship("AIOption", secondary=matchrequest_options)
 
     def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout,
             ai0_side, ai1_side, league_id = None):

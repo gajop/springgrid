@@ -137,9 +137,6 @@ def addStaticData():
     import roles
     roles.addstaticdata()
 
-    import optionshelper
-    optionshelper.addstaticdata()
-
     account = Account("admin", "admin")
     account.passwordinfo = PasswordInfo('admin')
     Session.add(account)

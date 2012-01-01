@@ -14,14 +14,6 @@ ai_allowedmods = Table('ai_allowedmod', Base.metadata,
    UniqueConstraint('ai_id', 'mod_id')
 )
 
-ai_allowedoptions = Table('ai_allowedoption', Base.metadata,
-   Column('ai_id', Integer, ForeignKey('ai.ai_id'), 
-       nullable=False),
-   Column('option_id', Integer, ForeignKey('aioption.option_id'),
-       nullable=False),
-   UniqueConstraint('ai_id', 'option_id')
-)
-
 class AI(Base):
     __tablename__ = 'ai'
 
@@ -35,7 +27,6 @@ class AI(Base):
 
     allowedmaps = relationship("Map", secondary=ai_allowedmaps)
     allowedmods = relationship("Mod", secondary=ai_allowedmods)
-    allowedoptions = relationship("AIOption", secondary=ai_allowedoptions)
 
     def __init__(self, ai_base_id, ai_version):
         self.ai_version = ai_version

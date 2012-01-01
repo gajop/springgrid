@@ -22,15 +22,6 @@ botrunner_supportedais = Table('botrunner_supportedai', Base.metadata,
    UniqueConstraint('botrunner_id', 'ai_id')
 )
 
-botrunner_assignedoptions = Table('botrunner_assignedoption', Base.metadata,
-   Column('botrunner_id', Integer, ForeignKey('botrunner.botrunner_id'),
-       nullable=False),
-   Column('botrunner_option_id', Integer, ForeignKey('aioption.option_id'),
-       nullable=False),
-   UniqueConstraint('botrunner_id', 'botrunner_option_id')
-)
-
-
 class BotRunner(Base):
     __tablename__ = 'botrunner'
 
@@ -41,7 +32,6 @@ class BotRunner(Base):
             ForeignKey('account.account_id'))
 
     owneraccount = relationship("Account")
-    options = relationship("AIOption", secondary=botrunner_assignedoptions)
     supportedmaps = relationship("Map", secondary=botrunner_supportedmaps)
     supportedmods = relationship("Mod", secondary=botrunner_supportedmods)
     supportedais = relationship("AI", secondary=botrunner_supportedais)
