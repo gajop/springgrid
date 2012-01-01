@@ -8,7 +8,7 @@ config_vbox.pyc
 *.pyc
 
 # exclude swap files
-.*.swp
+*.swp
 
 # various scripts that should not be included
 updatesite.cgi

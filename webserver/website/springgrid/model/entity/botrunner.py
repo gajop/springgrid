@@ -1,45 +1,44 @@
 from base import *
 from botrunner_session import BotRunnerSession
 
-botrunner_supportedmaps = Table('botrunner_supportedmaps', Base.metadata,
-   Column('botrunner_id', Integer, ForeignKey('botrunners.botrunner_id'),
+botrunner_supportedmaps = Table('botrunner_supportedmap', Base.metadata,
+   Column('botrunner_id', Integer, ForeignKey('botrunner.botrunner_id'),
        nullable=False),
-   Column('map_id', Integer, ForeignKey('maps.map_id'), nullable=False),
+   Column('map_id', Integer, ForeignKey('map.map_id'), nullable=False),
    UniqueConstraint('botrunner_id', 'map_id')
 )
 
-botrunner_supportedmods = Table('botrunner_supportedmods', Base.metadata,
-   Column('botrunner_id', Integer, ForeignKey('botrunners.botrunner_id'),
+botrunner_supportedmods = Table('botrunner_supportedmod', Base.metadata,
+   Column('botrunner_id', Integer, ForeignKey('botrunner.botrunner_id'),
        nullable=False),
-   Column('mod_id', Integer, ForeignKey('mods.mod_id'), nullable=False),
+   Column('mod_id', Integer, ForeignKey('mod.mod_id'), nullable=False),
    UniqueConstraint('botrunner_id', 'mod_id')
 )
 
-botrunner_supportedais = Table('botrunner_supportedais', Base.metadata,
-   Column('botrunner_id', Integer, ForeignKey('botrunners.botrunner_id'),
+botrunner_supportedais = Table('botrunner_supportedai', Base.metadata,
+   Column('botrunner_id', Integer, ForeignKey('botrunner.botrunner_id'),
        nullable=False),
-   Column('ai_id', Integer, ForeignKey('ais.ai_id'), nullable=False),
+   Column('ai_id', Integer, ForeignKey('ai.ai_id'), nullable=False),
    UniqueConstraint('botrunner_id', 'ai_id')
 )
 
-botrunner_assignedoptions = Table('botrunner_assignedoptions', Base.metadata,
-   Column('botrunner_id', Integer, ForeignKey('botrunners.botrunner_id'),
+botrunner_assignedoptions = Table('botrunner_assignedoption', Base.metadata,
+   Column('botrunner_id', Integer, ForeignKey('botrunner.botrunner_id'),
        nullable=False),
-   Column('botrunner_option_id', Integer, ForeignKey('aioptions.option_id'),
+   Column('botrunner_option_id', Integer, ForeignKey('aioption.option_id'),
        nullable=False),
    UniqueConstraint('botrunner_id', 'botrunner_option_id')
 )
 
 
 class BotRunner(Base):
-    __tablename__ = 'botrunners'
+    __tablename__ = 'botrunner'
 
     botrunner_id = Column(Integer, primary_key=True)
     botrunner_name = Column(String(255), unique=True, nullable=False)
     botrunner_sharedsecret = Column(String(255), nullable=False)
     botrunner_owneraccountid = Column(Integer,
-            ForeignKey('accounts.account_id'))
-    rowspan = 0  # used by viewbotrunners.py
+            ForeignKey('account.account_id'))
 
     owneraccount = relationship("Account")
     options = relationship("AIOption", secondary=botrunner_assignedoptions)

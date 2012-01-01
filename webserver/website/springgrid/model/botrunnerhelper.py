@@ -36,7 +36,7 @@ def botrunnerauthorized():
     sharedsecret = formhelper.getValue("sharedsecret")
     return validatesharedsecret( botrunnername, sharedsecret )
 
-def getBotRunner(botrunnername ):
+def getBotRunner(botrunnername):
     return Session.query(BotRunner).filter(BotRunner.botrunner_name == botrunnername).first()
 
 def getBotRunnerSession(botrunnername, botrunner_session_id ):

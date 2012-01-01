@@ -2,12 +2,12 @@ from base import *
 
 
 class ModSide(Base):
-    __tablename__ = 'mod_sides'
+    __tablename__ = 'mod_side'
 
     mod_side_id = Column(Integer, primary_key=True)
     #different mods can have the same side names
     mod_side_name = Column(String(255), unique=False)
-    mod_id = Column(Integer, ForeignKey('mods.mod_id'), nullable=False)
+    mod_id = Column(Integer, ForeignKey('mod.mod_id'), nullable=False)
 
     __table_args__ = (schema.UniqueConstraint('mod_side_name', 'mod_id'), {})
 

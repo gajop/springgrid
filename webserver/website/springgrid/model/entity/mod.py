@@ -2,7 +2,7 @@ from base import *
 
 
 class Mod(Base):
-    __tablename__ = 'mods'
+    __tablename__ = 'mod'
 
     mod_id = Column(Integer, primary_key=True)
     mod_name = Column(String(255), unique=True)

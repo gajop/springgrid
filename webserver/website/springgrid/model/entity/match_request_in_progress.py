@@ -7,7 +7,7 @@ class MatchRequestInProgress(Base):
 
     matchrequest_id = Column(Integer,
             ForeignKey('matchrequestqueue.matchrequest_id'), primary_key=True)
-    botrunner_id = Column(Integer, ForeignKey('botrunners.botrunner_id'),
+    botrunner_id = Column(Integer, ForeignKey('botrunner.botrunner_id'),
             nullable=False)
     botrunner_session_id = Column(String(255),
             nullable=False)
@@ -16,8 +16,8 @@ class MatchRequestInProgress(Base):
 
     __table_args__ = (schema.ForeignKeyConstraint(
         ('botrunner_id', 'botrunner_session_id'),
-        ('botrunner_sessions.botrunner_id',
-            'botrunner_sessions.botrunner_session_id')), {})
+        ('botrunner_session.botrunner_id',
+            'botrunner_session.botrunner_session_id')), {})
 
     botrunner = relationship("BotRunner")
     botrunnersession = relationship("BotRunnerSession",

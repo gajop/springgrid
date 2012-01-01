@@ -7,7 +7,7 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
-from springgrid.model.meta import AI, AIOption
+from springgrid.model.meta import AI, AIBase, AIOption
 from springgrid.model import roles
 
 log = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class AiController(BaseController):
         return render('genericmessage.html')
 
     def view(self, id):
-        ai = Session.query(AI).filter(AI.ai_id == id).first()
+        ai = Session.query(AIBase).filter(AIBase.ai_base_id == id).first()
         if ai == None:
             c.message = "No such ai"
             return render('genericmessage.html')
@@ -53,8 +53,8 @@ class AiController(BaseController):
         showform = roles.isInRole(roles.aiadmin)
 
         potentialoptions = [i[0] for i in Session.query(AIOption.option_name)]
-        for option in ai.allowedoptions:
-            potentialoptions.remove(option.option_name )
+        for option in ai.versions[0].allowedoptions: #TODO: what to do with AI opts?
+            potentialoptions.remove(option.option_name)
 
         c.ai = ai
         c.showForm = showform

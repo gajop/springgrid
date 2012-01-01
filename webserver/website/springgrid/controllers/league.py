@@ -159,7 +159,7 @@ class LeagueController(BaseController):
                 modsides[mod.mod_name][1].append((side.mod_side_name, side.mod_side_id))
 
         for ai in ais:
-            tmpais[ai.ai_id] = ai.ai_name + " " + ai.ai_version
+            tmpais[ai.ai_id] = ai.ai_base.ai_base_name + " " + ai.ai_version
 
         c.ais = tmpais
         c.sides = modsides
@@ -207,7 +207,7 @@ class LeagueController(BaseController):
 
         aistats = {}
         for ai in ais:
-            aistats[(ai.ai_name, ai.ai_version)] = AIStats(ai.ai_name, ai.ai_version)
+            aistats[(ai.ai_base.ai_base_name, ai.ai_version)] = AIStats(ai.ai_base.ai_base_name, ai.ai_version)
 
         for matchresult in matchresults:
             first = True
@@ -215,7 +215,7 @@ class LeagueController(BaseController):
                     MatchRequest.matchrequest_id == 
                     matchresult.matchrequest_id).first()
             for ai in [match.ai0, match.ai1]:
-                aistat = aistats[ai.ai_name, ai.ai_version]
+                aistat = aistats[ai.ai_base.ai_base_name, ai.ai_version]
                 aistat.games += 1
                 if matchresult.matchresult == 'draw':
                     aistat.draws += 1

@@ -60,9 +60,9 @@ def getcompatibleitemfromqueue(botrunnername, sessionid):
             if mod.mod_name == matchrequest.mod.mod_name:
                 modok = True
         for ai in botrunner.supportedais:
-            if ai.ai_name == matchrequest.ai0.ai_name and ai.ai_version == matchrequest.ai0.ai_version:
+            if ai.ai_base.ai_base_name == matchrequest.ai0.ai_base.ai_base_name and ai.ai_version == matchrequest.ai0.ai_version:
                 ai0ok = True
-            if ai.ai_name == matchrequest.ai1.ai_name and ai.ai_version == matchrequest.ai1.ai_version:
+            if ai.ai_base.ai_base_name == matchrequest.ai1.ai_base.ai_base_name and ai.ai_version == matchrequest.ai1.ai_version:
                 ai1ok = True
         if mapok and modok and ai0ok and ai1ok:
             # mark request in progress:

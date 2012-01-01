@@ -5,7 +5,7 @@ from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 
 from springgrid.lib.base import BaseController, render, Session
-from springgrid.model.meta import AI, Map, Mod, ModSide, AIOption, MatchRequest
+from springgrid.model.meta import AI, AIBase, Map, Mod, ModSide, AIOption, MatchRequest
 from springgrid.utils import *
 import formencode
 from formencode.validators import Int, String
@@ -28,7 +28,7 @@ class SubmitRequestForm(formencode.Schema):
 class SubmitRequestController(BaseController):
 
     def form(self):
-        c.ais = Session.query(AI.ai_name, AI.ai_version, AI.ai_id)
+        c.ais = Session.query(AIBase)
         c.maps = [i[0] for i in Session.query(Map.map_name)]
         c.mods = Session.query(Mod)
         sidequery = Session.query(ModSide)
@@ -44,8 +44,9 @@ class SubmitRequestController(BaseController):
         c.aiitems = []
         c.aivalues = []
         for ai in c.ais:
-            c.aivalues.append(ai.ai_name + " " + ai.ai_version)
-            c.aiitems.append(ai.ai_id)
+            for ai_version in ai.versions:
+                c.aivalues.append(ai.ai_base_name + " " + ai_version.ai_version)
+                c.aiitems.append(ai_version.ai_id)
         c.speeds = [i for i in range(1, 10)]
         c.speeds.extend([i for i in range(10,101,5)])
         c.timeouts = c.speeds

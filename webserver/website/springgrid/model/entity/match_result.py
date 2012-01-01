@@ -2,7 +2,7 @@ from base import *
 
 
 class MatchResult(Base):
-    __tablename__ = 'matchresults'
+    __tablename__ = 'matchresult'
 
     matchrequest_id = Column(Integer,
             ForeignKey('matchrequestqueue.matchrequest_id'),

@@ -1,20 +1,20 @@
 from base import *
 
-league_options = Table('league_options', Base.metadata,
-   Column('league_id', Integer, ForeignKey('leagues.league_id'),
+league_options = Table('league_option', Base.metadata,
+   Column('league_id', Integer, ForeignKey('league.league_id'),
        nullable=False),
-   Column('option_id', Integer, ForeignKey('aioptions.option_id'),
+   Column('option_id', Integer, ForeignKey('aioption.option_id'),
        nullable=False),
    UniqueConstraint('league_id', 'option_id')
 )
 
 
 class League(Base):
-    __tablename__ = 'leagues'
+    __tablename__ = 'league'
 
     league_id = Column(Integer, primary_key=True)
     league_name = Column(String(255), unique=True, nullable=False)
-    league_creatorid = Column(Integer, ForeignKey('accounts.account_id'))
+    league_creatorid = Column(Integer, ForeignKey('account.account_id'))
     map_id = Column(String(255), nullable=False)
     mod_id = Column(String(255), nullable=False)
     nummatchesperaipair = Column(Integer, nullable=False)

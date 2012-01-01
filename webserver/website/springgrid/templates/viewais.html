@@ -15,7 +15,7 @@
 
     {% for ai in c.ais %}
     <tr>
-        <td><a href='{{ url(controller='ai', action='view', id=ai.ai_id) }}'>{{ai.ai_name|e}}</a></td>
+        <td><a href='{{ url(controller='ai', action='view', id=ai.ai_id) }}'>{{ai.ai_base.ai_base_name|e}}</a></td>
         <td>{{ai.ai_version|e}}</td>
 
         <td>{% for option in ai.allowedoptions %}

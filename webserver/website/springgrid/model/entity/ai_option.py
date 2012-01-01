@@ -2,7 +2,7 @@ from base import *
 
 
 class AIOption(Base):
-    __tablename__ = 'aioptions'
+    __tablename__ = 'aioption'
 
     option_id = Column(Integer, primary_key=True)
     option_name = Column(String(255), unique=True, nullable=False)

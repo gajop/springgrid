@@ -2,7 +2,7 @@ from base import *
 
 
 class Map(Base):
-    __tablename__ = 'maps'
+    __tablename__ = 'map'
 
     map_id = Column(Integer, primary_key=True)
     map_name = Column(String(255), unique=True)

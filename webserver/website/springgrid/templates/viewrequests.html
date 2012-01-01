@@ -49,46 +49,46 @@ http://www.opensource.org/licenses/gpl-license.php
         <td>ID</td>
     </tr>
 
-{% for request in c.requests %}
-   {% if request.matchrequestinprogress != none %}
-      <tr class='inprogress'>
-   {% else %}
-      <tr>
-   {% endif %}
-   <td>{{request.matchrequest_id}}</td>
-   <td>{{request.ai0.ai_name|e}}</td>
-   <td>{{request.ai0.ai_version|e}}</td>
-   <td>{{request.ai0_side.mod_side_name|e}}</td>
-   <td>{{request.ai1.ai_name|e}}</td>
-   <td>{{request.ai1.ai_version|e}}</td>
-   <td>{{request.ai1_side.mod_side_name|e}}</td>
-   <td>{{request.map.map_name|e}}</td>
-   <td>{{request.mod.mod_name|e}}</td>
-   <td>
-   {% for option in request.options %}
-      {{option.option_name|e}}&nbsp;
-   {% endfor %}
-   &nbsp;</td>
-   {% if request.matchrequestinprogress != None: %}
-      <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
-      <td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
-      <td>{{c.datetimeassignedbyrequest[request]}}</td>
-      <td>&nbsp;</td>
-   {% else %}
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>
-          <form action='{{ h.url(controller='matches', action='remove', id=request.matchrequest_id) }}' method='post'>
-              <input type='submit' value='Remove'/>
-          </form>
-      </td>
-   {% endif %}
-   </tr>
+    {% for request in c.requests %}
+    {% if request.matchrequestinprogress != none %}
+    <tr class='inprogress'>
+        {% else %}
+        <tr>
+            {% endif %}
+            <td>{{request.matchrequest_id}}</td>
+            <td><a href="{{ h.url(controller='ai', action='view', id=request.ai0.ai_base.ai_base_id) }}">{{request.ai0.ai_base.ai_base_name|e}}</a></td>
+            <td>{{request.ai0.ai_version|e}}</td>
+            <td>{{request.ai0_side.mod_side_name|e}}</td>
+            <td><a href="{{ h.url(controller='ai', action='view', id=request.ai1.ai_base.ai_base_id) }}">{{request.ai1.ai_base.ai_base_name|e}}</a></td>
+            <td>{{request.ai1.ai_version|e}}</td>
+            <td>{{request.ai1_side.mod_side_name|e}}</td>
+            <td>{{request.map.map_name|e}}</td>
+            <td>{{request.mod.mod_name|e}}</td>
+            <td>
+                {% for option in request.options %}
+                {{option.option_name|e}}&nbsp;
+                {% endfor %}
+                &nbsp;</td>
+            {% if request.matchrequestinprogress != None: %}
+            <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
+            <td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
+            <td>{{c.datetimeassignedbyrequest[request]}}</td>
+            <td>&nbsp;</td>
+            {% else %}
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>
+                <form action='{{ h.url(controller='matches', action='remove', id=request.matchrequest_id) }}' method='post'>
+                    <input type='submit' value='Remove'/>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
 
-{% endfor %}
+        {% endfor %}
 
-</table>
+    </table>
 
-{% endblock %}
+    {% endblock %}
 

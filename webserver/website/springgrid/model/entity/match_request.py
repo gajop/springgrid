@@ -2,10 +2,10 @@ from base import *
 from ai import AI
 from mod_side import ModSide
 
-matchrequest_options = Table('matchrequest_options', Base.metadata,
+matchrequest_options = Table('matchrequest_option', Base.metadata,
    Column('matchrequest_id', Integer,
        ForeignKey('matchrequestqueue.matchrequest_id'), nullable=False),
-   Column('option_id', Integer, ForeignKey('aioptions.option_id'),
+   Column('option_id', Integer, ForeignKey('aioption.option_id'),
        nullable=False),
    UniqueConstraint('matchrequest_id', 'option_id')
 )
@@ -15,14 +15,14 @@ class MatchRequest(Base):
     __tablename__ = 'matchrequestqueue'
 
     matchrequest_id = Column(Integer, primary_key=True)
-    map_id = Column(Integer, ForeignKey('maps.map_id'), nullable=False)
-    league_id = Column(Integer, ForeignKey('leagues.league_id'), nullable=True)
-    mod_id = Column(Integer, ForeignKey('mods.mod_id'), nullable=False)
-    ai0_id = Column(Integer, ForeignKey('ais.ai_id'), nullable=False)
-    ai0_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'),
+    map_id = Column(Integer, ForeignKey('map.map_id'), nullable=False)
+    league_id = Column(Integer, ForeignKey('league.league_id'), nullable=True)
+    mod_id = Column(Integer, ForeignKey('mod.mod_id'), nullable=False)
+    ai0_id = Column(Integer, ForeignKey('ai.ai_id'), nullable=False)
+    ai0_side_id = Column(Integer, ForeignKey('mod_side.mod_side_id'),
             nullable=False)
-    ai1_id = Column(Integer, ForeignKey('ais.ai_id'), nullable=False)
-    ai1_side_id = Column(Integer, ForeignKey('mod_sides.mod_side_id'),
+    ai1_id = Column(Integer, ForeignKey('ai.ai_id'), nullable=False)
+    ai1_side_id = Column(Integer, ForeignKey('mod_side.mod_side_id'),
             nullable=False)
     speed = Column(Integer, nullable=False)
     softtimeout = Column(Integer, nullable=False)

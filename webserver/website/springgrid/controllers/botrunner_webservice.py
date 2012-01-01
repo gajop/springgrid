@@ -64,10 +64,10 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
                 sharedsecret):
             return (False, "Not authenticated")
 
-        [success, errormessage] = modhelper.addmodifdoesntexist(modname,
+        [success, errorMessage] = modhelper.addmodifdoesntexist(modname,
                 long(modarchivechecksum_string), sides)
         if not success:
-            return (False, "Couldn't register mod " + errormessage)
+            return (False, "Couldn't register mod " + errorMessage)
 
         if not modhelper.setbotrunnersupportsthismod(botrunnername, modname):
             return (False, "couldn't mark mod as supported for botrunner")
@@ -79,9 +79,9 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         if not botrunnerhelper.validatesharedsecret(botrunnername,
                 sharedsecret):
             return (False, "Not authenticated")
-
-        if not aihelper.addaiifdoesntexist(ainame, aiversion):
-            return (False, "Couldn't register ai")
+        [success, errorMessage] = aihelper.addaiifdoesntexist(ainame, aiversion)
+        if not success:
+            return (False, "Couldn't register ai " + errorMessage)
 
         if not aihelper.setbotrunnersupportsthisai(botrunnername, ainame,
                 aiversion):
@@ -229,10 +229,10 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
                 if mod.mod_name == request.mod.mod_name:
                     modok = True
             for ai in botrunner.supportedais:
-                if ai.ai_name == request.ai0.ai_name and\
+                if ai.ai_base.ai_base_name == request.ai0.ai_base.ai_base_name and\
                     ai.ai_version == request.ai0.ai_version:
                     ai0ok = True
-                if ai.ai_name == request.ai1.ai_name and\
+                if ai.ai_base.ai_base_name == request.ai1.ai_base.ai_base_name and\
                     ai.ai_version == request.ai1.ai_version:
                     ai1ok = True
             if not mapok:
@@ -325,9 +325,9 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
         requestitemdict = {}
 
         requestitemdict['matchrequest_id'] = requestitem.matchrequest_id
-        requestitemdict['ai0_name'] = requestitem.ai0.ai_name
+        requestitemdict['ai0_name'] = requestitem.ai0.ai_base.ai_base_name
         requestitemdict['ai0_version'] = requestitem.ai0.ai_version
-        requestitemdict['ai1_name'] = requestitem.ai1.ai_name
+        requestitemdict['ai1_name'] = requestitem.ai1.ai_base.ai_base_name
         requestitemdict['ai1_version'] = requestitem.ai1.ai_version
         requestitemdict['ai0_side'] = requestitem.ai0_side.mod_side_name
         requestitemdict['ai1_side'] = requestitem.ai1_side.mod_side_name

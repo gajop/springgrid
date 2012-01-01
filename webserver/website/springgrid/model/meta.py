@@ -31,14 +31,14 @@ from entity import *
 # SQLAlchemy session manager. Updated by model.init_model()
 Session = scoped_session(sessionmaker())
 
-account_roles = Table('role_members', Base.metadata,
-   Column('role_id', Integer,ForeignKey('roles.role_id'),nullable=False),
-   Column('account_id', Integer,ForeignKey('accounts.account_id'),nullable=False),
+account_roles = Table('role_member', Base.metadata,
+   Column('role_id', Integer,ForeignKey('role.role_id'),nullable=False),
+   Column('account_id', Integer,ForeignKey('account.account_id'),nullable=False),
    UniqueConstraint('role_id','account_id')
 )
 
 class Role(Base):
-    __tablename__ = 'roles'
+    __tablename__ = 'role'
 
     def __init__(self, role_name ):
         self.role_name = role_name
@@ -47,18 +47,18 @@ class Role(Base):
     role_name = Column(String(255), unique = True, nullable = False)
 
 class OpenID(Base):
-    __tablename__ = 'openids'
+    __tablename__ = 'openid'
 
-    account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
+    account_id = Column(Integer, ForeignKey('account.account_id'), primary_key = True)
     openid = Column(String(255), primary_key = True)
 
     def __init__( self, openid ):
         self.openid = openid
 
 class PasswordInfo(Base):
-    __tablename__ = 'passwords'
+    __tablename__ = 'password'
 
-    account_id = Column(Integer, ForeignKey('accounts.account_id'), primary_key = True)
+    account_id = Column(Integer, ForeignKey('account.account_id'), primary_key = True)
     passwordsalt = Column(String(255), nullable = False)
     passwordhash = Column(String(255), nullable = False)
 
@@ -73,7 +73,7 @@ class PasswordInfo(Base):
         self.passwordhash = bcrypt.hashpw(newPassword, self.passwordsalt)
 
 class Account(Base):
-    __tablename__ = 'accounts'
+    __tablename__ = 'account'
 
     account_id = Column(Integer,primary_key=True)
     username = Column(String(255), unique = True, nullable = False)
