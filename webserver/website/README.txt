@@ -1,9 +1,20 @@
-This file is for you to describe the springgrid application. Typically
-you would include information such as the information below:
+Prerequisites:
+sudo apt-get install python-dev
 
 Installation and Setup
 ======================
 
+Step-by-step install (in virtualenv):
+pip Pylons
+pip SQLAlchemy
+pip Jinja2
+pip py-bcrypt
+pip python-openid
+
+paster setup-app development.ini
+
+=========================================
+Old instructions:
 Install ``springgrid`` using easy_install::
 
     easy_install springgrid
@@ -17,3 +28,5 @@ Tweak the config file as appropriate and then setup the application::
     paster setup-app config.ini
 
 Then you are ready to go.
+    paster serve development.ini
+
