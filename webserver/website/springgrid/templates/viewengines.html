@@ -1,0 +1,83 @@
+{% extends 'menu.html' %}
+
+{#
+Copyright Hugh Perkins 2009
+hughperkins@gmail.com http://manageddreams.com
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+
+You should have received a copy of the GNU General Public License along
+with this program in the file licence.txt; if not, write to the
+Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-
+1307 USA
+You can find the licence also on the web at:
+http://www.opensource.org/licenses/gpl-license.php
+#}
+
+{% block content %}
+
+<h3>SpringGrid - engine List</h3>
+<table border='1' padding='3'>
+    <tr class='tablehead'>
+        <td>Name</td>
+        <td>Archive Checksum (Note: this is NOT the enginehash seen in the start script)</td>
+        <td>Download URL</td>
+        {% if showform %}
+        <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+
+{% for engine in c.engines %}
+	<tr>
+	   <td><a href="{{ url(controller='engine', action='view', id=engine.engine_id) }}">{{engine.engine_name|e}}</a></td><td>{{engine.engine_archivechecksum}}</td>
+	   <td>{% if not engine.engine_url is none %}<a href='{{engine.engine_url|e}}' rel="nofollow">{{engine.engine_url|e}}</a>{%endif%}&nbsp;</td>
+	   {% if c.showForm %}
+	   <td><a href="{{ h.url(controller='engine', action='remove', id=engine.engine_id) }}">Delete</a></td>
+	   {% endif %}
+	</tr>
+{% endfor %}
+
+</table>
+
+{% if c.showForm %}
+   <p />
+   <hr />
+   <p />
+
+   <h4>Register new engine:</h4>
+   <p>Note: the enginename and the enginehash should be set to whatever is used
+   in the startscript, so an easy way to get them is to start a game
+   from the lobby, then look at the file 'script.txt' in the spring
+   game directory</p>
+   <form action='{{ url(controller='engine', action='add') }}' method='post'>
+   <table border='1' padding='3'>
+	   <tr>
+	       <td>Name (this should be what would be in the startscript)</td>
+	       <td><input name='engineName'/></td>
+	   </tr>
+	   <tr>
+	       <td>Download URL</td>
+	       <td><input name='engineUrl'/></td>
+	   </tr>
+	   <tr>
+	       <td>engine archive checksum:</td>
+	       <td><input name='engineArchiveChecksum'/></td>
+	   </tr>
+	   <tr>
+	       <td>&nbsp;</td>
+	       <td><input type='submit' value='Add' /></td>
+	   </tr>
+   </table>
+   </form>
+{% endif %}
+
+{% endblock %}
+

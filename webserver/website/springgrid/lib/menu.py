@@ -44,6 +44,8 @@ def getMenus():
           h.url(controller='map', action='list')],
       ['View available mods',
           h.url(controller='mod', action='list')],
+      ['View available engines',
+          h.url(controller='engine', action='list')],
       ['View available ais',
           h.url(controller='ai', action='list')],
       ['View accounts',

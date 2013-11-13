@@ -1,4 +1,5 @@
 from base import *
+from engine import Engine
 from map import Map
 from mod import Mod
 from mod_side import ModSide
@@ -14,4 +15,4 @@ from league_ai import LeagueAI
 
 __all__ = ["Base", "Map", "Mod", "ModSide", "AIBase", "AI", "BotRunner",
            "BotRunnerSession", "MatchRequest", "MatchRequestInProgress",
-           "MatchResult", "League", "LeagueAI"]
+           "MatchResult", "League", "LeagueAI", "Engine"]

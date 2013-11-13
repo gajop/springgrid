@@ -6,6 +6,7 @@ class MatchRequest(Base):
     __tablename__ = 'matchrequestqueue'
 
     matchrequest_id = Column(Integer, primary_key=True)
+    engine_id = Column(Integer, ForeignKey('engine.engine_id'), nullable=False)
     map_id = Column(Integer, ForeignKey('map.map_id'), nullable=False)
     league_id = Column(Integer, ForeignKey('league.league_id'), nullable=True)
     mod_id = Column(Integer, ForeignKey('mod.mod_id'), nullable=False)
@@ -19,6 +20,7 @@ class MatchRequest(Base):
     softtimeout = Column(Integer, nullable=False)
     hardtimeout = Column(Integer, nullable=False)
 
+    engine = relationship("Engine")
     map = relationship("Map")
     mod = relationship("Mod")
     ai0 = relationship("AI", primaryjoin=ai0_id == AI.ai_id)
@@ -33,7 +35,7 @@ class MatchRequest(Base):
     matchresult = relationship("MatchResult", uselist=False)
 
     def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout,
-            ai0_side, ai1_side, league_id = None):
+            ai0_side, ai1_side, engine, league_id = None):
         self.ai0 = ai0
         self.ai1 = ai1
         self.map = map
@@ -44,4 +46,4 @@ class MatchRequest(Base):
         self.ai0_side = ai0_side
         self.ai1_side = ai1_side
         self.league_id = league_id
-        
+        self.engine = engine
