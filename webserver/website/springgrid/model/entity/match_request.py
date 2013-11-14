@@ -1,21 +1,14 @@
 from base import *
-from ai import AI
 from mod_side import ModSide
 
 class MatchRequest(Base):
-    __tablename__ = 'matchrequestqueue'
+    __tablename__ = 'matchrequest'
 
     matchrequest_id = Column(Integer, primary_key=True)
     engine_id = Column(Integer, ForeignKey('engine.engine_id'), nullable=False)
     map_id = Column(Integer, ForeignKey('map.map_id'), nullable=False)
     league_id = Column(Integer, ForeignKey('league.league_id'), nullable=True)
     mod_id = Column(Integer, ForeignKey('mod.mod_id'), nullable=False)
-    ai0_id = Column(Integer, ForeignKey('ai.ai_id'), nullable=False)
-    ai0_side_id = Column(Integer, ForeignKey('mod_side.mod_side_id'),
-            nullable=False)
-    ai1_id = Column(Integer, ForeignKey('ai.ai_id'), nullable=False)
-    ai1_side_id = Column(Integer, ForeignKey('mod_side.mod_side_id'),
-            nullable=False)
     speed = Column(Integer, nullable=False)
     softtimeout = Column(Integer, nullable=False)
     hardtimeout = Column(Integer, nullable=False)
@@ -23,27 +16,16 @@ class MatchRequest(Base):
     engine = relationship("Engine")
     map = relationship("Map")
     mod = relationship("Mod")
-    ai0 = relationship("AI", primaryjoin=ai0_id == AI.ai_id)
-    ai1 = relationship("AI", primaryjoin=ai1_id == AI.ai_id)
-    ai0_side = relationship("ModSide", primaryjoin=ai0_side_id ==
-            ModSide.mod_side_id)
-    ai1_side = relationship("ModSide", primaryjoin=ai1_side_id ==
-            ModSide.mod_side_id)
     league = relationship("League")
     matchrequestinprogress = relationship("MatchRequestInProgress",
             uselist=False)
     matchresult = relationship("MatchResult", uselist=False)
 
-    def __init__(self, ai0, ai1, map, mod, speed, softtimeout, hardtimeout,
-            ai0_side, ai1_side, engine, league_id = None):
-        self.ai0 = ai0
-        self.ai1 = ai1
+    def __init__(self, map, mod, speed, softtimeout, hardtimeout, engine, league_id = None):
         self.map = map
         self.mod = mod
         self.speed = speed
         self.softtimeout = softtimeout
         self.hardtimeout = hardtimeout
-        self.ai0_side = ai0_side
-        self.ai1_side = ai1_side
         self.league_id = league_id
         self.engine = engine

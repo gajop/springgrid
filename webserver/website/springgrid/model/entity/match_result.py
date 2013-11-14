@@ -5,7 +5,7 @@ class MatchResult(Base):
     __tablename__ = 'matchresult'
 
     matchrequest_id = Column(Integer,
-            ForeignKey('matchrequestqueue.matchrequest_id'),
+            ForeignKey('matchrequest.matchrequest_id'),
             primary_key=True)
     matchresult = Column(String(255), nullable=False)
 

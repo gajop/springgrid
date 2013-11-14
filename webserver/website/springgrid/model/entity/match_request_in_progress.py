@@ -6,7 +6,7 @@ class MatchRequestInProgress(Base):
     __tablename__ = 'matchrequests_inprogress'
 
     matchrequest_id = Column(Integer,
-            ForeignKey('matchrequestqueue.matchrequest_id'), primary_key=True)
+            ForeignKey('matchrequest.matchrequest_id'), primary_key=True)
     botrunner_id = Column(Integer, ForeignKey('botrunner.botrunner_id'),
             nullable=False)
     botrunner_session_id = Column(String(255),
