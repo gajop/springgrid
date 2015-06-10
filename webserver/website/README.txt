@@ -5,13 +5,19 @@ Installation and Setup
 ======================
 
 Step-by-step install (in virtualenv):
-pip Pylons
-pip SQLAlchemy
-pip Jinja2
-pip py-bcrypt
-pip python-openid
+pip install Pylons
+pip install SQLAlchemy
+pip install Jinja2
+pip install py-bcrypt
+pip install python-openid
 
 paster setup-app development.ini
+
+Run it
+======
+paster serve development.ini
+
+# should then be available at http://127.0.0.1:5010/about
 
 =========================================
 Old instructions:
