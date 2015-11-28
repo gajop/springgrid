@@ -27,5 +27,6 @@ def make_map(config):
     map.connect('/api_webservice', controller='api_webservice')
     map.connect('/{controller}/{action}')
     map.connect('/{controller}/{action}/{id}')
-
+    map.connect('/', controller='matches', action='results')
+    map.connect("home", "/", controller='matches', action='results')
     return map

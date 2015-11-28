@@ -45,32 +45,74 @@
     }
 </script>
 
-<h3>SpringGrid - submit game request</h3>
-<form action='{{ h.url(controller='submit_request', action='submit') }}' method='post'>
-<table border='1' padding='3'>
-<tr><td>AI0 name</td>
-    <td>{{formhelper.itemsandvaluestodropdown("ai0", c.aiitems, c.aivalues ) }}</td></tr>
-<tr><td>AI0 side</td><td><select id='ai0side' name='ai0side'/></td></tr>
-<tr><td>AI1 name</td>
-    <td>{{formhelper.itemsandvaluestodropdown("ai1", c.aiitems, c.aivalues ) }}</td></tr>
-<tr><td>AI1 side</td><td><select id='ai1side' name='ai1side'/></td></tr>
-<tr><td>Map</td><td>{{formhelper.listtodropdown( 'mapname', c.maps ) }}</td></tr>
-<tr><td>Mod</td>
-   <td><select id='modname' name='modname' onchange="onModChange();">
-   {% for mod in c.mods %}
-      <option value='{{mod}}'>{{mod}}</option>
-   {% endfor %}
-   </select></td></tr>
-<tr><td>Speed:</td><td>{{formhelper.listtodropdown("speed", c.speeds)}}</td></tr>
-<tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout',
-        c.timeouts)}}</td></tr>
-<tr><td>Hard timeout minutes</td><td>{{formhelper.listtodropdown('hardtimeout',
-        c.timeouts)}}</td></tr>
-
-<tr><td></td><td><input type='submit' value='Submit Request' /></td></tr>
-</table>
+<h3 class="col-sm-offset-5">Schedule match</h3>
+<form action='{{ h.url(controller='submit_request', action='submit') }}' method='post' class="col-md-3 col-md-offset-4">
+	<div class="form-group">
+		<label for="modname" class="control-label">Game</label>
+		<select class="form-control" name="modname" id="modname" onChange="onModChange();">
+			{% for mod in c.mods %}
+				<option value='{{mod}}'>{{ mod }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="mapname" class="control-label">Map</label>
+		<select class="form-control" name="mapname">
+			{% for map in c.maps %}
+				<option value='{{map}}'>{{ map }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="speed" class="control-label">Speed</label>
+		<select class="form-control" name="speed">
+			{% for speed in c.speeds %} 
+				<option value='{{ speed }}'>{{ speed }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="softtimeout" class="control-label">Soft timeout</label>
+		<select class="form-control" data-toggle="tooltip" data-placement="bottom" title=" Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached." name="softtimeout">
+			{% for timeout in c.timeouts %} 
+				<option value='{{ timeout }}'>{{ timeout }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="hardtimeout" class="control-label">Hard timeout</label>
+		<select class="form-control"  data-toggle="tooltip" data-placement="bottom" title=" Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs." name="hardtimeout">
+			{% for timeout in c.timeouts %} 
+				<option value='{{ timeout }}'>{{ timeout }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="ai0" class="control-label">First AI</label>
+		<select class="form-control" name="ai0" id="ai0">
+			{% for i in range(c.aiitems|length) %}
+				<option value='{{ c.aiitems[i] }}'>{{ c.aivalues[i] }}</option>
+			{% endfor %}
+		</select>
+		<label for="ai0side" class="control-label">Side</label>
+		<select class="form-control" name="ai0side" id="ai0side">
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="ai1" class="control-label">Second AI</label>
+		<select class="form-control" name="ai1" id="ai1">
+			{% for i in range(c.aiitems|length) %}
+				<option value='{{ c.aiitems[i] }}'>{{ c.aivalues[i] }}</option>
+			{% endfor %}
+		</select>
+		<label for="ai1side" class="control-label">Side</label>
+		<select class="form-control" name="ai1side" id="ai1side">
+		</select>
+	</div>	
+	<div class="form-group">
+		<input type='submit' value='Submit Request' class="btn btn-primary"/>
+	</div>
 </form>
-<p>Note: Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached. Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs.</p>
 
 {% endblock %}
 

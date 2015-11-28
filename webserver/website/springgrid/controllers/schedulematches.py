@@ -58,7 +58,8 @@ def go():
 
     matchscheduler.schedulematchesforleague( league, matchrequestqueue, matchresults )
 
-    jinjahelper.message("Matches scheduled")
+    redirect(url(controller='league', action='view', id=league.league_id))
+    #jinjahelper.message("Matches scheduled")
 
 go()
 

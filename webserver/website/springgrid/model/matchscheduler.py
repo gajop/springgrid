@@ -21,16 +21,17 @@
 #
 
 from springgrid.lib.base import Session
-from springgrid.model.meta import League, LeagueAI, AI, MatchRequest, Map, Mod, ModSide
+from springgrid.model.meta import League, LeagueAI, LeagueMap, AI, MatchRequest, Map, Mod, ModSide
+import random
 
 # does for one league WARNING: should be used when creating a league, does not commit to DB
 def addLeagueMatches(league, matchRequestQueue, matchResults):
     ais = Session.query(AI).join(LeagueAI).filter(LeagueAI.league_id ==\
                 league.league_id).all()
-                
-    map = Session.query(Map).filter(Map.map_id == league.map_id).first()
+    maps = Session.query(Map).join(LeagueMap).filter(LeagueMap.league_id ==\
+                league.league_id).all()
     mod = Session.query(Mod).filter(Mod.mod_id == league.mod_id).first()
-               
+
     playAgainstSelf = league.play_against_self
     if league.side_modes == "xvsy":
         sides = [int(i) for i in league.sides.split("vs")]
@@ -49,11 +50,18 @@ def addLeagueMatches(league, matchRequestQueue, matchResults):
             else:
                 allSides = [(first, first)]
             for firstSide, secondSide in allSides:
+                pickedMaps = {}
                 for k in xrange(league.matches_per_ai_pair):
+                    while True:
+                        indx = random.randrange(len(maps))
+                        if not pickedMaps.has_key(indx) or len(maps) < league.matches_per_ai_pair:
+                            map = maps[indx]
+                            pickedMaps[indx] = True
+                            break
                     matchRequest = MatchRequest(ai0, ai1, map, mod,\
                         league.speed, league.soft_timeout, league.hard_timeout,\
                         firstSide, secondSide, league.league_id)
-                    matchRequests.append(matchRequest)                        
+                    matchRequests.append(matchRequest)
     #save all matches to the database
     Session.add_all(matchRequests)
     Session.commit()

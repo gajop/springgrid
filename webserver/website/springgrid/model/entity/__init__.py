@@ -11,7 +11,8 @@ from match_request_in_progress import MatchRequestInProgress
 from match_result import MatchResult
 from league import League
 from league_ai import LeagueAI
+from league_map import LeagueMap
 
 __all__ = ["Base", "Map", "Mod", "ModSide", "AIBase", "AI", "BotRunner",
            "BotRunnerSession", "MatchRequest", "MatchRequestInProgress",
-           "MatchResult", "League", "LeagueAI"]
+           "MatchResult", "League", "LeagueAI", "LeagueMap"]

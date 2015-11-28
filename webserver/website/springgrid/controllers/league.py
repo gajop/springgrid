@@ -10,7 +10,7 @@ from pylons.decorators import validate
 from springgrid.lib.base import BaseController, render, Session
 from pylons import url
 from pylons.controllers.util import redirect
-from springgrid.model.meta import League, LeagueAI, Mod, ModSide, AI, Map, Account, MatchRequest
+from springgrid.model.meta import League, LeagueAI, LeagueMap, Mod, ModSide, AI, Map, Account, MatchRequest
 from springgrid.model import roles, matchscheduler
 
 log = logging.getLogger(__name__)
@@ -20,7 +20,6 @@ class LeagueForm(formencode.Schema):
     filter_extra_fields = False
     leagueName = String(not_empty=True)
     modId = Int(not_empty=True)
-    mapId = Int(not_empty=True)
     speed = Int(not_empty=True)
     softtimeout = Int(not_empty=True)
     hardtimeout = Int(not_empty=True)
@@ -52,7 +51,6 @@ class LeagueController(BaseController):
 
         leagueName = self.form_result["leagueName"]
         modId = self.form_result["modId"]
-        mapId = self.form_result["mapId"]
         speed = self.form_result["speed"]
         softtimeout = self.form_result["softtimeout"]
         hardtimeout = self.form_result["hardtimeout"]
@@ -62,26 +60,36 @@ class LeagueController(BaseController):
         playagainstself = self.form_result["playagainstself"]
         account = Session.query(Account).filter(Account.username == session['user']).first()
         ais = []
-        for i in range(Session.query(AI).count()):
+        for i in range(Session.query(AI).count() + 1):
             ai_i = 'ai_checkbox_' + str(i)
             if (self.form_result.has_key(ai_i)):
                 ais.append(i)
-
-        league = League(leagueName, account, modId, mapId,
+        maps = []
+        i = 0
+        while True:
+            map_i = 'mapId' + str(i)
+            if not self.form_result.has_key(map_i):
+                break
+            maps.append(self.form_result[map_i])
+            i = i + 1
+        print(maps)
+        league = League(leagueName, account, modId,
                 nummatchesperaipair, speed, softtimeout, hardtimeout,
                 sides, sidemodes, playagainstself)
-        leagueais = [LeagueAI(ai, league) for ai in ais]
+        leagueAIs = [LeagueAI(ai, league) for ai in ais]
+        leagueMaps = [LeagueMap(map, league) for map in maps]
         Session.add(league)
-        Session.add_all(leagueais)        
-        
+        Session.add_all(leagueAIs)
+        Session.add_all(leagueMaps)
+
         matchrequests = Session.query(MatchRequest).filter(MatchRequest.league_id ==\
-                league.league_id)         
+                league.league_id)
         matchresults = [req for req in matchrequests if req.matchresult != None] 
-        
+
         matchscheduler.addLeagueMatches(league, matchrequests, matchresults)
         Session.flush()
         Session.commit()
-        
+
         redirect(url(controller='league', action='view', id=league.league_id))
 
     @validate(schema=LeagueForm(), form='view', post_only=True, on_get=False)
@@ -170,7 +178,7 @@ class LeagueController(BaseController):
         league = Session.query(League).filter(League.league_id == id).first()
 
         #get map name
-        c.map_name = Session.query(Map).filter(Map.map_id == league.map_id).first().map_name
+        c.map_names = Session.query(Map).join(LeagueMap).filter(LeagueMap.league_id == league.league_id).values('map_name')
         c.mod_name = Session.query(Mod).filter(Mod.mod_id == league.mod_id).first().mod_name
 
         #get the league ais that are part of the chosen league

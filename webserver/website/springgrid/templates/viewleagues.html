@@ -41,13 +41,13 @@ http://www.opensource.org/licenses/gpl-license.php
 <script type="text/javascript">
     function onSideModeChange() {
         var sidemodesSelect = document.getElementById("sidemodes");
-        var description = document.getElementById("description");
+        //var description = document.getElementById("description");
         var value = sidemodesSelect.options[sidemodesSelect.selectedIndex].value;
         if (value == "allsame") {
-            description.value = "AIs pick one side for the entire league.";
+            //description.value = "AIs pick one side for the entire league.";
             addSides();
         } else if (value == "xvsy") {
-            description.value = "For each match in the number of league matches, AIs play two games against their opponent, swapping sides.";
+            //description.value = "For each match in the number of league matches, AIs play two games against their opponent, swapping sides.";
             addSideCombinations();
         }
     }
@@ -164,19 +164,18 @@ function clearUnselectedAISelection() { //better name pls
 
 <p>A league is a specific game configuration used for testing AIs against each other</p>
 <p>For example, a league could be a specific map, mod, and certain options, like say cheating on, or cheating off</p>
-<p>You can group leagues together in leaguegroups.</p>
-<table padding='3'>
+<table class="table">
     <tr class='tablehead'>
-        <td>League Name:</td>
-        <td>Mod Name</td>
-        <td>Map Name</td>
-        <td>Number matches per AI pair</td>
-        <td>Assigned options</td>
+        <td>Name</td>
+        <td>Game</td>
+        <td>Map</td>
+        <td>Matches per AI pair</td>
+        <td>Options</td>
     </tr>
 
     {% for league in c.leagues %}
     <tr>
-        <td><a href='{{ url(controller='league', action='view', id=league.league_id) }}'>{{league.league_name|e}}</a></td>
+        <th><a href='{{ url(controller='league', action='view', id=league.league_id) }}'>{{league.league_name|e}}</a></th>
         <td>{{league.mod_name|e}}</td>
         <td>{{league.map_name|e}}</td>
         <td>{{league.nummatchesperaipair}}</td>
@@ -202,60 +201,130 @@ function clearUnselectedAISelection() { //better name pls
 <hr />
 <p />
 
-<h2>Create new league:</h2>
-<form action='{{ h.url(controller='league', action='add') }}' method='post' onsubmit="return checkForm();">
-    <table padding='3'>
-        <tr><td>League name</td><td><input name='leagueName'/></td></tr>
-        <tr><td>Mod name</td><td>
-                <select name="modId" id="modname" onchange="onSideModeChange();">
-                    {% for k, v in c.mods.iteritems() %}
-                    <option value="{{k|e}}">{{v|e}}</option>
-                    {% endfor %}</td></tr>
-            <tr><td>Map name</td><td>
-                    <select name="mapId" id="mapname">
-                        {% for k, v in c.maps.iteritems() %}
-                        <option value="{{k|e}}">{{v|e}}</option>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr><td>Matches per AI and side selection</td><td>{{formhelper.listtodropdown( 'nummatchesperaipair', range(1,21) )}}</td></tr>
-                <tr><td>Play against self</td><td><input type="checkbox" name="playagainstself"/></td></tr>
-                <tr><td>Speed</td><td>{{formhelper.listtodropdown('speed', c.speeds)}}</td></tr>
-                <tr><td>Soft timeout minutes</td><td>{{formhelper.listtodropdown('softtimeout', c.timeouts)}}</td></tr>
-                <tr><td>Hard timeout minutes</td><td>{{formhelper.listtodropdown('hardtimeout', c.timeouts)}}</td></tr>
-                <tr><td>League side selection type</td><td>
-                        <select id="sidemodes" name="sidemodes" onchange="onSideModeChange();">
-                            {% for k, v in c.sidemodes.iteritems() %}
-                            <option value="{{k|e}}">{{v|e}}</option>
-                            {% endfor %}</td></tr>
-                    <tr><td>Side selection type description</td><td>
-                            <textarea rows="5" cols="60" id="description" readonly="true"> 
-                            </textarea>
-                    </td></tr>
-                    <tr><td>League sides</td><td>
-                            <select id="sides" name="sides" />
-                        </td></tr>
-                        <tr>
-                            <td>AIs</td>
-                            <td><div id="format">
-                                <ul>
-                                    {% for k, v in c.ais.iteritems() %}
-                                    <li>
-                                    <input type="checkbox" id="ai_checkbox_{{k|e}}" name="ai_checkbox_{{k|e}}"/>
-                                    <label for="ai_checkbox_{{k|e}}">{{v|e}}</label>
-                                    </li>
-                                    {% endfor %}
-                                </ul>          
-                            </div>
-                            </td>
-                        </tr>
+<div class="extraMapTemplate">
+	<div class="form-group">
+		<select class="form-control" name=mapId>
+			{% for k, v in c.maps.iteritems() %}
+				<option value="{{k|e}}">{{v|e}}</option>
+			{% endfor %}
+		</select>
+	</div>
+</div>
 
-                        <tr><td></td><td><input type='submit' value='Add' /></td></tr>
-                    </table>
-                </form>
-                <p>Note: Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached. Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs.</p>
-                {% endif %}
+<h3 class="col-sm-offset-5">Create new league</h3>
+<form action='{{ h.url(controller='league', action='add') }}' method='post' onsubmit="return checkForm();" class="col-md-3 col-md-offset-4" >
+	<div class="form-group">
+		<label for="leagueName" class="control-label">League Name</label>
+		<input name='leagueName' class="form-control"/>
+	</div>
+	<div class="form-group">
+		<label for="modId" class="control-label">Game</label>
+		<select class="form-control" name="modId" id="modname" onChange="onSideModeChange();">
+				{% for k, v in c.mods.iteritems() %}
+				<option value="{{k|e}}">{{v|e}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<label for="mapId" class="control-label">Map pool</label>
+	<div id='form-content'>
+	</div>
+	<div class="form-group">
+		<button type="button" class="btn btn-default" id ="addMap" aria-label="Left Align">
+		<span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"> Map</span>
+		</button>	
+	</div>
+	<div class="form-group">
+		<label for="nummatchesperaipair" class="control-label">Matches per AI and side selection</label>
+		<select class="form-control" name="nummatchesperaipair">
+			{% for i in range(1, 21) %}
+				<option value='{{i}}'>{{i}}</option>
+			{% endfor %}
+		</select>
+	</div>
+    <div class="checkbox">
+        <label for="playagainstself">
+            <input type="checkbox" name="playagainstself"> Play against self
+        </label>
+    </div>
+	<div class="form-group">
+		<label for="speed" class="control-label">Speed</label>
+		<select class="form-control" name="speed">
+			{% for speed in c.speeds %} 
+				<option value='{{ speed }}'>{{ speed }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="softtimeout" class="control-label">Soft timeout</label>
+		<select class="form-control" data-toggle="tooltip" data-placement="bottom" title=" Soft timeout specifies the amount of ingame time the match should last. It will wait until the game frame equivalent of specified minutes is reached." name="softtimeout">
+			{% for timeout in c.timeouts %} 
+				<option value='{{ timeout }}'>{{ timeout }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="hardtimeout" class="control-label">Hard timeout</label>
+		<select class="form-control"  data-toggle="tooltip" data-placement="bottom" title=" Hard timeout will stop the game after a certain amount of time has reached in the real world - it's used as a hard limit for cases when game instances are slown down, most often due to AIs." name="hardtimeout">
+			{% for timeout in c.timeouts %} 
+				<option value='{{ timeout }}'>{{ timeout }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="sidemodes" class="control-label">Side selection</label>
+		<select id="sidemodes" name="sidemodes" onchange="onSideModeChange();" class="form-control" data-toggle="tooltip" data-placement="bottom" title='All same: AIs pick one side for the entire league.
+X vs Y: For each match in the number of league matches, AIs play two games against their opponent, swapping sides.'>
+			{% for k, v in c.sidemodes.iteritems() %}
+				<option value="{{k|e}}">{{v|e}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="sides" class="control-label">Sides</label>
+		<select id="sides" name="sides" class="form-control">
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="AI" class="control-label">AIs</label>
+		<ul>
+		{% for k, v in c.ais.iteritems() %}
+			<li>
+			<input type="checkbox" id="ai_checkbox_{{k|e}}" name="ai_checkbox_{{k|e}}"/>
+			<label for="ai_checkbox_{{k|e}}">{{v|e}}</label>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	<div class="form-group">
+		<input type='submit' value='Create League' class="btn btn-primary"/>
+	</div>
+</form>
+{% endif %}
+{% endblock %}
 
+{% block postLoadScripts %}
+<script>
+	$(document).ready(function () {
+		// Add one map initially
+		$('<div/>', {
+			'class' : 'extraMap', html: GetHtml()
+		}).appendTo('#form-content');
 
-                {% endblock %}
+		// Add maps on click
+		$('#addMap').click(function () {
+			$('<div/>', {
+				'class' : 'extraMap', html: GetHtml()
+		}).appendTo('#form-content');
+
+		});
+	})
+	function GetHtml() //Get the template and update the input field names
+	{
+		var len = $('.extraMap').length;
+		var $html = $('.extraMapTemplate').clone();
+	    $html.find('[name=mapId]')[0].name='mapId' + len;
+		return $html.html();
+	}
+</script>
+{% endblock %}
 

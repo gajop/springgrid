@@ -1,6 +1,5 @@
 {% extends 'menu.html' %}
 
-
 {#
 Copyright Hugh Perkins 2009
 hughperkins@gmail.com http://manageddreams.com
@@ -24,9 +23,9 @@ http://www.opensource.org/licenses/gpl-license.php
 #}
 
 {% block content %}
-<h3>SpringGrid - Match requests</h3>
+<h3>Match requests</h3>
 {{ c.requests.pager('Page $page: $link_previous $link_next ~4~') }}
-<table border='1' padding='3'>	
+<table border='1' padding='3' class="table table-striped table-hover table-condensed table-bordered">
     <tr class='tablehead' align="center">
         <td rowspan="2">Match ID</td>
         <td colspan="3">First AI</td>
@@ -50,46 +49,46 @@ http://www.opensource.org/licenses/gpl-license.php
     </tr>
 
     {% for request in c.requests %}
-    {% if request.matchrequestinprogress != none %}
-    <tr class='inprogress'>
-        {% else %}
-        <tr>
-            {% endif %}
-            <td>{{request.matchrequest_id}}</td>
-            <td><a href="{{ h.url(controller='ai', action='view', id=request.ai0.ai_base.ai_base_id) }}">{{request.ai0.ai_base.ai_base_name|e}}</a></td>
-            <td>{{request.ai0.ai_version|e}}</td>
-            <td>{{request.ai0_side.mod_side_name|e}}</td>
-            <td><a href="{{ h.url(controller='ai', action='view', id=request.ai1.ai_base.ai_base_id) }}">{{request.ai1.ai_base.ai_base_name|e}}</a></td>
-            <td>{{request.ai1.ai_version|e}}</td>
-            <td>{{request.ai1_side.mod_side_name|e}}</td>
-            <td>{{request.map.map_name|e}}</td>
-            <td>{{request.mod.mod_name|e}}</td>
-            <td>{% if request.league_id != None %}
-                <a href="{{ h.url(controller='league', action='view', id=request.league_id) }}">{{request.league.league_name}}</a>
-                {% else %}
-                No league
-                {% endif %}
-            </td>
-            {% if request.matchrequestinprogress != None: %}
-            <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
-            <td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
-            <td>{{c.datetimeassignedbyrequest[request]}}</td>
-            <td>&nbsp;</td>
-            {% else %}
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>
-                <form action='{{ h.url(controller='matches', action='remove', id=request.matchrequest_id) }}' method='post'>
-                    <input type='submit' value='Remove'/>
-                </form>
-            </td>
-            {% endif %}
-        </tr>
+		{% if request.matchrequestinprogress != none %}
+		<tr class='success' align="center">
+			{% else %}
+		<tr align="center">
+		{% endif %}
+			<td>{{request.matchrequest_id}}</td>
+			<td><a href="{{ h.url(controller='ai', action='view', id=request.ai0.ai_base.ai_base_id) }}">{{request.ai0.ai_base.ai_base_name|e}}</a></td>
+			<td>{{request.ai0.ai_version|e}}</td>
+			<td>{{request.ai0_side.mod_side_name|e}}</td>
+			<td><a href="{{ h.url(controller='ai', action='view', id=request.ai1.ai_base.ai_base_id) }}">{{request.ai1.ai_base.ai_base_name|e}}</a></td>
+			<td>{{request.ai1.ai_version|e}}</td>
+			<td>{{request.ai1_side.mod_side_name|e}}</td>
+			<td>{{request.map.map_name|e}}</td>
+			<td>{{request.mod.mod_name|e}}</td>
+			<td>{% if request.league_id != None %}
+				<a href="{{ h.url(controller='league', action='view', id=request.league_id) }}">{{request.league.league_name}}</a>
+				{% else %}
+				No league
+				{% endif %}
+			</td>
+			{% if request.matchrequestinprogress != None: %}
+			<td><a href="{{ h.url(controller='botrunner', action='view', id=request.matchrequestinprogress.botrunner.botrunner_id) }}">{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</a></td>
+			<td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
+			<td>{{c.datetimeassignedbyrequest[request].strftime('%H:%M  %d/%m/%y')}}</td>
+			<td>&nbsp;</td>
+			{% else %}
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>
+				<form action='{{ h.url(controller='matches', action='remove', id=request.matchrequest_id) }}' method='post'>
+					<input type='submit' value='Remove'/>
+				</form>
+			</td>
+			{% endif %}
+		</tr>
 
-        {% endfor %}
+	{% endfor %}
 
-    </table>
-
+</table>
+</div>
     {% endblock %}
 

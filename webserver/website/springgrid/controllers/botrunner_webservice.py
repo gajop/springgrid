@@ -64,6 +64,7 @@ class BotrunnerWebserviceController(BaseXMLRPCController):
                 sharedsecret):
             return (False, "Not authenticated")
 
+        print (modname, modarchivechecksum_string, sides)
         [success, errorMessage] = modhelper.addmodifdoesntexist(modname,
                 long(modarchivechecksum_string), sides)
         if not success:

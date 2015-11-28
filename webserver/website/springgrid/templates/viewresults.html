@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h3>SpringGrid - Match results</h3>
+<h3>Match results</h3>
 {{ c.requests.pager('Page $page: $link_previous $link_next ~4~') }}
-<table border='1' padding='3'>
+<table border='1' padding='3' class="table table-striped table-hover table-condensed table-bordered">
     <tr class='tablehead' align="center">
         <td rowspan="2">Match ID</td>
         <td colspan="3">First AI</td>
@@ -27,14 +27,14 @@
         <td>Side</td>
     </tr>
     {% for request in c.requests %}
-    <tr>
+    <tr align="center">
         <td>{{request.matchrequest_id}}</td>
-        <td><a href="{{ h.url(controller='ai', action='view', id=request.ai0.ai_base.ai_base_id) }}">{{request.ai0.ai_base.ai_base_name|e}}</a></td>
-        <td>{{request.ai0.ai_version|e}}</td>
-        <td>{{request.ai0_side.mod_side_name|e}}</td>
-        <td><a href="{{ h.url(controller='ai', action='view', id=request.ai1.ai_base.ai_base_id) }}">{{request.ai1.ai_base.ai_base_name|e}}</a></td>
-        <td>{{request.ai1.ai_version|e}}</td>
-        <td>{{request.ai1_side.mod_side_name|e}}</td>
+        <td {% if request.matchresult.matchresult == 'ai0won' %} class="success" {% endif %} ><a href="{{ h.url(controller='ai', action='view', id=request.ai0.ai_base.ai_base_id) }}">{{request.ai0.ai_base.ai_base_name|e}}</a></td>
+        <td {% if request.matchresult.matchresult == 'ai0won' %} class="success" {% endif %}>{{request.ai0.ai_version|e}}</td>
+        <td {% if request.matchresult.matchresult == 'ai0won' %} class="success" {% endif %}>{{request.ai0_side.mod_side_name|e}}</td>
+        <td {% if request.matchresult.matchresult == 'ai1won' %} class="success" {% endif %} ><a href="{{ h.url(controller='ai', action='view', id=request.ai1.ai_base.ai_base_id) }}">{{request.ai1.ai_base.ai_base_name|e}}</a></td>
+        <td {% if request.matchresult.matchresult == 'ai1won' %} class="success" {% endif %}>{{request.ai1.ai_version|e}}</td>
+        <td {% if request.matchresult.matchresult == 'ai1won' %} class="success" {% endif %}>{{request.ai1_side.mod_side_name|e}}</td>
         <td>{{request.map.map_name|e}}</td>
         <td>{{request.mod.mod_name|e}}</td>
         <td>{% if request.league_id != None %}
@@ -44,9 +44,10 @@
             {% endif %}
         </td>
         <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
-        <td>{{request.matchrequestinprogress.datetimeassigned}}</td>
-        <td {% if request.matchresult.matchresult == 'crashed' %} class="fail" 
-            {% elif request.matchresult.matchresult == 'draw' %} class="warning" {% endif %}
+        <td>{{request.matchrequestinprogress.datetimeassigned.strftime('%H:%M  %d/%m/%y')}}</td>
+        <td {% if request.matchresult.matchresult == 'crashed' %} class="danger" 
+            {% elif request.matchresult.matchresult == 'draw' or request.matchresult.matchresult == 'gametimeout' %} class="warning" 
+            {% else %} class="success" {% endif %}
             >{{request.matchresult.matchresult|e}}</td>
         <td>
             {% if c.infologPaths[request] is defined %}
@@ -64,7 +65,6 @@
         </td>
     </tr>
     {% endfor %}
-
 </table>
 
 {% endblock %}

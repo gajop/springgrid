@@ -45,8 +45,9 @@ class SubmitRequestController(BaseController):
             for ai_version in ai.versions:
                 c.aivalues.append(ai.ai_base_name + " " + ai_version.ai_version)
                 c.aiitems.append(ai_version.ai_id)
-        c.speeds = [i for i in range(1, 10)]
-        c.speeds.extend([i for i in range(10,101,5)])
+        c.speeds = [20] #default
+        c.speeds.extend(range(1, 10))
+        c.speeds.extend(range(10, 101, 5))
         c.timeouts = c.speeds
         return render('submitrequestform.html')
 
@@ -69,4 +70,4 @@ class SubmitRequestController(BaseController):
 
         Session.commit()
 
-        return "Submitted ok."
+        redirect(url(controller='matches', action='requests'))
