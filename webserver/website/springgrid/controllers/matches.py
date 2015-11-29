@@ -1,6 +1,7 @@
 import logging
 import os
 import webob
+import re
 
 from webob import Response 
 
@@ -37,9 +38,22 @@ class MatchesController(BaseController):
             c.requests,
             page=page,
             items_per_page=20)
+        c.page = page
+
+        c.spoil = 1
+        try:
+            c.spoil = int(request.params['spoil'])
+        except:
+            pass
 
         c.replayPaths = {}
         c.infologPaths = {}
+
+        c.pager = c.requests.pager('Page $page: $link_previous $link_next ~4~')
+        params = "&spoil=" + str(c.spoil)
+        if request.params.has_key('league'):
+            params = params + "&league=" + request.params['league']
+        c.pager = re.sub(r"\?page=(\d+)", r"?page=\1" + params, c.pager)
         for req in c.requests:
             replayPath = replaycontroller.getReplayPath(req.matchrequest_id)
             if os.path.isfile(replayPath):
@@ -83,7 +97,10 @@ class MatchesController(BaseController):
     def replays(self, id):
         try:
             downloadFile = open(scriptdir + "/../replays/" + id, 'r').read()
-            response.content_type = 'application/x-bzip-compressed-tar'
+            # application/octet-stream is a fairly generic way of saying that the file should be saved on the disk
+            response.content_type = "application/octet-stream"
+            # NOTICE: We aren't using compressed files anymore so this probably isn't needed
+            #response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:
             raise  

@@ -30,15 +30,23 @@ scriptdir = os.path.dirname(os.path.realpath( __file__ ))
 def getInfologPath(matchrequestid):
     if not os.path.isdir(scriptdir + "/../replays"):
         os.mkdir(scriptdir + "/../replays")
-    return scriptdir + "/../replays/infolog_" + str(matchrequestid) + ".tar.bz2"
+    # TODO: Serving raws
+    #return scriptdir + "/../replays/infolog_" + str(matchrequestid) + ".tar.bz2"
+    return scriptdir + "/../replays/infolog_" + str(matchrequestid) + ".txt"
 
 def getInfologWebRelativePath(matchrequestid):
-    return "replays/infolog_" + str(matchrequestid) + ".tar.bz2"
+    # TODO: Serving raws
+    #return "replays/infolog_" + str(matchrequestid) + ".tar.bz2"
+    return "replays/infolog_" + str(matchrequestid) + ".txt"
 
 def getReplayPath(matchrequestid):
     if not os.path.isdir(scriptdir + "/../replays"):
         os.mkdir(scriptdir + "/../replays")
-    return scriptdir + "/../replays/replay_" + str(matchrequestid) + ".tar.bz2"
+    # TODO: Serving raws
+    #return scriptdir + "/../replays/replay_" + str(matchrequestid) + ".tar.bz2"
+    return scriptdir + "/../replays/replay_" + str(matchrequestid) + ".sdf"
 
 def getReplayWebRelativePath(matchrequestid):
-    return "replays/replay_" + str(matchrequestid) + ".tar.bz2"
+    # TODO: Serving raws
+    #return "replays/replay_" + str(matchrequestid) + ".tar.bz2"
+    return "replays/replay_" + str(matchrequestid) + ".sdf"

@@ -15,6 +15,9 @@ log = logging.getLogger(__name__)
 
 
 class BotrunnerWebserviceController(BaseXMLRPCController):
+    # HACK: probably SHOULD be lower
+    max_body_length = 41943040000
+
     # return (True,'') if goes ok, otherwise (False,message)
     def ping(self, botrunnername, sharedsecret, sessionid, status):
         if not botrunnerhelper.validatesharedsecret(

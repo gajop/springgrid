@@ -164,7 +164,8 @@ class LeagueController(BaseController):
         c.sidemodes = { "allsame" : "All same", "xvsy" : "X vs Y" }
         c.speeds = [20] #default
         c.speeds.extend(range(1, 10))
-        c.speeds.extend(range(10, 101, 5))
+        c.speeds.extend(range(10, 100, 5))
+        c.speeds.extend(range(100, 1001, 50))
         c.timeouts = c.speeds
         return render('viewleagues.html')
 
@@ -192,6 +193,12 @@ class LeagueController(BaseController):
         aistats = {}
         for ai in ais:
             aistats[(ai.ai_base.ai_base_name, ai.ai_version)] = AIStats(ai.ai_base.ai_base_name, ai.ai_version)
+
+        c.spoil = 1
+        try:
+            c.spoil = int(request.params['spoil'])
+        except:
+            pass
 
         for match in matchRequests:
             first = True
@@ -224,8 +231,11 @@ class LeagueController(BaseController):
                             aistat.wins += 1
                             aistat.score += 3
                 first = False
-        aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
-        
+        if c.spoil == 1:
+            aistats = sorted(aistats.itervalues(), key=lambda x: -x.score)
+        else:
+            aistats = aistats.itervalues()
+
         c.aistats = aistats
         c.league = league
         c.leagues = Session.query(League).all()

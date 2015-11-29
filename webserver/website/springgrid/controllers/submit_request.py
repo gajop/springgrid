@@ -47,7 +47,8 @@ class SubmitRequestController(BaseController):
                 c.aiitems.append(ai_version.ai_id)
         c.speeds = [20] #default
         c.speeds.extend(range(1, 10))
-        c.speeds.extend(range(10, 101, 5))
+        c.speeds.extend(range(10, 100, 5))
+        c.speeds.extend(range(100, 1001, 50))
         c.timeouts = c.speeds
         return render('submitrequestform.html')
 

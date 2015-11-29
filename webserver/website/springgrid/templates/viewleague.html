@@ -53,6 +53,7 @@ http://www.opensource.org/licenses/gpl-license.php
 </tr>
     {% for aistat in c.aistats %}
     <tr>
+        {% if c.spoil != 0 %}
         <th> {% if loop.index == 1 %} <span class="glyphicon glyphicon-star" aria-hidden="true"></span>  {% endif %} {{aistat.name|e}} {{aistat.version|e}}</th>
         <td>{{aistat.wins}}</td>
         <td>{{aistat.losses}}</td>
@@ -62,11 +63,23 @@ http://www.opensource.org/licenses/gpl-license.php
         <td>{{aistat.scheduled}}</td>
         <td>{{aistat.games}}</td>
         <td>{{aistat.score}}</td>
+        {% else %}
+        <th>{{aistat.name|e}} {{aistat.version|e}}</th>
+        <td>?</td>
+        <td>?</td>
+        <td>?</td>
+        <td>?</td>
+        <td>?</td>
+        <td>{{aistat.scheduled}}</td>
+        <td>{{aistat.games}}</td>
+        <td>?</td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
-<a href="{{ h.url(controller='matches', action='results')}}?league={{c.league.league_id}}" class="btn btn-default">View Results</a>
+<a href="{{ h.url(controller='matches', action='results')}}?league={{c.league.league_id}}&spoil={{c.spoil}}" class="btn btn-default">View Results</a>
 <a href="{{ h.url(controller='matches', action='requests')}}?league={{c.league.league_id}}" class="btn btn-default">View Requests</a>
+<a href="{{ h.url(controller='league', action='view', id=c.league.league_id)}}?spoil={{1-c.spoil}}" class="btn btn-default">Toggle spoiling</a>
 
 {% endblock %}
 
