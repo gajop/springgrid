@@ -2,6 +2,7 @@ import logging
 import os
 import webob
 import re
+import datetime
 
 from webob import Response 
 
@@ -86,14 +87,25 @@ class MatchesController(BaseController):
             page=page,
             items_per_page=20)
 
-        c.datetimeassignedbyrequest = {}
+        c.assignedTime = {}
+        c.elapsedTime = {}
         for req in c.requests:
             if req.matchrequestinprogress != None:
-                c.datetimeassignedbyrequest[req] = \
-                        req.matchrequestinprogress.datetimeassigned
+                c.assignedTime[req] = req.matchrequestinprogress.datetimeassigned
+
+                timeDelta = datetime.datetime.now() - req.matchrequestinprogress.datetimeassigned
+                hours, remainder = divmod(timeDelta.seconds, 3600)
+                minutes, seconds = divmod(remainder, 60)
+                if hours > 0:
+                    timeDeltaFormatted = '%dh %02dm %02ds' % (hours, minutes, seconds)
+                elif minutes > 0:
+                    timeDeltaFormatted = '%2dm %02ds' % (minutes, seconds)
+                else:
+                    timeDeltaFormatted = '%2ds' % (seconds)
+                c.elapsedTime[req] = timeDeltaFormatted
 
         return render('viewrequests.html')
-        
+
     def replays(self, id):
         try:
             downloadFile = open(scriptdir + "/../replays/" + id, 'r').read()
@@ -103,22 +115,21 @@ class MatchesController(BaseController):
             #response.content_type = 'application/x-bzip-compressed-tar'
             return downloadFile
         except IOError:
-            raise  
-            
+            raise
+
     def remove(self, id):
         if not roles.isInRole(roles.leagueadmin):
             c.message = "You must be logged in as a leagueadmin"
             return render('genericmessage.html')
-        
+
         request = Session.query(MatchRequest).filter(MatchRequest.matchrequest_id == id).first()
-        
+
         if request == None:
             c.message = "No such request"
-            return render('genericmessage.html')   
-        
+            return render('genericmessage.html')
+
         Session.delete(request)
         Session.commit()
-        
+
         c.message = "Deleted ok"
-        return render('genericmessage.html')    
-       
+        return render('genericmessage.html')

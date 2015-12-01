@@ -43,7 +43,7 @@
             No league
             {% endif %}
         </td>
-        <td>{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</td>
+        <td><a href="{{ h.url(controller='botrunner', action='view', id=request.matchrequestinprogress.botrunner.botrunner_id) }}">{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</a></td>
         <td>{{request.matchrequestinprogress.datetimeassigned.strftime('%H:%M  %d/%m/%y')}}</td>
         {% if c.spoil == 0 %} 
         <td>?

@@ -34,7 +34,8 @@ http://www.opensource.org/licenses/gpl-license.php
         <td rowspan="2">Mod</td>
         <td rowspan="2">League</td>
         <td colspan="2">Botrunner</td>
-        <td rowspan="2">Time Assigned</td>
+        <td rowspan="2">Assigned</td>
+        <td rowspan="2">Running</td>
         <td rowspan="2">Remove</td>
     </tr>
     <tr class='tablehead' align="center">
@@ -72,9 +73,11 @@ http://www.opensource.org/licenses/gpl-license.php
 			{% if request.matchrequestinprogress != None: %}
 			<td><a href="{{ h.url(controller='botrunner', action='view', id=request.matchrequestinprogress.botrunner.botrunner_id) }}">{{request.matchrequestinprogress.botrunner.botrunner_name|e}}</a></td>
 			<td>{{request.matchrequestinprogress.botrunnersession.botrunner_session_id|truncate(5,'...')|e}}</td>
-			<td>{{c.datetimeassignedbyrequest[request].strftime('%H:%M  %d/%m/%y')}}</td>
+			<td>{{c.assignedTime[request].strftime('%H:%M  %d/%m/%y')}}</td>
+			<td>{{c.elapsedTime[request]}}</td>
 			<td>&nbsp;</td>
 			{% else %}
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
