@@ -55,9 +55,9 @@ def addmodifdoesntexist(modname, modarchivechecksum, sidenames):
             return (True,'')
         except:
             return(False, "error updating db: " + str( sys.exc_value ) )
-
-    if mod.mod_archivechecksum != modarchivechecksum:
-        return (False,"mod archive checksum doesn't match the one already on the website.")
+    # HACK: ignore mod archive checksum for now
+    #if mod.mod_archivechecksum != modarchivechecksum:
+        #return (False,"mod archive checksum doesn't match the one already on the website.")
 
     return (True,'')
 
